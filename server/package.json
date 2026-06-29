@@ -1,0 +1,18 @@
+{
+  "name": "selvaggi-built-proxy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend proxy for the Selvaggi Built site. Holds the Anthropic API key server-side, routes RFP/ICRA/Estimator calls to Claude Sonnet, and POSTs contact form submissions to a CRM webhook.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "dotenv": "^16.4.5"
+  }
+}
