@@ -1,0 +1,23 @@
+# Raw client source material — must never be publicly served
+Website Content Leslie work/
+Website Content/
+01_Selvaggi Logos — DO NOT EDIT/
+Content /
+SELVAGGI CONTENT/
+
+# Internal docs and stray files
+ASSET-MANIFEST.md
+README.md
+CLAUDE.md
+DOCTYPE html.docx
+.env.example
+
+# Local-only Express proxy (Vercel uses /api serverless functions instead)
+server/
+
+# Generated marketing assets not referenced by the site
+instagram/
+
+# Tooling / OS
+.claude/
+.DS_Store

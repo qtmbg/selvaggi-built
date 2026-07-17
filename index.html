@@ -12,12 +12,10 @@
     <meta property="og:description" content="Active-facility healthcare interior renovation in California. Precision under pressure.">
     <meta name="theme-color" content="#101820">
 
-    <!-- ASSET-SLOT: image | CD | favicon | REPLACE inline chevron with official SelvaggiBuilt favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23101820%22/><polygon points=%2235,65 65,35 65,65%22 fill=%22%23B77C4A%22/></svg>" data-placeholder="true">
+    <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -46,7 +44,6 @@
     </script>
 
     <!-- JSON-LD: Organization + LocalBusiness -->
-    <!-- ASSET-SLOT: text | client | office address | BLOCKED: streetAddress / postalCode below are the OLD address. Update both address blocks when the client supplies the current one (also update footer + contact view). Do not invent an address. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -59,14 +56,13 @@
           "email": "sales@selvaggibuilt.com",
           "address": {
             "@type": "PostalAddress",
-            "streetAddress": "1130 N. Kraemer Blvd., Suite N",
+            "streetAddress": "5100 E. La Palma Ave., Ste 110",
             "addressLocality": "Anaheim",
             "addressRegion": "CA",
-            "postalCode": "92806",
+            "postalCode": "92807",
             "addressCountry": "US"
           },
-          "identifier": "CSLB #1079406",
-          "sameAs": [ "https://www.linkedin.com/REQUIRED-OFFICIAL-COMPANY-URL" ]
+          "identifier": "CSLB #1079406"
         },
         {
           "@type": "GeneralContractor",
@@ -75,10 +71,10 @@
           "telephone": "+1-657-201-3606",
           "address": {
             "@type": "PostalAddress",
-            "streetAddress": "1130 N. Kraemer Blvd., Suite N",
+            "streetAddress": "5100 E. La Palma Ave., Ste 110",
             "addressLocality": "Anaheim",
             "addressRegion": "CA",
-            "postalCode": "92806",
+            "postalCode": "92807",
             "addressCountry": "US"
           }
         }
@@ -229,21 +225,6 @@
             letter-spacing: 0.08em; text-transform: uppercase;
             padding: 0.35rem 0.5rem; z-index: 2;
         }
-
-        /* Person slot */
-        .person-slot {
-            background: var(--ebony);
-            color: var(--ivory);
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; padding: 1.5rem;
-            border: 1px solid var(--copper);
-        }
-        .person-slot-label {
-            font-size: 11px; font-weight: 600;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            color: var(--copper);
-        }
-        .person-slot-note { font-size: 13px; color: var(--ivory); margin-top: 0.5rem; }
 
         /* Client-input placeholder marker.
            Clean, intentional "to be provided" note. No dashed boxes / fake
@@ -643,13 +624,8 @@
     <!-- Primary nav -->
     <header class="glass sticky top-0 z-40">
         <nav class="max-w-[1280px] mx-auto h-20 px-6 flex justify-between items-center" aria-label="Main">
-            <a href="#/home" data-route="/home" class="flex items-center gap-3" aria-label="Selvaggi Built home">
-                <!-- ASSET-SLOT: image | CD | header logo | BLOCKED: awaiting client logo asset. REPLACE this placeholder chevron with the official SelvaggiBuilt_Logo_Chevron.svg (header + favicon + footer all use the same source). Do not invent a logo. -->
-                <svg class="w-9 h-9 flex-shrink-0" viewBox="0 0 32 32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-placeholder="true">
-                    <rect width="32" height="32" fill="var(--ebony)"/>
-                    <path d="M12 20 L20 12 H14 V10 H22 V18 H20 V14 L12 22 Z" fill="var(--copper)"/>
-                </svg>
-                <span class="text-ebony text-[16px] md:text-[18px] font-extrabold tracking-logo">SELVAGGI BUILT</span>
+            <a href="#/home" data-route="/home" class="flex items-center" aria-label="Selvaggi Built home">
+                <img src="assets/logo/logo-horizontal-color.svg" alt="Selvaggi Built" class="h-8 md:h-9 w-auto">
             </a>
 
             <div class="hidden lg:flex items-center gap-7 text-ebony text-[13px] font-medium tracking-subhead uppercase">
@@ -657,7 +633,6 @@
                 <a href="#/expertise" data-route="/expertise" class="nav-link">Expertise</a>
                 <a href="#/how-we-work" data-route="/how-we-work" class="nav-link">How We Work</a>
                 <a href="#/projects" data-route="/projects" class="nav-link">Projects</a>
-                <a href="#/insights" data-route="/insights" class="nav-link">Insights</a>
                 <a href="#/company" data-route="/company" class="nav-link">Company</a>
                 <a href="#/contact" data-route="/contact" class="nav-link">Contact</a>
             </div>
@@ -678,7 +653,6 @@
             <a href="#/expertise" data-route="/expertise" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">Expertise</a>
             <a href="#/how-we-work" data-route="/how-we-work" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">How We Work</a>
             <a href="#/projects" data-route="/projects" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">Projects</a>
-            <a href="#/insights" data-route="/insights" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">Insights</a>
             <a href="#/company" data-route="/company" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">Company</a>
             <a href="#/contact" data-route="/contact" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">Contact</a>
             <a href="#" onclick="openRfpModal(event); closeMobileMenu();" class="btn-primary bg-copper text-white h-12 px-6 inline-flex items-center justify-center font-medium text-[13px] uppercase tracking-subhead mt-3 glass-btn">
@@ -721,21 +695,17 @@
 
                     <div class="lg:col-span-5 w-full reveal">
                         <div class="grid grid-cols-5 grid-rows-6 gap-3 h-[480px] md:h-[560px]">
-                            <!-- ASSET-SLOT: image | Aaron | hero collage tile 1 | REPLACE stock placeholder with real Selvaggi project photo: completed sterile core or hospital corridor -->
-                            <div class="photo col-span-3 row-span-4 glass-hover" aria-hidden="true" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=900&q=80" alt="">
+                            <div class="photo col-span-3 row-span-4 glass-hover">
+                                <img src="assets/home/hero-1.jpg" alt="Renovated hospital patient waiting area with new flooring, seating, and wall finishes" loading="eager">
                             </div>
-                            <!-- ASSET-SLOT: image | Aaron | hero collage tile 2 | REPLACE stock placeholder with real Selvaggi project photo: ICRA barrier or containment wall -->
-                            <div class="photo col-span-2 row-span-3 glass-hover" aria-hidden="true" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=600&q=80" alt="">
+                            <div class="photo col-span-2 row-span-3 glass-hover">
+                                <img src="assets/home/hero-2.jpg" alt="ICRA containment barrier with negative-air filtration in an active hospital corridor">
                             </div>
-                            <!-- ASSET-SLOT: image | Aaron | hero collage tile 3 | REPLACE stock placeholder with real Selvaggi project photo: OR equipment install or finishes -->
-                            <div class="photo col-span-2 row-span-3 glass-hover" aria-hidden="true" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=600&q=80" alt="">
+                            <div class="photo col-span-2 row-span-3 glass-hover">
+                                <img src="assets/home/hero-3.jpg" alt="Selvaggi Built team member installing a containment barrier in an occupied hospital corridor">
                             </div>
-                            <!-- ASSET-SLOT: image | Aaron | hero collage tile 4 | REPLACE stock placeholder with real Selvaggi project photo: pre-construction audit or BIM review -->
-                            <div class="photo col-span-3 row-span-2 glass-hover" aria-hidden="true" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?auto=format&fit=crop&w=800&q=80" alt="">
+                            <div class="photo col-span-3 row-span-2 glass-hover">
+                                <img src="assets/home/hero-4.jpg" alt="Renovated hospital corridor with new wood-look flooring, handrails, and wall protection">
                             </div>
                         </div>
                     </div>
@@ -767,11 +737,9 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <a href="#/expertise" data-route="/expertise" class="card glass glass-hover border border-copper/40 block reveal">
-                            <!-- ASSET-SLOT: image | Aaron | sectors teaser 01 | REPLACE stock placeholder with real Selvaggi hospital interior photo -->
-                            <div class="photo aspect-[4/3]" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+                            <div class="photo aspect-[4/3]">
+                                <img src="assets/home/sector-hospitals.webp" alt="Renovated hospital corridor with handrails and wall protection at Torrance Memorial Medical Center" loading="lazy">
                                 <span class="photo-tag glass-dark">01. Hospitals</span>
-                                <span class="placeholder-flag glass">Representative</span>
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Hospitals</h3>
@@ -783,11 +751,9 @@
                             </div>
                         </a>
                         <a href="#/expertise" data-route="/expertise" class="card glass glass-hover border border-copper/40 block reveal">
-                            <!-- ASSET-SLOT: image | Aaron | sectors teaser 02 | REPLACE stock placeholder with real Selvaggi behavioral health interior photo -->
-                            <div class="photo aspect-[4/3]" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+                            <div class="photo aspect-[4/3]">
+                                <img src="assets/home/sector-behavioral.webp" alt="Anti-ligature behavioral health patient room with platform beds and therapeutic mural at Canyon Ridge" loading="lazy">
                                 <span class="photo-tag glass-dark">02. Behavioral</span>
-                                <span class="placeholder-flag glass">Representative</span>
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Behavioral Health</h3>
@@ -799,11 +765,9 @@
                             </div>
                         </a>
                         <a href="#/expertise" data-route="/expertise" class="card glass glass-hover border border-copper/40 block reveal">
-                            <!-- ASSET-SLOT: image | Aaron | sectors teaser 03 | REPLACE stock placeholder with real Selvaggi surgery center photo -->
-                            <div class="photo aspect-[4/3]" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+                            <div class="photo aspect-[4/3]">
+                                <img src="assets/home/sector-surgery.webp" alt="Clean outpatient surgery center operating room with surgical lighting and adjustable table" loading="lazy">
                                 <span class="photo-tag glass-dark">03. Surgery</span>
-                                <span class="placeholder-flag glass">Representative</span>
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Surgery Centers</h3>
@@ -822,11 +786,9 @@
             <section class="bg-ebony py-20 md:py-28">
                 <div class="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
                     <div class="md:col-span-6 reveal">
-                        <!-- ASSET-SLOT: image | Aaron | protocol teaser | REPLACE stock placeholder with real Selvaggi ICRA containment / barrier photo -->
-                        <div class="photo aspect-[16/10]" data-placeholder="true">
-                            <img src="https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&fit=crop&w=1200&q=80" alt="" loading="lazy">
-                            <span class="photo-tag glass-dark">ICRA Containment</span>
-                            <span class="placeholder-flag glass">Representative</span>
+                        <div class="photo aspect-[16/10]">
+                            <img src="assets/home/feature-precision.jpg" alt="Renovated hospital nurse station with new casework and finishes delivered inside an active facility" loading="lazy">
+                            <span class="photo-tag glass-dark">Active-facility renovation</span>
                         </div>
                     </div>
                     <div class="md:col-span-6 reveal">
@@ -907,32 +869,32 @@
                         <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead md:text-right">Six steps</span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
-                        <div class="reveal flex flex-col gap-3 border-t-2 border-copper/50 pt-6">
+                        <div class="reveal flex flex-col gap-3">
                             <span class="text-copper text-[32px] font-semibold leading-none">01</span>
                             <h3 class="text-ebony text-[22px] font-semibold tracking-tighter">Listen on site.</h3>
                             <p class="text-ebony/80 text-[16px] leading-[1.6]">We walk the facility before we quote, listening to the teams who know the space best. Every plan starts with a clear understanding of patient care, staff workflow, access, safety, infection control, and operational constraints.</p>
                         </div>
-                        <div class="reveal flex flex-col gap-3 border-t-2 border-copper/50 pt-6">
+                        <div class="reveal flex flex-col gap-3">
                             <span class="text-copper text-[32px] font-semibold leading-none">02</span>
                             <h3 class="text-ebony text-[22px] font-semibold tracking-tighter">Plan around operations.</h3>
                             <p class="text-ebony/80 text-[16px] leading-[1.6]">The schedule serves the facility, not the build. We plan phasing, shutdowns, access, containment, deliveries, and work hours around active healthcare operations so construction moves forward with minimal disruption.</p>
                         </div>
-                        <div class="reveal flex flex-col gap-3 border-t-2 border-copper/50 pt-6">
+                        <div class="reveal flex flex-col gap-3">
                             <span class="text-copper text-[32px] font-semibold leading-none">03</span>
                             <h3 class="text-ebony text-[22px] font-semibold tracking-tighter">Coordinate the critical details.</h3>
                             <p class="text-ebony/80 text-[16px] leading-[1.6]">Healthcare renovations depend on details that cannot be left to chance. We coordinate utility tie-ins, vendor access, equipment requirements, containment, inspections, logistics, and communication so field work stays aligned with facility needs.</p>
                         </div>
-                        <div class="reveal flex flex-col gap-3 border-t-2 border-copper/50 pt-6">
+                        <div class="reveal flex flex-col gap-3">
                             <span class="text-copper text-[32px] font-semibold leading-none">04</span>
                             <h3 class="text-ebony text-[22px] font-semibold tracking-tighter">Protect the environment.</h3>
                             <p class="text-ebony/80 text-[16px] leading-[1.6]">Cleanliness, safety, infection control, and separation from active care areas are central to how we work. We plan and maintain construction zones with the discipline required for occupied healthcare settings.</p>
                         </div>
-                        <div class="reveal flex flex-col gap-3 border-t-2 border-copper/50 pt-6">
+                        <div class="reveal flex flex-col gap-3">
                             <span class="text-copper text-[32px] font-semibold leading-none">05</span>
                             <h3 class="text-ebony text-[22px] font-semibold tracking-tighter">Document everything.</h3>
                             <p class="text-ebony/80 text-[16px] leading-[1.6]">We track daily progress, field conditions, safety controls, infection prevention measures, inspections, and closeout requirements so every stakeholder stays aligned from kickoff to turnover.</p>
                         </div>
-                        <div class="reveal flex flex-col gap-3 border-t-2 border-copper/50 pt-6">
+                        <div class="reveal flex flex-col gap-3">
                             <span class="text-copper text-[32px] font-semibold leading-none">06</span>
                             <h3 class="text-ebony text-[22px] font-semibold tracking-tighter">Finish ready for use.</h3>
                             <p class="text-ebony/80 text-[16px] leading-[1.6]">Turnover is more than completion. We close out with the documentation, coordination, responsiveness, and craftsmanship required to help healthcare teams move into the finished space with confidence.</p>
@@ -967,7 +929,7 @@
                     <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-caption mb-6 block">Capabilities and sectors</span>
                     <h1 class="text-[44px] md:text-[64px] font-semibold text-ivory tracking-tighter leading-[1.05] mb-6">Engineered for active facilities.</h1>
                     <p class="text-ivory/80 text-[18px] md:text-[20px] leading-[1.55] max-w-[640px] mx-auto">
-                        Rigid methodologies designed exclusively for complex healthcare interior environments.
+                        Proven methodologies designed exclusively for complex healthcare interior environments.
                     </p>
                 </div>
             </section>
@@ -985,11 +947,9 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <article class="glass border border-copper/40 block reveal">
-                            <!-- ASSET-SLOT: image | Aaron | sector card: Hospitals | REPLACE stock placeholder with real Selvaggi hospital interior photo -->
-                            <div class="photo aspect-[4/3]" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+                            <div class="photo aspect-[4/3]">
+                                <img src="assets/sectors/sectors-hospitals-inpatient-corridor.webp" alt="Renovated hospital inpatient corridor with wood-look flooring, wall protection, and framed artwork" loading="lazy">
                                 <span class="photo-tag glass-dark">01. Hospitals</span>
-                                <span class="placeholder-flag glass">Representative</span>
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Hospitals</h3>
@@ -998,67 +958,57 @@
                         </article>
 
                         <article class="glass border border-copper/40 block reveal">
-                            <!-- ASSET-SLOT: image | Aaron | sector card: MOB | REPLACE stock placeholder with real Selvaggi medical office build photo -->
-                            <div class="photo aspect-[4/3]" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
-                                <span class="photo-tag glass-dark">02. MOB</span>
-                                <span class="placeholder-flag glass">Representative</span>
+                            <div class="photo aspect-[4/3]">
+                                <img src="assets/sectors/sectors-medical-offices-nurse-station.webp" alt="Completed medical office nurse station with green glass counter and wood flooring renovated by Selvaggi Built" loading="lazy">
+                                <span class="photo-tag glass-dark">02. Medical Offices</span>
                             </div>
                             <div class="p-7">
-                                <h3 class="text-ebony text-[20px] font-semibold mb-2">Medical Office Buildings</h3>
-                                <p class="text-ebony/80 text-[15px]">Tenant improvements for specialized clinical practices on tight schedules.</p>
+                                <h3 class="text-ebony text-[20px] font-semibold mb-2">Medical Offices</h3>
+                                <p class="text-ebony/80 text-[15px]">Tenant improvements for physician groups and specialty clinics — scheduled around patient appointments and clinical workflows.</p>
                             </div>
                         </article>
 
                         <article class="glass border border-copper/40 block reveal">
-                            <!-- ASSET-SLOT: image | Aaron | sector card: Behavioral | REPLACE stock placeholder with real Selvaggi behavioral health interior -->
-                            <div class="photo aspect-[4/3]" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+                            <div class="photo aspect-[4/3]">
+                                <img src="assets/sectors/sectors-behavioral-health-patient-room-canyon-ridge.webp" alt="Anti-ligature behavioral health patient room with platform beds, flush-mount sink, and therapeutic mural at Canyon Ridge" loading="lazy">
                                 <span class="photo-tag glass-dark">03. Behavioral</span>
-                                <span class="placeholder-flag glass">Representative</span>
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Behavioral Health</h3>
-                                <p class="text-ebony/80 text-[15px]">Anti-ligature environments engineered for patient safety and staff sightlines.</p>
+                                <p class="text-ebony/80 text-[15px]">Anti-ligature environments engineered for patient safety, staff sightlines, and regulatory compliance.</p>
                             </div>
                         </article>
 
                         <article class="glass border border-copper/40 block reveal">
-                            <!-- ASSET-SLOT: image | Aaron | sector card: Imaging | REPLACE stock placeholder with real Selvaggi imaging suite photo -->
-                            <div class="photo aspect-[4/3]" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+                            <div class="photo aspect-[4/3]">
+                                <img src="assets/sectors/sectors-imaging-diagnostic-mammography-suite.webp" alt="Mammography suite renovation with new cabinetry and 3D imaging equipment installed in an active hospital facility" loading="lazy">
                                 <span class="photo-tag glass-dark">04. Imaging</span>
-                                <span class="placeholder-flag glass">Representative</span>
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Imaging and Diagnostic</h3>
-                                <p class="text-ebony/80 text-[15px]">Lead-lined shielding, rigid structural supports, and clean power for advanced modalities.</p>
+                                <p class="text-ebony/80 text-[15px]">Lead-lined suites, structural supports, and clean power for advanced imaging modalities — installed without disrupting adjacent clinical areas.</p>
                             </div>
                         </article>
 
                         <article class="glass border border-copper/40 block reveal">
-                            <!-- ASSET-SLOT: image | Aaron | sector card: Surgery | REPLACE stock placeholder with real Selvaggi surgery center / OR photo -->
-                            <div class="photo aspect-[4/3]" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+                            <div class="photo aspect-[4/3]">
+                                <img src="assets/sectors/sectors-surgery-centers-operating-room.webp" alt="Clean outpatient surgery center operating room with surgical lighting, adjustable table, and natural light" loading="lazy">
                                 <span class="photo-tag glass-dark">05. Surgery</span>
-                                <span class="placeholder-flag glass">Representative</span>
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Surgery Centers</h3>
-                                <p class="text-ebony/80 text-[15px]">Outpatient operating rooms delivered to inpatient standards. ASC and HOPD ready.</p>
+                                <p class="text-ebony/80 text-[15px]">Outpatient operating rooms and sterile processing spaces built to inpatient standards. ASC and HOPD ready.</p>
                             </div>
                         </article>
 
                         <article class="glass border border-copper/40 block reveal">
-                            <!-- ASSET-SLOT: image | Aaron | sector card: Laboratory | REPLACE stock placeholder with real Selvaggi laboratory / pharmacy photo -->
-                            <div class="photo aspect-[4/3]" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+                            <div class="photo aspect-[4/3]">
+                                <img src="assets/sectors/sectors-laboratory-pathology-clinical-lab.webp" alt="Active clinical laboratory renovation with new casework, equipment, and biosafety infrastructure by Selvaggi Built" loading="lazy">
                                 <span class="photo-tag glass-dark">06. Laboratory</span>
-                                <span class="placeholder-flag glass">Representative</span>
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Laboratory and Pathology</h3>
-                                <p class="text-ebony/80 text-[15px]">Negative pressure isolation and hazardous material containment built to BSL standards.</p>
+                                <p class="text-ebony/80 text-[15px]">Casework, utilities, and ventilation systems renovated in active lab environments — coordinated around specimen processing schedules and biosafety requirements.</p>
                             </div>
                         </article>
                     </div>
@@ -1073,17 +1023,17 @@
                             <span class="text-copper text-[14px] font-semibold tracking-caption">02</span>
                             <h2 class="text-[28px] md:text-[40px] font-semibold text-ivory tracking-tighter">Capabilities</h2>
                         </div>
-                        <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead">What we do</span>
+                        <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead">What we deliver</span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6 reveal">
                         <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>Active-Facility Renovation</span></div>
-                        <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>HCAI / OSHPD Projects</span></div>
+                        <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>HCAI-Regulated Construction</span></div>
                         <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>ICRA Level 3 and 4 Execution</span></div>
                         <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>Seismic Mitigation and Anchoring</span></div>
                         <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>Preconstruction and Phasing</span></div>
                         <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>Hospital Equipment Installation</span></div>
                         <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>Anti-Ligature Retrofitting</span></div>
-                        <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>Healthcare Construction Consulting</span></div>
+                        <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>Pre-Project Consulting and Scoping</span></div>
                         <div class="flex items-start gap-4 text-ivory text-[16px]"><div class="w-2 h-2 bg-copper mt-2 flex-shrink-0"></div><span>24/7 Emergency Response</span></div>
                     </div>
                 </div>
@@ -1101,11 +1051,9 @@
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
                         <div class="lg:col-span-7 reveal">
-                            <!-- ASSET-SLOT: image | Aaron | protocol hero | REPLACE stock placeholder with real Selvaggi containment barrier / HEPA setup photo -->
-                            <div class="photo aspect-[16/10] mb-6" data-placeholder="true">
-                                <img src="https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&fit=crop&w=1200&q=80" alt="" loading="lazy">
-                                <span class="photo-tag glass-dark">ICRA Containment</span>
-                                <span class="placeholder-flag glass">Representative</span>
+                            <div class="photo aspect-[16/10] mb-6">
+                                <img src="assets/expertise/protocol-hero.jpg" alt="Renovated hospital corridor at Torrance Memorial with new flooring, handrails, and wall protection completed around active operations" loading="lazy">
+                                <span class="photo-tag glass-dark">Active-facility renovation</span>
                             </div>
                             <p class="text-ebony/85 text-[16px] md:text-[17px]">
                                 A hospital is a living system. It cannot pause for construction. Our Zero-Disruption Protocol engineers the build sequence entirely around facility operations. Before tools are mobilized, we conduct ground-penetrating radar scans, map critical utilities, and establish isolation zones. ICRA Level 4 barriers, rigid wall systems, and HEPA-filtered negative air machines prevent cross-contamination. Every phase is reviewed and approved by facility directors and Inspectors of Record. Disruptive tie-ins are restricted to designated after-hours windows. We do not adapt our methods to the hospital. Our methods are built strictly for it.
@@ -1116,21 +1064,21 @@
                                 <span class="text-copper text-[22px] font-semibold mt-1">01</span>
                                 <div>
                                     <h3 class="text-ebony text-[18px] font-semibold mb-1">Pre-construction risk audit</h3>
-                                    <p class="text-ebony/80 text-[15px]">Identify all utility lines, assess facility impact, lock logistics.</p>
+                                    <p class="text-ebony/80 text-[15px]">Identify utility conflicts, assess infection control requirements, and lock phasing logistics before mobilization.</p>
                                 </div>
                             </div>
                             <div class="flex gap-6">
                                 <span class="text-copper text-[22px] font-semibold mt-1">02</span>
                                 <div>
                                     <h3 class="text-ebony text-[18px] font-semibold mb-1">ICRA barrier and containment plan</h3>
-                                    <p class="text-ebony/80 text-[15px]">Rigid walls and continuous HEPA negative-air filtration installed.</p>
+                                    <p class="text-ebony/80 text-[15px]">Rigid containment walls and continuous HEPA negative-air filtration installed before any work begins.</p>
                                 </div>
                             </div>
                             <div class="flex gap-6">
                                 <span class="text-copper text-[22px] font-semibold mt-1">03</span>
                                 <div>
                                     <h3 class="text-ebony text-[18px] font-semibold mb-1">Phased schedule with operations sign-off</h3>
-                                    <p class="text-ebony/80 text-[15px]">Disruptive tie-ins scheduled strictly during after-hours windows.</p>
+                                    <p class="text-ebony/80 text-[15px]">All disruptive tie-ins, shutdowns, and utility work scheduled during pre-approved after-hours windows with facility sign-off.</p>
                                 </div>
                             </div>
                             <div class="flex gap-6">
@@ -1152,7 +1100,6 @@
                         <div class="flex items-baseline gap-4 flex-wrap">
                             <span class="text-copper text-[14px] font-semibold tracking-caption">04</span>
                             <h2 class="text-[28px] md:text-[40px] font-semibold text-ivory tracking-tighter">Compliance and Scoping Tools</h2>
-                            <span class="inline-flex items-center border border-copper/60 text-copper text-[11px] font-semibold uppercase tracking-caption px-2.5 py-1">Prototype · pending review</span>
                         </div>
                         <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead">Diagnostic intelligence</span>
                     </div>
@@ -1163,7 +1110,7 @@
                         <span class="text-copper text-[12px] font-semibold tracking-caption block mb-3">Compliance diagnostic</span>
                         <h3 class="text-[26px] md:text-[34px] font-semibold text-ivory mb-4 tracking-tighter">ICRA Level Assessor</h3>
                         <p class="text-ivory/80 text-[16px] max-w-[620px] mx-auto">
-                            Reference current ICRA guidance to output a required barrier system, negative-pressure tier, and mitigation checklist.
+                            Select your construction activity type, patient risk group, project duration, and adjacent occupancy — instantly generate your required ICRA barrier tier, negative-pressure specification, and mitigation checklist to share with your infection control team.
                         </p>
                     </div>
 
@@ -1241,7 +1188,7 @@
                         <span class="text-copper text-[12px] font-semibold tracking-caption block mb-3">Intelligent forecasting</span>
                         <h3 class="text-[26px] md:text-[34px] font-semibold text-ivory mb-4 tracking-tighter">Process and Compliance Roadmap</h3>
                         <p class="text-ivory/80 text-[16px] max-w-[620px] mx-auto">
-                            Generate a baseline schedule, critical-path analysis, and compliance roadmap from standard California healthcare interior sequencing.
+                            Enter your project scope and California facility type — generate a baseline phasing schedule, critical-path summary, and HCAI compliance roadmap ready for your facility planning team.
                         </p>
                     </div>
 
@@ -1344,11 +1291,7 @@
                     <div class="flex flex-wrap gap-3" id="projectFilter">
                         <button data-filter="all" class="filter-btn bg-ebony text-white px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead glass-btn">All</button>
                         <button data-filter="hospital" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Hospitals</button>
-                        <button data-filter="mob" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Medical Office</button>
                         <button data-filter="behavioral" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Behavioral Health</button>
-                        <button data-filter="imaging" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Imaging</button>
-                        <button data-filter="surgery" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Surgery Centers</button>
-                        <button data-filter="lab" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Laboratory</button>
                     </div>
                 </div>
             </section>
@@ -1368,105 +1311,39 @@
             <div id="projectDetailRoot" class="bg-white"></div>
         </section>
 
-        <!-- ============================================
-             INSIGHTS
-             ============================================ -->
-        <section id="view-insights" class="view" data-view="/insights" data-title="Insights | Selvaggi Built" data-description="Articles on healthcare interior construction, ICRA compliance, and California facility renovation.">
-
-            <section class="bg-ivory py-20 md:py-28 border-b border-ebony/10">
-                <div class="max-w-[1280px] mx-auto px-6 text-center reveal">
-                    <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-caption mb-6 block">Insights</span>
-                    <h1 class="text-[44px] md:text-[64px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Field notes from the work.</h1>
-                    <p class="text-ebony/80 text-[18px] md:text-[20px] max-w-[640px] mx-auto">
-                        Standards, methods, and lessons drawn from healthcare interior renovation in active California facilities.
-                    </p>
-                </div>
-            </section>
-
-            <section class="bg-ivory py-16 md:py-24">
-                <div class="max-w-[1280px] mx-auto px-6">
-                    <div id="insightsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-                </div>
-            </section>
-        </section>
+        <!-- Insights views removed for launch — no articles supplied yet. Restore the
+             view-insights / view-insight-detail sections, the insights data + render
+             functions, the /insights routes, and the nav/footer links when content is ready. -->
 
         <!-- ============================================
-             INSIGHT DETAIL
+             COMPANY (Team + Credentials)
              ============================================ -->
-        <section id="view-insight-detail" class="view" data-view="/insights/detail" data-title="Article | Selvaggi Built" data-description="Healthcare interior construction insights.">
-            <div id="insightDetailRoot" class="bg-white"></div>
-        </section>
+        <section id="view-company" class="view" data-view="/company" data-title="Company | Selvaggi Built" data-description="The founder, leadership and field team, and credentials behind Selvaggi Built's healthcare renovation work.">
 
-        <!-- ============================================
-             COMPANY (Credentials + Team + Testimonials)
-             ============================================ -->
-        <section id="view-company" class="view" data-view="/company" data-title="Company | Selvaggi Built" data-description="The founder, leadership team, credentials, and client testimonials.">
-
-            <section class="bg-ebony py-20 md:py-28">
+            <section class="bg-ebony py-24 md:py-36">
                 <div class="max-w-[1280px] mx-auto px-6 text-center reveal">
                     <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-caption mb-6 block">Our standard</span>
                     <h1 class="text-[44px] md:text-[64px] font-semibold text-ivory tracking-tighter leading-[1.05] mb-6">We build around operations.</h1>
                 </div>
             </section>
 
-            <!-- How we work -->
-            <section class="bg-ebony py-20 md:py-28 border-t border-ivory/10">
-                <div class="max-w-[1280px] mx-auto px-6">
-                    <div class="flex flex-col md:flex-row md:items-baseline justify-between border-b border-ivory/40 pb-4 mb-12 gap-4 reveal">
-                        <div class="flex items-baseline gap-4">
-                            <span class="text-copper text-[14px] font-semibold tracking-caption">01</span>
-                            <h2 class="text-[28px] md:text-[40px] font-semibold text-ivory tracking-tighter">How we work</h2>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 reveal">
-                        <div class="flex flex-col gap-3">
-                            <span class="text-copper text-[28px] font-semibold leading-none">01</span>
-                            <h3 class="text-ivory text-[20px] font-semibold">Listen on site.</h3>
-                            <p class="text-ivory/80 text-[15px]">We walk the facility before we quote.</p>
-                        </div>
-                        <div class="flex flex-col gap-3">
-                            <span class="text-copper text-[28px] font-semibold leading-none">02</span>
-                            <h3 class="text-ivory text-[20px] font-semibold">Plan around operations.</h3>
-                            <p class="text-ivory/80 text-[15px]">The schedule serves the hospital, not the build.</p>
-                        </div>
-                        <div class="flex flex-col gap-3">
-                            <span class="text-copper text-[28px] font-semibold leading-none">03</span>
-                            <h3 class="text-ivory text-[20px] font-semibold">Document everything.</h3>
-                            <p class="text-ivory/80 text-[15px]">Daily logs, weekly compliance reports, full closeout book.</p>
-                        </div>
-                    </div>
-                    <div class="mt-12 reveal">
-                        <a href="#/how-we-work" data-route="/how-we-work" class="link-arrow inline-flex items-center text-copper font-medium text-[14px] uppercase tracking-subhead">
-                            See the full process
-                            <svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
-                        </a>
-                    </div>
-                </div>
-            </section>
-
             <!-- Founder note -->
-            <section class="bg-white py-20 md:py-28">
+            <section class="bg-white py-24 md:py-32">
                 <div class="max-w-[960px] mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
                     <div class="md:col-span-5 reveal">
-                        <!-- ASSET-SLOT: person-image | Aaron | founder portrait | REQUIRED: real headshot of Aaron Selvaggi, no stock face, project-photo quality -->
-                        <div class="person-slot glass-dark aspect-[4/5]">
-                            <div>
-                                <span class="person-slot-label">REQUIRED HEADSHOT</span>
-                                <p class="person-slot-note">Real photo of Aaron Selvaggi. No stock substitution.</p>
-                            </div>
+                        <div class="photo aspect-[4/5] glass-hover">
+                            <img src="assets/team/aaron.webp" alt="Portrait of Aaron Selvaggi, Founder and President of Selvaggi Built" loading="lazy">
                         </div>
                     </div>
                     <div class="md:col-span-7 reveal">
-                        <span class="text-copper text-[12px] font-semibold tracking-caption block mb-3">02. From the founder</span>
+                        <span class="text-copper text-[12px] font-semibold tracking-caption block mb-3">01. From the founder</span>
                         <p class="text-ebony text-[24px] md:text-[28px] font-semibold leading-[1.35] tracking-tighter mb-6">
                             "Hospitals do not stop for us. We build around them. That is the entire job."
                         </p>
-                        <!-- Confirmed line only. Bio body is a required slot. -->
-                        <p class="text-ebony/85 text-[16px] mb-4">
-                            Aaron Selvaggi, CEO and Founder. Hospital construction and project management since 2017.
+                        <p class="text-ebony/85 text-[16px] mb-6">
+                            Aaron Selvaggi leads Selvaggi Built with a clear focus on healthcare renovation, occupied facility construction, and complex tenant improvement work across Southern California. His leadership emphasizes trust, responsiveness, safety, craftsmanship, and the disciplined coordination required to deliver successful projects in active hospital and medical environments.
                         </p>
-                        <p class="req mb-6">[REQUIRED: founder bio paragraph. Confirmed facts only. Approved by Aaron before publication.]</p>
-                        <span class="text-ebony text-[11px] font-semibold uppercase tracking-caption">Aaron Selvaggi. CEO and Founder.</span>
+                        <span class="text-ebony text-[11px] font-semibold uppercase tracking-caption">Aaron Selvaggi. Founder &amp; President.</span>
                     </div>
                 </div>
             </section>
@@ -1476,62 +1353,114 @@
                 <div class="max-w-[1280px] mx-auto px-6">
                     <div class="flex flex-col md:flex-row md:items-baseline justify-between border-b border-ebony pb-4 mb-12 gap-4 reveal">
                         <div class="flex items-baseline gap-4">
-                            <span class="text-copper text-[14px] font-semibold tracking-caption">03</span>
-                            <h2 class="text-[28px] md:text-[40px] font-semibold text-ebony tracking-tighter">Leadership</h2>
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">02</span>
+                            <h2 class="text-[28px] md:text-[40px] font-semibold text-ebony tracking-tighter">Our Team</h2>
                         </div>
-                        <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead">The team</span>
+                        <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead">Leadership and field staff</span>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <!-- Aaron -->
-                        <article class="card glass glass-hover border border-copper/40 reveal">
-                            <!-- ASSET-SLOT: person-image | Aaron | leadership card: Aaron Selvaggi | REQUIRED: real headshot of Aaron Selvaggi, no stock face -->
-                            <div class="person-slot glass-dark aspect-[4/5]">
-                                <div>
-                                    <span class="person-slot-label">REQUIRED HEADSHOT</span>
-                                    <p class="person-slot-note">Aaron Selvaggi. No stock substitution.</p>
-                                </div>
+                        <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
+                            <div class="photo aspect-[4/5]">
+                                <img src="assets/team/aaron.webp" alt="Portrait of Aaron Selvaggi" loading="lazy">
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-1">Aaron Selvaggi</h3>
-                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">CEO and Founder</span>
-                                <p class="text-ebony/80 text-[14px] mb-4">Hospital construction and project management since 2017.</p>
-                                <p class="req mb-4">[REQUIRED: full bio paragraph approved by Aaron.]</p>
-                                <p class="req">[OPTIONAL: LinkedIn URL slot.]</p>
-                            </div>
-                        </article>
-
-                        <!-- Leslie -->
-                        <article class="card glass glass-hover border border-copper/40 reveal">
-                            <!-- ASSET-SLOT: person-image | Leslie | leadership card: Leslie Lentz | REQUIRED: real headshot of Leslie Lentz, no stock face -->
-                            <div class="person-slot glass-dark aspect-[4/5]">
-                                <div>
-                                    <span class="person-slot-label">REQUIRED HEADSHOT</span>
-                                    <p class="person-slot-note">Leslie Lentz. No stock substitution.</p>
-                                </div>
-                            </div>
-                            <div class="p-7">
-                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Leslie Lentz</h3>
-                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Marketing Director</span>
-                                <p class="req mb-4">[REQUIRED: full bio paragraph approved by Leslie.]</p>
-                                <p class="req">[OPTIONAL: LinkedIn URL slot.]</p>
+                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Founder &amp; President</span>
+                                <p class="text-ebony/80 text-[14px] mb-3">Provides leadership across Selvaggi Built's healthcare renovation work, helping guide client relationships, project standards, and the company's commitment to safety, communication, and reliable execution.</p>
+                                <p class="text-ebony/80 text-[14px]">With a steady focus on trust, craftsmanship, and accountability, he helps ensure the team delivers complex renovation projects with the professionalism and responsiveness active healthcare environments require.</p>
                             </div>
                         </article>
 
                         <!-- Joel -->
-                        <article class="card glass glass-hover border border-copper/40 reveal">
-                            <!-- ASSET-SLOT: person-image | Joel | leadership card: Joel Hernandez | REQUIRED: real headshot of Joel Hernandez, no stock face -->
-                            <div class="person-slot glass-dark aspect-[4/5]">
-                                <div>
-                                    <span class="person-slot-label">REQUIRED HEADSHOT</span>
-                                    <p class="person-slot-note">Joel Hernandez. No stock substitution.</p>
-                                </div>
+                        <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
+                            <div class="photo aspect-[4/5]">
+                                <img src="assets/team/joel.webp" alt="Portrait of Joel Hernandez" loading="lazy">
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-1">Joel Hernandez</h3>
-                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Project Manager</span>
-                                <p class="req mb-4">[REQUIRED: full bio paragraph approved by Joel.]</p>
-                                <p class="req">[OPTIONAL: LinkedIn URL slot.]</p>
+                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Director of Operations</span>
+                                <p class="text-ebony/80 text-[14px] mb-3">Oversees project delivery, field coordination, operational systems, and team execution across Selvaggi Built's healthcare renovation work.</p>
+                                <p class="text-ebony/80 text-[14px]">With a practical, solutions-focused leadership style, he supports clients, project teams, and trade partners by helping ensure complex renovations are planned clearly, coordinated effectively, and executed with the reliability active healthcare environments require.</p>
+                            </div>
+                        </article>
+
+                        <!-- Adam -->
+                        <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
+                            <div class="photo aspect-[4/5]">
+                                <img src="assets/team/adam.webp" alt="Portrait of Adam Hill" loading="lazy">
+                            </div>
+                            <div class="p-7">
+                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Adam Hill</h3>
+                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Office Manager</span>
+                                <p class="text-ebony/80 text-[14px] mb-3">Supports daily operations, team coordination, and administrative systems that help keep projects, communication, and internal workflows running smoothly.</p>
+                                <p class="text-ebony/80 text-[14px]">With a steady, organized approach, he helps maintain the structure behind Selvaggi Built's work, supporting the office, project teams, and client-facing operations with reliability and attention to detail.</p>
+                            </div>
+                        </article>
+
+                        <!-- Leslie -->
+                        <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
+                            <div class="photo aspect-[4/5]">
+                                <img src="assets/team/leslie.webp" alt="Portrait of Leslie Lentz-Eldridge" loading="lazy">
+                            </div>
+                            <div class="p-7">
+                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Leslie Lentz-Eldridge</h3>
+                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Marketing Director</span>
+                                <p class="text-ebony/80 text-[14px] mb-3">Leads brand strategy, marketing, and communication for Selvaggi Built, helping shape how the company presents its expertise, values, and healthcare renovation experience across every client touchpoint.</p>
+                                <p class="text-ebony/80 text-[14px]">With a strategic eye for messaging, growth, and client experience, she develops the proposals, website content, marketing systems, and brand initiatives that support Selvaggi Built's continued visibility and trusted reputation.</p>
+                            </div>
+                        </article>
+
+                        <!-- Luis -->
+                        <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
+                            <div class="photo aspect-[4/5]">
+                                <img src="assets/team/luis.webp" alt="Portrait of Luis Hernandez" loading="lazy">
+                            </div>
+                            <div class="p-7">
+                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Luis Hernandez</h3>
+                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Superintendent</span>
+                                <p class="text-ebony/80 text-[14px] mb-3">Leads field execution with a focus on safety, coordination, quality, and minimizing disruption in active healthcare environments.</p>
+                                <p class="text-ebony/80 text-[14px]">With a steady, hands-on approach, he works closely with project teams, trade partners, and facility staff to keep work moving efficiently, maintain clean and organized job sites, and support the level of communication and reliability complex renovations require.</p>
+                            </div>
+                        </article>
+
+                        <!-- Michelle -->
+                        <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
+                            <div class="photo aspect-[4/5]">
+                                <img src="assets/team/michelle.webp" alt="Portrait of Michelle Murrey" loading="lazy">
+                            </div>
+                            <div class="p-7">
+                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Michelle Murrey</h3>
+                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Estimating Administrator</span>
+                                <p class="text-ebony/80 text-[14px] mb-3">Supports the estimating process through organized documentation, bid coordination, and clear communication with project teams, trade partners, and vendors.</p>
+                                <p class="text-ebony/80 text-[14px]">With a detail-focused and dependable approach, she helps keep preconstruction workflows moving efficiently, supporting accurate proposals, timely responses, and the coordination needed to help projects start with clarity and confidence.</p>
+                            </div>
+                        </article>
+
+                        <!-- Martin -->
+                        <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
+                            <div class="photo aspect-[4/5]">
+                                <img src="assets/team/martin.webp" alt="Portrait of Martin Peralta" loading="lazy">
+                            </div>
+                            <div class="p-7">
+                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Martin Peralta</h3>
+                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Project Foreman</span>
+                                <p class="text-ebony/80 text-[14px] mb-3">Keeps daily field work moving through hands-on coordination, jobsite organization, and consistent communication with project teams, trade partners, and facility staff.</p>
+                                <p class="text-ebony/80 text-[14px]">With a practical, detail-focused approach, he helps maintain safe, clean, and efficient jobsites while keeping work aligned with project goals, schedule requirements, and the standards active healthcare environments demand.</p>
+                            </div>
+                        </article>
+
+                        <!-- Axel -->
+                        <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
+                            <div class="photo aspect-[4/5]">
+                                <img src="assets/team/axel.webp" alt="Portrait of Axel Guzman" loading="lazy">
+                            </div>
+                            <div class="p-7">
+                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Axel Guzman</h3>
+                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Junior Estimator</span>
+                                <p class="text-ebony/80 text-[14px] mb-3">Contributes to the estimating process through quantity takeoffs, bid support, document review, and coordination with internal teams and trade partners.</p>
+                                <p class="text-ebony/80 text-[14px]">With a detail-oriented and eager approach, he helps organize preconstruction information, support proposal accuracy, and keep estimating workflows moving with clarity and responsiveness.</p>
                             </div>
                         </article>
                     </div>
@@ -1543,15 +1472,15 @@
                 <div class="max-w-[1280px] mx-auto px-6">
                     <div class="flex flex-col md:flex-row md:items-baseline justify-between border-b border-ebony pb-4 mb-12 gap-4 reveal">
                         <div class="flex items-baseline gap-4">
-                            <span class="text-copper text-[14px] font-semibold tracking-caption">04</span>
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">03</span>
                             <h2 class="text-[28px] md:text-[40px] font-semibold text-ebony tracking-tighter">Credentials</h2>
                         </div>
                         <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead">Confirmed</span>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-10 reveal">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-10 reveal">
                         <div class="glass glass-hover border-l-2 border-l-copper p-5">
-                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Confirmed</span>
+                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">License</span>
                             <h3 class="text-ebony text-[16px] font-semibold mb-1">CSLB License</h3>
                             <p class="text-ebony/80 text-[15px]">#1079406</p>
                         </div>
@@ -1561,90 +1490,15 @@
                             <p class="text-ebony/80 text-[15px]">Healthcare interior construction.</p>
                         </div>
                         <div class="glass glass-hover border-l-2 border-l-copper p-5">
-                            <!-- ASSET-SLOT: text | Aaron | HCAI/OSHPD track record stat | REQUIRED -->
-                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Track record</span>
+                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Compliance</span>
                             <h3 class="text-ebony text-[16px] font-semibold mb-1">HCAI / OSHPD</h3>
-                            <p class="req">[REQUIRED: completed project count or years active under HCAI.]</p>
-                        </div>
-                        <div class="glass glass-hover border-l-2 border-l-copper p-5">
-                            <!-- ASSET-SLOT: text | Aaron | safety certs | REQUIRED -->
-                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Safety</span>
-                            <h3 class="text-ebony text-[16px] font-semibold mb-1">Certifications</h3>
-                            <p class="req">[REQUIRED: OSHA, ICRA, and infection-control certs held by superintendents.]</p>
-                        </div>
-                        <div class="glass glass-hover border-l-2 border-l-copper p-5">
-                            <!-- ASSET-SLOT: text | Aaron | industry awards / rankings | REQUIRED -->
-                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Industry</span>
-                            <h3 class="text-ebony text-[16px] font-semibold mb-1">Rankings and Awards</h3>
-                            <p class="req">[REQUIRED: any verified industry ranking or award. None if not applicable.]</p>
-                        </div>
-                        <div class="glass glass-hover border-l-2 border-l-copper p-5">
-                            <!-- ASSET-SLOT: text | Aaron | small business / minority certs if eligible | REQUIRED -->
-                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Business</span>
-                            <h3 class="text-ebony text-[16px] font-semibold mb-1">Business Certifications</h3>
-                            <p class="req">[REQUIRED: small business, minority, or veteran certs if eligible.]</p>
-                        </div>
-                        <div class="glass glass-hover border-l-2 border-l-copper p-5">
-                            <!-- ASSET-SLOT: text | Aaron | insurance and bonding capacity | REQUIRED -->
-                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Coverage</span>
-                            <h3 class="text-ebony text-[16px] font-semibold mb-1">Insurance and Bonding</h3>
-                            <p class="req">[REQUIRED: GL, umbrella, and single / aggregate bonding capacity.]</p>
-                        </div>
-                        <div class="glass glass-hover border-l-2 border-l-copper p-5">
-                            <!-- ASSET-SLOT: text | Aaron | association memberships | REQUIRED -->
-                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Affiliations</span>
-                            <h3 class="text-ebony text-[16px] font-semibold mb-1">Memberships</h3>
-                            <p class="req">[REQUIRED: ASHE, AGC, CHA, or other healthcare construction associations.]</p>
+                            <p class="text-ebony/80 text-[15px]">ICRA Level 3 and 4 execution under Title 22.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Testimonials -->
-            <section id="testimonials" class="bg-ivory py-20 md:py-28">
-                <div class="max-w-[1280px] mx-auto px-6">
-                    <div class="flex flex-col md:flex-row md:items-baseline justify-between border-b border-ebony pb-4 mb-12 gap-4 reveal">
-                        <div class="flex items-baseline gap-4">
-                            <span class="text-copper text-[14px] font-semibold tracking-caption">05</span>
-                            <h2 class="text-[28px] md:text-[40px] font-semibold text-ebony tracking-tighter">Client testimonials</h2>
-                        </div>
-                        <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead">Attributed only</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <!-- ASSET-SLOT: text | Aaron / Leslie | testimonial 01 | REQUIRED: real attributed healthcare-client testimonial with signed release -->
-                        <article class="glass glass-hover border border-copper/40 p-8 reveal">
-                            <span class="text-copper text-[36px] font-semibold leading-none block mb-4">"</span>
-                            <p class="req mb-6">[REQUIRED: real attributed healthcare-client testimonial. Signed release on file. No invented quotes. No stock "Jane Smith" filler.]</p>
-                            <div class="border-t border-ebony pt-4">
-                                <p class="req mb-1">[REQUIRED: client name]</p>
-                                <p class="req mb-1">[REQUIRED: title]</p>
-                                <p class="req">[REQUIRED: organization]</p>
-                            </div>
-                        </article>
-                        <!-- ASSET-SLOT: text | Aaron / Leslie | testimonial 02 | REQUIRED: real attributed healthcare-client testimonial with signed release -->
-                        <article class="glass glass-hover border border-copper/40 p-8 reveal">
-                            <span class="text-copper text-[36px] font-semibold leading-none block mb-4">"</span>
-                            <p class="req mb-6">[REQUIRED: real attributed healthcare-client testimonial. Signed release on file.]</p>
-                            <div class="border-t border-ebony pt-4">
-                                <p class="req mb-1">[REQUIRED: client name]</p>
-                                <p class="req mb-1">[REQUIRED: title]</p>
-                                <p class="req">[REQUIRED: organization]</p>
-                            </div>
-                        </article>
-                        <!-- ASSET-SLOT: text | Aaron / Leslie | testimonial 03 | REQUIRED: real attributed healthcare-client testimonial with signed release -->
-                        <article class="glass glass-hover border border-copper/40 p-8 reveal">
-                            <span class="text-copper text-[36px] font-semibold leading-none block mb-4">"</span>
-                            <p class="req mb-6">[REQUIRED: real attributed healthcare-client testimonial. Signed release on file.]</p>
-                            <div class="border-t border-ebony pt-4">
-                                <p class="req mb-1">[REQUIRED: client name]</p>
-                                <p class="req mb-1">[REQUIRED: title]</p>
-                                <p class="req">[REQUIRED: organization]</p>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-            </section>
+            <!-- Testimonials section hidden until the client supplies attributed client quotes with a signed release. Restore when available. -->
 
             <!-- CTA -->
             <section class="bg-ebony py-20 md:py-28">
@@ -1676,10 +1530,9 @@
                     <div class="md:col-span-4 flex flex-col gap-8 reveal">
                         <div>
                             <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Office</span>
-                            <!-- ASSET-SLOT: text | client | office address | BLOCKED: this is the OLD address. Awaiting client's CURRENT address. When supplied, update here, in the footer, in the JSON-LD schema in <head>, and in the office-map slot below. Do not invent an address. -->
                             <address class="text-ebony text-[16px] not-italic">
-                                1130 N. Kraemer Blvd., Suite N<br>
-                                Anaheim, CA 92806
+                                5100 E. La Palma Ave., Ste 110<br>
+                                Anaheim, CA 92807
                             </address>
                         </div>
                         <div>
@@ -1688,9 +1541,7 @@
                         </div>
                         <div>
                             <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Email</span>
-                            <!-- ASSET-SLOT: text | client | contact emails | PENDING CONFIRMATION: confirm which address(es) to display publicly (general sales, Aaron's direct, both, or department emails). Update here and in the footer once confirmed. Do not invent emails. -->
                             <a href="mailto:sales@selvaggibuilt.com" class="text-ebony text-[16px] hover:text-copper transition-colors block">sales@selvaggibuilt.com</a>
-                            <a href="mailto:aaron@selvaggibuilt.com" class="text-ebony text-[16px] hover:text-copper transition-colors block">aaron@selvaggibuilt.com</a>
                         </div>
                         <div>
                             <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">License</span>
@@ -1727,8 +1578,7 @@
                             <div id="contactStatus" class="md:col-span-2 text-[14px]" aria-live="polite"></div>
                         </form>
                         <p class="text-[12px] text-ebony/60 mt-6 italic">
-                            <!-- ASSET-SLOT: text | Legal | privacy line above form | REQUIRED before launch -->
-                            [REQUIRED: privacy line linking to vetted Privacy Policy before form goes live.]
+                            We use the details you provide only to respond to your inquiry. We never sell or share your information.
                         </p>
                     </div>
                 </div>
@@ -1737,12 +1587,11 @@
             <!-- Map slot -->
             <section class="bg-ivory py-16 md:py-24">
                 <div class="max-w-[1280px] mx-auto px-6">
-                    <!-- ASSET-SLOT: embed | Leslie | office map | REQUIRED: embedded Google Map iframe of 1130 N. Kraemer Blvd. Suite N, Anaheim CA 92806 -->
-                    <div class="glass glass-hover border border-copper/40 aspect-[16/6] flex items-center justify-center text-ebony text-center p-8">
-                        <div>
-                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Map slot</span>
-                            <p class="req">[REQUIRED: embedded Google Map of office location.]</p>
-                        </div>
+                    <div class="glass glass-hover border border-copper/40 aspect-[16/6] overflow-hidden">
+                        <iframe
+                            title="Map to Selvaggi Built, 5100 E. La Palma Ave. Ste 110, Anaheim, CA 92807"
+                            src="https://www.google.com/maps?q=5100+E.+La+Palma+Ave+Ste+110,+Anaheim,+CA+92807&output=embed"
+                            class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </section>
@@ -1756,18 +1605,12 @@
         <div class="max-w-[1280px] mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-14">
                 <div class="md:col-span-4 flex flex-col">
-                    <a href="#/home" data-route="/home" class="flex items-center gap-3 mb-6" aria-label="Selvaggi Built home">
-                        <!-- ASSET-SLOT: image | CD | footer logo | BLOCKED: awaiting client logo asset. REPLACE this placeholder chevron with the official SelvaggiBuilt logo (ivory/reversed variant for the dark footer). Do not invent a logo. -->
-                        <svg class="w-9 h-9 flex-shrink-0" viewBox="0 0 32 32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-placeholder="true">
-                            <rect width="32" height="32" fill="var(--ivory)"/>
-                            <path d="M12 20 L20 12 H14 V10 H22 V18 H20 V14 L12 22 Z" fill="var(--copper)"/>
-                        </svg>
-                        <span class="text-ivory text-[18px] font-extrabold tracking-logo">SELVAGGI BUILT</span>
+                    <a href="#/home" data-route="/home" class="flex items-center mb-6" aria-label="Selvaggi Built home">
+                        <img src="assets/logo/logo-horizontal-white.svg" alt="Selvaggi Built" class="h-9 w-auto">
                     </a>
-                    <!-- ASSET-SLOT: text | client | office address | BLOCKED: the address below is the OLD address. Awaiting client's CURRENT address. Update here, in the contact view, and in the JSON-LD schema in <head>. Do not invent an address. -->
                     <address class="text-ivory/90 text-[15px] not-italic mb-4">
-                        1130 N. Kraemer Blvd., Suite N<br>
-                        Anaheim, CA 92806
+                        5100 E. La Palma Ave., Ste 110<br>
+                        Anaheim, CA 92807
                     </address>
                     <a href="tel:6572013606" class="text-ivory text-[15px] hover:text-copper transition-colors">657-201-3606</a>
                     <a href="mailto:sales@selvaggibuilt.com" class="text-ivory text-[15px] hover:text-copper transition-colors">sales@selvaggibuilt.com</a>
@@ -1778,7 +1621,6 @@
                     <a href="#/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Expertise</a>
                     <a href="#/how-we-work" data-route="/how-we-work" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">How We Work</a>
                     <a href="#/projects" data-route="/projects" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Projects</a>
-                    <a href="#/insights" data-route="/insights" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Insights</a>
                     <a href="#/company" data-route="/company" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Company</a>
                     <a href="#/contact" data-route="/contact" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Contact</a>
                 </div>
@@ -1786,7 +1628,7 @@
                 <div class="md:col-span-3 flex flex-col gap-3">
                     <h4 class="text-ivory text-[12px] font-semibold uppercase tracking-caption mb-2">Sectors</h4>
                     <a href="#/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Hospitals</a>
-                    <a href="#/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Medical Office</a>
+                    <a href="#/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Medical Offices</a>
                     <a href="#/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Behavioral Health</a>
                     <a href="#/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Imaging and Diagnostic</a>
                     <a href="#/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Surgery Centers</a>
@@ -1798,27 +1640,14 @@
                     <span class="text-ivory/90 text-[15px]">CSLB License #1079406</span>
                     <span class="text-ivory/90 text-[15px]">Healthcare Interior Construction</span>
                     <span class="text-ivory/90 text-[15px]">California Only</span>
-                    <!-- ASSET-SLOT: text | Leslie | official LinkedIn URL | REQUIRED: official company LinkedIn URL. No root linkedin.com. -->
-                    <a href="#" class="text-copper text-[14px] hover:text-ivory transition-colors mt-2" aria-disabled="true">[REQUIRED: LinkedIn URL]</a>
                 </div>
             </div>
-
-            <p class="text-[12px] text-ivory/70 max-w-[640px] mb-8">
-                Environmental and project images displayed across this site are representative visual placeholders. Real Selvaggi Built project photography will replace them before launch. Person photographs are required real headshots and are never substituted with stock images.
-            </p>
 
             <div class="border-t border-ivory/15 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <span class="text-ivory/80 text-[12px] font-semibold uppercase tracking-caption text-center md:text-left">
                     &copy; 2026 Selvaggi Built, Inc. All rights reserved.
                 </span>
-                <div class="flex gap-6 text-ivory/80 text-[12px] font-semibold uppercase tracking-caption">
-                    <!-- ASSET-SLOT: text | Legal | privacy policy URL | REQUIRED: legally vetted Privacy Policy before forms go live. -->
-                    <a href="#/privacy" class="hover:text-copper transition-colors" aria-disabled="true">[REQ] Privacy</a>
-                    <!-- ASSET-SLOT: text | Legal | accessibility statement URL | REQUIRED -->
-                    <a href="#/accessibility" class="hover:text-copper transition-colors" aria-disabled="true">[REQ] Accessibility</a>
-                    <!-- ASSET-SLOT: text | Legal | terms of use | REQUIRED -->
-                    <a href="#/terms" class="hover:text-copper transition-colors" aria-disabled="true">[REQ] Terms</a>
-                </div>
+                <span class="text-copper text-[12px] font-semibold uppercase tracking-caption">Precision Under Pressure</span>
             </div>
         </div>
     </footer>
@@ -1860,88 +1689,102 @@
 
     <script>
         /* ============================================================
-           DATA. projects and insights
-           Hardcoded values are CONFIRMED only.
-           ASSET-SLOT placeholders cover everything else.
+           DATA. projects
+           Real, client-supplied project case studies.
            ============================================================ */
         const projects = [
             {
-                slug: 'project-01',
+                slug: 'torrance-nurses-station',
                 sector: 'hospital',
                 sectorLabel: 'Hospital',
-                heroImage: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80',
-                heroAlt: '',
+                title: "Torrance Memorial Medical Center — 4th Tower Nurses Station",
+                sqft: "600 SF",
+                schedule: null,
+                compliance: "ICRA Level 4 / HCAI",
+                outcomeLine: "A modernized 4th-tower nurses station rebuilt under full ICRA Level 4 containment without interrupting hospital operations.",
+                challenge: "The existing nurses station required modernization while maintaining hospital operations in an active patient care environment. The renovation involved demolition and replacement of existing cabinetry, installation of new workstations and finishes, and coordination of construction activities within a functioning healthcare facility. Infection control, staff access, and minimizing disruption to daily operations were critical project constraints.",
+                approach: "The project team implemented a fully contained construction zone utilizing zip wall barriers and negative air pressure to maintain infection control requirements. Existing cabinetry was selectively demolished to accommodate the new design, while protective measures were taken to preserve adjacent finishes and operational areas. The renovation included installation of a new height-adjustable workstation, solid surface countertops, plastic laminate finishes, and new file storage solutions. Existing bumper guards and corner guards were carefully removed and reinstalled, with damaged components replaced as needed.",
+                outcome: "The refurbished nurses station provided a modernized, functional workspace that improved staff ergonomics, organization, and workflow efficiency. The project was completed while maintaining healthcare operations and meeting infection control requirements, resulting in an upgraded nurses station that enhanced both appearance and day-to-day functionality for clinical staff.",
+                heroImage: 'assets/projects/torrance-nurses-station/hero.jpg',
+                heroAlt: "New height-adjustable nurses station with solid-surface countertops in an active hospital corridor at Torrance Memorial",
                 gallery: [
-                    'https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=1000&q=80',
-                    'https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=1000&q=80',
-                    'https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&fit=crop&w=1000&q=80'
+                    { src: 'assets/projects/torrance-nurses-station/g1.jpg', alt: "Refurbished 4th-tower nurses station with new workstations and solid-surface countertops" },
+                    { src: 'assets/projects/torrance-nurses-station/g2.jpg', alt: "Completed nurses station counter and casework along an active hospital corridor" },
+                    { src: 'assets/projects/torrance-nurses-station/g3.jpg', alt: "New nurses station workstation with file storage and reinstalled corner guards" }
                 ]
             },
             {
-                slug: 'project-02',
-                sector: 'surgery',
-                sectorLabel: 'Surgery Center',
-                heroImage: 'https://images.unsplash.com/photo-1631815587646-b85a1bb027e1?auto=format&fit=crop&w=1200&q=80',
-                heroAlt: '',
-                gallery: [
-                    'https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&w=1000&q=80',
-                    'https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?auto=format&fit=crop&w=1000&q=80',
-                    'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=1000&q=80'
-                ]
-            },
-            {
-                slug: 'project-03',
+                slug: 'canyon-ridge-patient-rooms',
                 sector: 'behavioral',
                 sectorLabel: 'Behavioral Health',
-                heroImage: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=1200&q=80',
-                heroAlt: '',
+                title: "Canyon Ridge Behavioral Health — Patient Room Renovations",
+                sqft: "17,766 SF",
+                schedule: "15 months",
+                compliance: "ICRA Level 3",
+                outcomeLine: "27 phased patient-room renovations delivered in an active behavioral health hospital with minimal disruption to patient care.",
+                challenge: "Canyon Ridge Hospital required the refurbishment of occupied behavioral health patient rooms while maintaining continuous facility operations and patient safety. The project involved 27 phased renovations in an active mental health environment, requiring strict adherence to behavioral health standards, infection control protocols, ligature-resistant construction requirements, and coordination with hospital staff to minimize disruption to patient care.",
+                approach: "Selvaggi Built developed a detailed phased construction plan that allowed work to proceed while keeping the facility operational. The team coordinated closely with hospital leadership, nursing staff, and subcontractors to sequence work efficiently, maintain infection control measures, and ensure compliance with behavioral health construction standards. Daily communication, proactive issue resolution, and rigorous quality control were implemented throughout each phase to maintain schedule and safety objectives.",
+                outcome: "The project successfully delivered modernized patient rooms that improved functionality, durability, and patient experience while meeting behavioral health safety requirements. Through disciplined phasing and stakeholder coordination, construction activities were completed with minimal impact on hospital operations, maintaining a safe environment for patients, staff, and visitors throughout the renovation process.",
+                heroImage: 'assets/projects/canyon-ridge-patient-room/hero.jpg',
+                heroAlt: "Renovated anti-ligature behavioral health patient room with platform beds, flush-mount sink, and therapeutic mural at Canyon Ridge",
                 gallery: [
-                    'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1000&q=80',
-                    'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1000&q=80',
-                    'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1000&q=80'
+                    { src: 'assets/projects/canyon-ridge-patient-room/g1.jpg', alt: "Two anti-ligature platform beds with nightstand and calming ocean murals at Canyon Ridge" },
+                    { src: 'assets/projects/canyon-ridge-patient-room/g2.jpg', alt: "Completed Canyon Ridge patient room with durable casework and ligature-resistant fixtures" },
+                    { src: 'assets/projects/canyon-ridge-patient-room/g3.jpg', alt: "Refurbished behavioral health patient room with new flooring and platform furniture" }
+                ]
+            },
+            {
+                slug: 'del-amo-dining',
+                sector: 'behavioral',
+                sectorLabel: 'Behavioral Health',
+                title: "Del Amo Behavioral Health — Dining Room Refurbishment",
+                sqft: "1,700 SF",
+                schedule: null,
+                compliance: "ICRA Level 3",
+                outcomeLine: "Two behavioral health dining rooms refreshed with floating solid-surface counters, integrated equipment enclosures, and new flooring — completed in an occupied facility.",
+                challenge: "The existing dining room counters at Del Amo ITU and Del Sol Dining Rooms were outdated and did not provide the desired functionality or appearance for the facility. The project required the removal of existing counters, cabinets, and wall protection while working within an occupied healthcare environment where dust control, safety, and minimal disruption to operations were critical considerations.",
+                approach: "The refurbishment included selective demolition of existing finishes and millwork, installation of concealed floating counter support brackets anchored directly to wall studs, construction of new support framing and cabinetry for water filtration systems, and installation of new solid surface floating counters. Additional improvements included new water filter and coffee dispenser enclosures, drywall repairs, complete interior painting of both dining rooms, and installation of approximately 1,700 square feet of Mannington glue-down LVT flooring. Infection control measures, including negative air pressure equipment and dust containment procedures, were implemented throughout construction to maintain a safe environment for patients and staff.",
+                outcome: "The project transformed both dining rooms with a modern floating counter design that improved functionality, accessibility, and aesthetics. The new solid surface counters, integrated equipment enclosures, refreshed finishes, and upgraded flooring created a cleaner, more durable, and visually appealing environment while supporting daily facility operations. The completed renovations enhanced the overall dining experience and delivered a long-lasting solution aligned with the facility's operational needs and design objectives.",
+                heroImage: 'assets/projects/del-amo-dining/hero.jpg',
+                heroAlt: "Completed Del Amo dining room with new LVT flooring, fresh paint, and refurbished seating",
+                gallery: [
+                    { src: 'assets/projects/del-amo-dining/g1.jpg', alt: "New floating solid-surface counter with integrated water filter and coffee dispenser enclosures" },
+                    { src: 'assets/projects/del-amo-dining/g2.jpg', alt: "Refurbished dining counter with concealed floating supports in a behavioral health dining room" },
+                    { src: 'assets/projects/del-amo-dining/g3.jpg', alt: "Del Amo dining room mid-renovation with infection-control containment in place" }
                 ]
             }
-        ];
-
-        const insights = [
-            { slug: 'insight-01', category: 'Pharmaceutical', title: 'Key Takeaways From Leading Pharmaceutical Construction Projects', image: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1200&q=80' },
-            { slug: 'insight-02', category: 'Architecture', title: 'What You Should Know About Medical Architecture', image: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1200&q=80' },
-            { slug: 'insight-03', category: 'Methods', title: 'What Makes Medical Building Construction Stand Out', image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=1200&q=80' },
-            { slug: 'insight-04', category: 'Laboratory', title: 'The Ultimate Guide To Laboratory Construction', image: 'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=1200&q=80' },
-            { slug: 'insight-05', category: 'Cost', title: 'How To Reduce Costs In Healthcare Construction Projects', image: 'https://images.unsplash.com/photo-1631815587646-b85a1bb027e1?auto=format&fit=crop&w=1200&q=80' },
-            { slug: 'insight-06', category: 'Design', title: 'Exploring 10 Styles In Medical Building Architecture', image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1200&q=80' }
         ];
 
         /* ============================================================
            RENDER HELPERS
            ============================================================ */
+        // Build the metric list for a project, skipping any value not yet confirmed.
+        function projectMetrics(p) {
+            const rows = [['Facility type', p.sectorLabel]];
+            if (p.sqft) rows.push(['Square footage', p.sqft]);
+            if (p.schedule) rows.push(['Schedule', p.schedule]);
+            if (p.compliance) rows.push(['Compliance tier', p.compliance]);
+            return rows;
+        }
+
         function projectCardHTML(p) {
+            const rows = projectMetrics(p).map(([label, val], idx) =>
+                `<div class="flex justify-between gap-4"><span>${label}</span><span class="${idx === 0 ? 'text-copper' : 'text-ebony'} text-right">${val}</span></div>`
+            ).join('');
             return `
                 <article class="card glass glass-hover border border-copper/40 flex flex-col" data-sector="${p.sector}">
                     <a href="#/projects/${p.slug}" data-route="/projects/${p.slug}" class="block">
-                        <!-- ASSET-SLOT: image | Aaron | project card hero: ${p.slug} | REPLACE stock placeholder with real Selvaggi project photo -->
-                        <div class="photo aspect-[4/5]" data-placeholder="true">
-                            <img src="${p.heroImage}" alt="" loading="lazy">
+                        <div class="photo aspect-[4/5]">
+                            <img src="${p.heroImage}" alt="${p.heroAlt}" loading="lazy">
                             <span class="photo-tag glass-dark">${p.sectorLabel}</span>
-                            <span class="placeholder-flag glass">Representative</span>
                         </div>
                     </a>
                     <div class="p-7 flex flex-col flex-grow">
-                        <!-- ASSET-SLOT: text | Aaron | project title: ${p.slug} | REQUIRED: real or credibly anonymized project title. No invented hospital name. -->
-                        <h3 class="text-ebony text-[20px] font-semibold mb-3">
-                            <span class="req">[REQUIRED: project title for ${p.slug}]</span>
-                        </h3>
+                        <h3 class="text-ebony text-[20px] font-semibold mb-3">${p.title}</h3>
                         <a href="#/projects/${p.slug}" data-route="/projects/${p.slug}" class="flex flex-col gap-2 mb-5 border-y border-ebony py-4 text-[12px] font-semibold uppercase tracking-caption text-ebony transition-colors hover:border-copper" aria-label="Open the ${p.sectorLabel} case study">
-                            <div class="flex justify-between"><span>Facility type</span><span class="text-copper">${p.sectorLabel}</span></div>
-                            <!-- ASSET-SLOT: text | Aaron | project metric: SF for ${p.slug} | REQUIRED -->
-                            <div class="flex justify-between"><span>Square footage</span><span class="req">[REQ]</span></div>
-                            <!-- ASSET-SLOT: text | Aaron | project metric: schedule for ${p.slug} | REQUIRED -->
-                            <div class="flex justify-between"><span>Schedule</span><span class="req">[REQ]</span></div>
-                            <!-- ASSET-SLOT: text | Aaron | project metric: compliance tier for ${p.slug} | REQUIRED -->
-                            <div class="flex justify-between"><span>Compliance tier</span><span class="req">[REQ]</span></div>
+                            ${rows}
                         </a>
-                        <!-- ASSET-SLOT: text | Aaron | project outcome line for ${p.slug} | REQUIRED -->
-                        <p class="req mb-5">[REQUIRED: one-line outcome for ${p.slug}.]</p>
+                        <p class="text-ebony/80 text-[15px] mb-5">${p.outcomeLine}</p>
                         <a href="#/projects/${p.slug}" data-route="/projects/${p.slug}" class="link-arrow inline-flex items-center text-copper font-medium text-[13px] uppercase tracking-subhead mt-auto w-max">
                             Read case study
                             <svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
@@ -1974,50 +1817,37 @@
                             Back to projects
                         </a>
                         <span class="text-copper text-[12px] font-semibold uppercase tracking-caption block mb-4">${p.sectorLabel}</span>
-                        <h1 class="text-[36px] md:text-[56px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">
-                            <span class="req">[REQUIRED: project title for ${p.slug}]</span>
-                        </h1>
+                        <h1 class="text-[36px] md:text-[56px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">${p.title}</h1>
                     </div>
                 </section>
 
                 <section class="bg-white">
                     <div class="max-w-[1280px] mx-auto px-6 -mt-1">
-                        <!-- ASSET-SLOT: image | Aaron | project detail hero: ${p.slug} | REPLACE stock placeholder with real Selvaggi project photo -->
-                        <div class="photo aspect-[16/9]" data-placeholder="true">
-                            <img src="${p.heroImage}" alt="" loading="lazy">
-                            <span class="placeholder-flag glass">Representative</span>
+                        <div class="photo aspect-[16/9]">
+                            <img src="${p.heroImage}" alt="${p.heroAlt}" loading="lazy">
                         </div>
                     </div>
                 </section>
 
                 <section class="bg-white py-16 md:py-24">
                     <div class="max-w-[1280px] mx-auto px-6">
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 border-y border-ebony py-6 mb-12">
-                            <div><span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-1">Facility</span><span class="text-ebony text-[15px] font-semibold">${p.sectorLabel}</span></div>
-                            <!-- ASSET-SLOT: text | Aaron | project detail SF: ${p.slug} | REQUIRED -->
-                            <div><span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-1">Square footage</span><p class="req">[REQ]</p></div>
-                            <!-- ASSET-SLOT: text | Aaron | project detail schedule: ${p.slug} | REQUIRED -->
-                            <div><span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-1">Schedule</span><p class="req">[REQ]</p></div>
-                            <!-- ASSET-SLOT: text | Aaron | project detail compliance: ${p.slug} | REQUIRED -->
-                            <div><span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-1">Compliance tier</span><p class="req">[REQ]</p></div>
+                        <div class="flex flex-wrap gap-x-12 gap-y-6 border-y border-ebony py-6 mb-12">
+                            ${projectMetrics(p).map(([label, val]) => `<div><span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-1">${label}</span><span class="text-ebony text-[15px] font-semibold">${val}</span></div>`).join('')}
                         </div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
                             <div class="lg:col-span-8 flex flex-col gap-10">
                                 <div>
                                     <h2 class="text-[24px] md:text-[28px] font-semibold text-ebony tracking-tighter mb-4">The Challenge</h2>
-                                    <!-- ASSET-SLOT: text | Aaron | project challenge prose: ${p.slug} | REQUIRED -->
-                                    <p class="req">[REQUIRED: 1 to 3 paragraphs describing the project constraints, facility status, and what made the renovation difficult.]</p>
+                                    <p class="text-ebony/85 text-[16px] leading-[1.7]">${p.challenge}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-[24px] md:text-[28px] font-semibold text-ebony tracking-tighter mb-4">The Approach</h2>
-                                    <!-- ASSET-SLOT: text | Aaron | project approach prose: ${p.slug} | REQUIRED -->
-                                    <p class="req">[REQUIRED: how Selvaggi Built sequenced the work, applied the Zero-Disruption Protocol, and coordinated with the facility.]</p>
+                                    <p class="text-ebony/85 text-[16px] leading-[1.7]">${p.approach}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-[24px] md:text-[28px] font-semibold text-ebony tracking-tighter mb-4">The Outcome</h2>
-                                    <!-- ASSET-SLOT: text | Aaron | project outcome prose: ${p.slug} | REQUIRED -->
-                                    <p class="req">[REQUIRED: measurable result. Verified completion details. No marketing fluff.]</p>
+                                    <p class="text-ebony/85 text-[16px] leading-[1.7]">${p.outcome}</p>
                                 </div>
                                 <div class="flex flex-col sm:flex-row gap-4 border-t border-ebony pt-8">
                                     <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Start an RFP</a>
@@ -2025,12 +1855,9 @@
                                 </div>
                             </div>
                             <aside class="lg:col-span-4">
-                                <!-- ASSET-SLOT: text | Aaron / Leslie | optional client quote: ${p.slug} | OPTIONAL: real attributed client quote with signed release -->
-                                <div class="border-l-2 border-copper pl-6 py-2">
-                                    <span class="text-copper text-[36px] font-semibold leading-none block mb-3">"</span>
-                                    <p class="req mb-4">[OPTIONAL: real attributed client quote with signed release. Leave blank if none.]</p>
-                                    <p class="req mb-1">[OPTIONAL: name]</p>
-                                    <p class="req">[OPTIONAL: title, organization]</p>
+                                <div class="border-l-2 border-copper pl-6 py-2 lg:sticky lg:top-28">
+                                    <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-3">Outcome</span>
+                                    <p class="text-ebony text-[20px] font-semibold leading-[1.45] tracking-tighter">${p.outcomeLine}</p>
                                 </div>
                             </aside>
                         </div>
@@ -2041,11 +1868,9 @@
                     <div class="max-w-[1280px] mx-auto px-6">
                         <span class="text-copper text-[12px] font-semibold uppercase tracking-caption block mb-6">Gallery</span>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            ${p.gallery.map((g, i) => `
-                                <!-- ASSET-SLOT: image | Aaron | project gallery image ${i+1}: ${p.slug} | REPLACE stock placeholder with real Selvaggi project photo -->
-                                <div class="photo aspect-[4/3]" data-placeholder="true">
-                                    <img src="${g}" alt="" loading="lazy">
-                                    <span class="placeholder-flag glass">Representative</span>
+                            ${p.gallery.map((g) => `
+                                <div class="photo aspect-[4/3]">
+                                    <img src="${g.src}" alt="${g.alt}" loading="lazy">
                                 </div>
                             `).join('')}
                         </div>
@@ -2062,93 +1887,7 @@
             applyReveals();
         }
 
-        function insightCardHTML(i) {
-            return `
-                <article class="card glass glass-hover border border-copper/40 flex flex-col">
-                    <a href="#/insights/${i.slug}" data-route="/insights/${i.slug}" class="block">
-                        <!-- ASSET-SLOT: image | Leslie | insight card image: ${i.slug} | REPLACE stock placeholder with editorial photo for "${i.title}" -->
-                        <div class="photo aspect-[16/9]" data-placeholder="true">
-                            <img src="${i.image}" alt="" loading="lazy">
-                            <span class="placeholder-flag glass">Representative</span>
-                        </div>
-                    </a>
-                    <div class="p-7 flex flex-col flex-grow">
-                        <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-3">${i.category}</span>
-                        <h3 class="text-ebony text-[18px] font-semibold leading-[1.35] mb-4">${i.title}</h3>
-                        <!-- ASSET-SLOT: text | Leslie | insight excerpt: ${i.slug} | MIGRATE: excerpt from live selvaggibuilt.com post. Scrub any "ground-up" or residential / commercial / industrial language. -->
-                        <p class="req mb-5">[MIGRATE: excerpt from live selvaggibuilt.com post for "${i.title}". Scrub any ground-up / commercial / industrial language. Healthcare interior only.]</p>
-                        <a href="#/insights/${i.slug}" data-route="/insights/${i.slug}" class="link-arrow inline-flex items-center text-copper font-medium text-[13px] uppercase tracking-subhead mt-auto w-max">
-                            Read article
-                            <svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
-                        </a>
-                    </div>
-                </article>
-            `;
-        }
-
-        function renderInsights() {
-            const grid = document.getElementById('insightsGrid');
-            if (grid) grid.innerHTML = insights.map(insightCardHTML).join('');
-            applyReveals();
-        }
-
-        function renderInsightDetail(slug) {
-            const i = insights.find(x => x.slug === slug);
-            const root = document.getElementById('insightDetailRoot');
-            if (!i) {
-                root.innerHTML = `<section class="py-32 text-center"><h1 class="text-[32px] font-semibold text-ebony">Article not found.</h1><p class="mt-4"><a href="#/insights" data-route="/insights" class="text-copper">Back to insights</a></p></section>`;
-                return;
-            }
-            const others = insights.filter(x => x.slug !== i.slug).slice(0, 3);
-            root.innerHTML = `
-                <section class="bg-ivory py-16 md:py-20">
-                    <div class="max-w-[820px] mx-auto px-6">
-                        <a href="#/insights" data-route="/insights" class="inline-flex items-center text-copper text-[12px] font-semibold uppercase tracking-caption mb-6 link-arrow">
-                            <svg class="w-4 h-4 mr-2 rotate-180" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
-                            Back to insights
-                        </a>
-                        <span class="text-copper text-[12px] font-semibold uppercase tracking-caption block mb-4">${i.category}</span>
-                        <h1 class="text-[32px] md:text-[48px] font-semibold text-ebony tracking-tighter leading-[1.1] mb-6">${i.title}</h1>
-                        <!-- ASSET-SLOT: text | Leslie | insight publication date: ${i.slug} | REQUIRED from source -->
-                        <p class="text-ebony/60 text-[13px]">
-                            <span class="req">[REQUIRED: publication date from source post]</span>
-                        </p>
-                    </div>
-                </section>
-
-                <section class="bg-white">
-                    <div class="max-w-[1100px] mx-auto px-6 pt-8">
-                        <!-- ASSET-SLOT: image | Leslie | insight detail hero: ${i.slug} | REPLACE stock placeholder with editorial image for this article -->
-                        <div class="photo aspect-[16/9]" data-placeholder="true">
-                            <img src="${i.image}" alt="" loading="lazy">
-                            <span class="placeholder-flag glass">Representative</span>
-                        </div>
-                    </div>
-                </section>
-
-                <article class="bg-white py-16 md:py-24">
-                    <div class="max-w-[720px] mx-auto px-6 text-[16px] md:text-[17px] text-ebony/85">
-                        <!-- ASSET-SLOT: text | Leslie | insight body: ${i.slug} | MIGRATE: full article body from live selvaggibuilt.com post. Scrub any "ground-up" or residential / commercial / industrial language. Healthcare interior only. -->
-                        <p class="req text-[15px] mb-6">[MIGRATE: full article body for "${i.title}" from live selvaggibuilt.com post.]</p>
-                        <p class="req text-[15px] mb-6">[MIGRATE: scrub any ground-up / commercial / industrial language during migration. Selvaggi Built scope is healthcare interior only.]</p>
-
-                        <blockquote class="border-l-2 border-copper pl-6 my-10 text-[20px] md:text-[22px] font-semibold text-ebony leading-[1.4]">
-                            <span class="req">[OPTIONAL: pull-quote from migrated body.]</span>
-                        </blockquote>
-                    </div>
-                </article>
-
-                <section class="bg-ivory py-16 md:py-24">
-                    <div class="max-w-[1280px] mx-auto px-6">
-                        <span class="text-copper text-[12px] font-semibold uppercase tracking-caption block mb-6">Related articles</span>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            ${others.map(insightCardHTML).join('')}
-                        </div>
-                    </div>
-                </section>
-            `;
-            applyReveals();
-        }
+        // Insights render functions removed for launch (no articles supplied yet).
 
         /* ============================================================
            ROUTER
@@ -2158,7 +1897,6 @@
             '/expertise':    'view-expertise',
             '/how-we-work':  'view-how-we-work',
             '/projects':     'view-projects',
-            '/insights':     'view-insights',
             '/company':      'view-company',
             '/contact':      'view-contact'
         };
@@ -2213,11 +1951,6 @@
                 activateView('view-project-detail');
                 renderProjectDetail(slug);
                 setMeta('view-project-detail');
-            } else if (path.startsWith('/insights/') && path.length > '/insights/'.length) {
-                const slug = path.replace('/insights/', '');
-                activateView('view-insight-detail');
-                renderInsightDetail(slug);
-                setMeta('view-insight-detail');
             } else {
                 const id = routes[path] || 'view-home';
                 activateView(id);
@@ -2632,7 +2365,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (!location.hash) location.hash = '#/home';
             renderProjects();
-            renderInsights();
             attachProjectFilter();
             router();
             patchStatusEl('contactStatus');
