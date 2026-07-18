@@ -1360,19 +1360,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Aaron -->
-                        <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
-                            <div class="photo aspect-[4/5]">
-                                <img src="assets/team/aaron.webp" alt="Portrait of Aaron Selvaggi" loading="lazy">
-                            </div>
-                            <div class="p-7">
-                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Aaron Selvaggi</h3>
-                                <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Founder &amp; President</span>
-                                <p class="text-ebony/80 text-[14px] mb-3">Provides leadership across Selvaggi Built's healthcare renovation work, helping guide client relationships, project standards, and the company's commitment to safety, communication, and reliable execution.</p>
-                                <p class="text-ebony/80 text-[14px]">With a steady focus on trust, craftsmanship, and accountability, he helps ensure the team delivers complex renovation projects with the professionalism and responsiveness active healthcare environments require.</p>
-                            </div>
-                        </article>
-
                         <!-- Joel -->
                         <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
                             <div class="photo aspect-[4/5]">
@@ -1978,7 +1965,7 @@
         }
 
         /* ============================================================
-           AI PROXY CALLS. Claude Sonnet backend
+           AI PROXY CALLS. Gemini backend
            POST to /api/ai with { tool, payload } shape.
            No client-side keys. no upstream-vendor identifiers in client code.
            ============================================================ */
@@ -2004,7 +1991,7 @@
         function unlockBtn(btn, spinner) { btn.disabled = false; btn.style.opacity = '1'; spinner.style.display = 'none'; }
         function backendOfflineHTML() {
             return `<p class="text-copper text-[14px] font-semibold uppercase tracking-caption mb-2">Backend required</p>
-            <p class="text-[14px]">The AI scoping tools require the Claude Sonnet backend proxy. Start the proxy server and try again, or contact us directly at <a href="tel:6572013606" class="underline">657-201-3606</a>.</p>`;
+            <p class="text-[14px]">The AI scoping tools require the backend proxy. Start the proxy server and try again, or contact us directly at <a href="tel:6572013606" class="underline">657-201-3606</a>.</p>`;
         }
 
         async function generateRfpDraft() {
