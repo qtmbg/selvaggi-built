@@ -130,7 +130,7 @@
         .view { display: none; opacity: 0; transition: opacity 0.4s ease; }
         .view.active { display: block; opacity: 1; }
 
-        /* Ask-RFP pill — the one-line project intake that feeds the RFP modal.
+        /* Ask-RFP pill: the one-line project intake that feeds the RFP modal.
            A rotating example brief cycles in the empty input; on submit the
            typed text disintegrates into dust (canvas) and the RFP modal opens
            prefilled. Markup lives in the home CTA and Tools brief sections. */
@@ -157,14 +157,17 @@
         .ask-rfp-input:disabled { opacity: 0; }
         .ask-rfp-ph {
             pointer-events: none;
-            position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+            /* Centered via line-height, not translateY: the global
+               reduced-motion rule forces transform:none on everything,
+               which would knock a transform-centered label off-center. */
+            position: absolute; left: 0; top: 0; height: 100%; line-height: 24px;
             max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
             font-size: 15px; color: rgba(16, 24, 32, 0.42);
             opacity: 1;
             transition: opacity 0.32s ease, transform 0.32s ease, filter 0.32s ease;
         }
-        .ask-rfp-ph.is-leaving { opacity: 0; transform: translateY(calc(-50% - 10px)); filter: blur(4px); }
-        .ask-rfp-ph.is-entering { opacity: 0; transform: translateY(calc(-50% + 10px)); filter: blur(4px); transition: none; }
+        .ask-rfp-ph.is-leaving { opacity: 0; transform: translateY(-10px); filter: blur(4px); }
+        .ask-rfp-ph.is-entering { opacity: 0; transform: translateY(10px); filter: blur(4px); transition: none; }
         .ask-rfp-ph.is-hidden { opacity: 0; transition: opacity 0.15s ease; }
         /* Dust canvas overhangs the pill's right edge, so it must not be clipped. */
         .ask-rfp-canvas { pointer-events: none; position: absolute; left: 0; top: 0; }
@@ -190,7 +193,7 @@
             .ask-rfp-ph, .ask-rfp-input { transition: none; }
         }
 
-        /* FAQ accordion — native <details>/<summary> so it works with no JS,
+        /* FAQ accordion: native <details>/<summary> so it works with no JS,
            styled to the glass system. The copper plus rotates to an X on open. */
         .faq-item { border-bottom: 1px solid rgba(16, 24, 32, 0.12); }
         .faq-item summary {
@@ -740,7 +743,7 @@
                 <img src="assets/logo/logo-horizontal-color.svg" alt="Selvaggi Built" class="h-8 md:h-9 w-auto">
             </a>
 
-            <!-- The logo is the Home link — keeping Home out of the desktop nav
+            <!-- The logo is the Home link; keeping Home out of the desktop nav
                  gives the 7 remaining items room to breathe at laptop widths. -->
             <div class="hidden lg:flex items-center gap-4 xl:gap-8 text-ebony text-[12px] xl:text-[13px] font-medium tracking-subhead uppercase whitespace-nowrap">
                 <a href="#/expertise" data-route="/expertise" class="nav-link">Expertise</a>
@@ -826,6 +829,34 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- Ready to start: the primary conversion band, deliberately first
+                 thing after the hero so visitors can act immediately. -->
+            <section class="bg-ivory py-16 md:py-20 border-t border-ebony/10">
+                <div class="max-w-[720px] mx-auto px-6 text-center flex flex-col items-center reveal">
+                    <span class="text-copper text-[12px] font-semibold uppercase tracking-caption mb-5">Ready to start</span>
+                    <h2 class="text-[32px] md:text-[44px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-5">Submit a project for review.</h2>
+                    <p class="text-ebony/80 text-[16px] md:text-[18px] mb-8 max-w-[540px]">
+                        Describe it in one line: scope, schedule, constraints. Our scoping assistant turns it into a formal brief for our estimators.
+                    </p>
+                    <form data-ask-rfp class="w-full max-w-[560px]" aria-label="Describe your project to start an RFP">
+                        <div class="ask-rfp-pill glass-btn">
+                            <div class="ask-rfp-field">
+                                <div class="ask-rfp-clip">
+                                    <input type="text" class="ask-rfp-input" aria-label="Describe your project" autocomplete="off" spellcheck="false">
+                                    <span class="ask-rfp-ph" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <button type="submit" class="ask-rfp-submit" aria-label="Start an RFP with this description">
+                                <svg class="w-[18px] h-[18px]" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="text-ebony/70 text-[14px] mt-5">
+                        Prefer to talk it through first? <a href="#/contact" data-route="/contact" class="text-copper font-semibold hover:underline">Contact us</a>. We respond within one business day.
+                    </p>
                 </div>
             </section>
 
@@ -936,7 +967,7 @@
                 </div>
             </section>
 
-            <!-- Condensed FAQ — answers the three biggest pre-conversion questions
+            <!-- Condensed FAQ: answers the three biggest pre-conversion questions
                  in place; the full list lives at #/faq (also linked in the footer). -->
             <section class="bg-white py-20 md:py-28 border-t border-ebony/10">
                 <div class="max-w-[860px] mx-auto px-6">
@@ -953,7 +984,7 @@
                                 <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
                             </summary>
                             <div class="faq-answer">
-                                <p>That is the core of what we do. Our Zero-Disruption Protocol engineers the build sequence around facility operations — phasing, containment, infection control, shutdowns, access, and daily documentation — so patient care continues while construction moves forward.</p>
+                                <p>That is the core of what we do. Our Zero-Disruption Protocol engineers the build sequence around facility operations: phasing, containment, infection control, shutdowns, access, and daily documentation, so patient care continues while construction moves forward.</p>
                             </div>
                         </details>
                         <details class="faq-item">
@@ -961,7 +992,7 @@
                                 <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
                             </summary>
                             <div class="faq-answer">
-                                <p>Start an RFP below — one line is enough to begin — or <a href="#/contact" data-route="/contact">contact us</a> directly. We respond within one business day, and we walk the facility before we quote.</p>
+                                <p>Start an RFP at the top of this page (one line is enough to begin) or <a href="#/contact" data-route="/contact">contact us</a> directly. We respond within one business day, and we walk the facility before we quote.</p>
                             </div>
                         </details>
                         <details class="faq-item">
@@ -969,37 +1000,25 @@
                                 <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
                             </summary>
                             <div class="faq-answer">
-                                <p>California only — hospitals, medical office buildings, surgery centers, behavioral health facilities, imaging suites, and laboratories, under CSLB License #1079406. More detail in the <a href="#/faq" data-route="/faq">full FAQ</a>.</p>
+                                <p>California only: hospitals, medical office buildings, surgery centers, behavioral health facilities, imaging suites, and laboratories, under CSLB License #1079406. More detail in the <a href="#/faq" data-route="/faq">full FAQ</a>.</p>
                             </div>
                         </details>
                     </div>
                 </div>
             </section>
 
-            <!-- CTA -->
-            <section class="bg-ivory py-20 md:py-28">
+            <!-- Closing CTA -->
+            <section class="bg-ivory py-16 md:py-20">
                 <div class="max-w-[720px] mx-auto px-6 text-center flex flex-col items-center reveal">
-                    <span class="text-copper text-[12px] font-semibold uppercase tracking-caption mb-6">Ready to start</span>
-                    <h2 class="text-[36px] md:text-[52px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Submit a project for review.</h2>
+                    <span class="text-copper text-[12px] font-semibold uppercase tracking-caption mb-6">Ready when you are</span>
+                    <h2 class="text-[32px] md:text-[44px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Let's walk your facility.</h2>
                     <p class="text-ebony/80 text-[17px] md:text-[19px] mb-10 max-w-[540px]">
-                        Describe it in one line — scope, schedule, constraints. Our scoping assistant turns it into a formal brief for our estimators.
+                        We listen on site before we quote. Send your project for review and we respond within one business day.
                     </p>
-                    <form data-ask-rfp class="w-full max-w-[560px]" aria-label="Describe your project to start an RFP">
-                        <div class="ask-rfp-pill glass-btn">
-                            <div class="ask-rfp-field">
-                                <div class="ask-rfp-clip">
-                                    <input type="text" class="ask-rfp-input" aria-label="Describe your project" autocomplete="off" spellcheck="false">
-                                    <span class="ask-rfp-ph" aria-hidden="true"></span>
-                                </div>
-                            </div>
-                            <button type="submit" class="ask-rfp-submit" aria-label="Start an RFP with this description">
-                                <svg class="w-[18px] h-[18px]" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
-                            </button>
-                        </div>
-                    </form>
-                    <p class="text-ebony/70 text-[14px] mt-6">
-                        Prefer to talk it through first? <a href="#/contact" data-route="/contact" class="text-copper font-semibold hover:underline">Contact us</a> — we respond within one business day.
-                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                        <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Start an RFP</a>
+                        <a href="#/contact" data-route="/contact" class="btn-secondary border border-ebony text-ebony h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Contact us</a>
+                    </div>
                 </div>
             </section>
         </section>
@@ -1133,7 +1152,7 @@
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Medical Offices</h3>
-                                <p class="text-ebony/80 text-[15px]">Tenant improvements for physician groups and specialty clinics — scheduled around patient appointments and clinical workflows.</p>
+                                <p class="text-ebony/80 text-[15px]">Tenant improvements for physician groups and specialty clinics, scheduled around patient appointments and clinical workflows.</p>
                             </div>
                         </article>
 
@@ -1155,7 +1174,7 @@
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Imaging and Diagnostic</h3>
-                                <p class="text-ebony/80 text-[15px]">Lead-lined suites, structural supports, and clean power for advanced imaging modalities — installed without disrupting adjacent clinical areas.</p>
+                                <p class="text-ebony/80 text-[15px]">Lead-lined suites, structural supports, and clean power for advanced imaging modalities, installed without disrupting adjacent clinical areas.</p>
                             </div>
                         </article>
 
@@ -1177,7 +1196,7 @@
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Laboratory and Pathology</h3>
-                                <p class="text-ebony/80 text-[15px]">Casework, utilities, and ventilation systems renovated in active lab environments — coordinated around specimen processing schedules and biosafety requirements.</p>
+                                <p class="text-ebony/80 text-[15px]">Casework, utilities, and ventilation systems renovated in active lab environments, coordinated around specimen processing schedules and biosafety requirements.</p>
                             </div>
                         </article>
                     </div>
@@ -1268,7 +1287,7 @@
                     <span class="text-copper text-[12px] font-semibold uppercase tracking-caption block mb-4">Diagnostic intelligence</span>
                     <h2 class="text-[28px] md:text-[40px] font-semibold text-ivory tracking-tighter mb-6">Scope your project before you walk it.</h2>
                     <p class="text-ivory/80 text-[16px] max-w-[620px] mx-auto mb-10">
-                        Our free planning tools generate an ICRA containment matrix, an HCAI compliance roadmap, and a structured project brief in minutes — the same first questions we answer on every site walk.
+                        Our free planning tools generate an ICRA containment matrix, an HCAI compliance roadmap, and a structured project brief in minutes: the same first questions we answer on every site walk.
                     </p>
                     <a href="#/tools" data-route="/tools" class="btn-primary bg-copper text-white h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Open the Toolkit</a>
                 </div>
@@ -1307,7 +1326,7 @@
                         <span class="text-copper text-[12px] font-semibold tracking-caption block mb-3">Compliance diagnostic</span>
                         <h3 class="text-[26px] md:text-[34px] font-semibold text-ivory mb-4 tracking-tighter">ICRA Level Assessor</h3>
                         <p class="text-ivory/80 text-[16px] max-w-[620px] mx-auto">
-                            Select your construction activity type, patient risk group, project duration, and adjacent occupancy — instantly generate your required ICRA barrier tier, negative-pressure specification, and mitigation checklist to share with your infection control team.
+                            Select your construction activity type, patient risk group, project duration, and adjacent occupancy, then instantly generate your required ICRA barrier tier, negative-pressure specification, and mitigation checklist to share with your infection control team.
                         </p>
                     </div>
 
@@ -1385,7 +1404,7 @@
                         <span class="text-copper text-[12px] font-semibold tracking-caption block mb-3">Intelligent forecasting</span>
                         <h3 class="text-[26px] md:text-[34px] font-semibold text-ivory mb-4 tracking-tighter">Process and Compliance Roadmap</h3>
                         <p class="text-ivory/80 text-[16px] max-w-[620px] mx-auto">
-                            Enter your project scope and California facility type — generate a baseline phasing schedule, critical-path summary, and HCAI compliance roadmap ready for your facility planning team.
+                            Enter your project scope and California facility type, then generate a baseline phasing schedule, critical-path summary, and HCAI compliance roadmap ready for your facility planning team.
                         </p>
                     </div>
 
@@ -1472,7 +1491,7 @@
                     <span class="text-copper text-[12px] font-semibold uppercase tracking-caption block mb-3">Intelligent scoping</span>
                     <h2 class="text-[26px] md:text-[34px] font-semibold text-ebony mb-4 tracking-tighter">Project Brief Builder</h2>
                     <p class="text-ebony/80 text-[16px] max-w-[620px] mx-auto mb-8">
-                        Have rough notes from a planning meeting? Start with one line — our scoping assistant structures it into a formal brief — scope, phasing constraints, compliance flags — ready to submit directly to our estimating team.
+                        Have rough notes from a planning meeting? Start with one line and our scoping assistant structures it into a formal brief (scope, phasing constraints, compliance flags) ready to submit directly to our estimating team.
                     </p>
                     <form data-ask-rfp class="w-full max-w-[560px] mx-auto" aria-label="Describe your project to draft a brief">
                         <div class="ask-rfp-pill glass-btn">
@@ -1542,7 +1561,7 @@
                     <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-caption mb-6 block">Insights</span>
                     <h1 class="text-[44px] md:text-[64px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Field notes from active facilities.</h1>
                     <p class="text-ebony/80 text-[18px] md:text-[20px] max-w-[680px] mx-auto">
-                        What we do, what we know, and what we keep learning about building inside California's healthcare environments — written for the facility directors, planners, and infection preventionists who live it.
+                        What we do, what we know, and what we keep learning about building inside California's healthcare environments, written for the facility directors, planners, and infection preventionists who live it.
                     </p>
                 </div>
             </section>
@@ -1850,7 +1869,7 @@
                     <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-caption mb-6 block">Questions</span>
                     <h1 class="text-[44px] md:text-[64px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Frequently asked questions.</h1>
                     <p class="text-ebony/80 text-[18px] md:text-[20px] max-w-[640px] mx-auto">
-                        What facility directors, planners, and infection preventionists ask us most — before, during, and after a project.
+                        What facility directors, planners, and infection preventionists ask us most: before, during, and after a project.
                     </p>
                 </div>
             </section>
@@ -1868,7 +1887,7 @@
                                 <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
                             </summary>
                             <div class="faq-answer">
-                                <p>Start an RFP from any page — describe your project in a line or two and our scoping assistant structures it into a formal brief for our estimating team. If you would rather talk first, <a href="#/contact" data-route="/contact">contact us</a> directly; we respond within one business day.</p>
+                                <p>Start an RFP from any page: describe your project in a line or two and our scoping assistant structures it into a formal brief for our estimating team. If you would rather talk first, <a href="#/contact" data-route="/contact">contact us</a> directly; we respond within one business day.</p>
                                 <p>Either way, we walk the facility before we quote. Every plan starts with a clear understanding of patient care, staff workflow, access, safety, and infection control on your site.</p>
                             </div>
                         </details>
@@ -1893,7 +1912,7 @@
                                 <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
                             </summary>
                             <div class="faq-answer">
-                                <p>Both. Recent work ranges from focused refurbishments — a nurses station, behavioral health dining rooms — to multi-phase renovation programs. What matters is not the size of the project; it is that the work happens inside an active healthcare environment, and that is what our process is built for.</p>
+                                <p>Both. Recent work ranges from focused refurbishments (a nurses station, behavioral health dining rooms) to multi-phase renovation programs. What matters is not the size of the project; it is that the work happens inside an active healthcare environment, and that is what our process is built for.</p>
                             </div>
                         </details>
                     </div>
@@ -1908,7 +1927,7 @@
                                 <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
                             </summary>
                             <div class="faq-answer">
-                                <p>That is the core of what we do. Our Zero-Disruption Protocol engineers the build sequence around facility operations — phasing, containment, infection control, utility shutdowns, access, and daily documentation — so patient care continues while construction moves forward. Read more in <a href="#/how-we-work" data-route="/how-we-work">How We Work</a>.</p>
+                                <p>That is the core of what we do. Our Zero-Disruption Protocol engineers the build sequence around facility operations: phasing, containment, infection control, utility shutdowns, access, and daily documentation, so patient care continues while construction moves forward. Read more in <a href="#/how-we-work" data-route="/how-we-work">How We Work</a>.</p>
                             </div>
                         </details>
                         <details class="faq-item">
@@ -1924,7 +1943,7 @@
                                 <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
                             </summary>
                             <div class="faq-answer">
-                                <p>Disruptive tie-ins, shutdowns, and utility work are restricted to pre-approved after-hours windows with facility sign-off. The schedule serves the facility, not the build — work hours, deliveries, and access are planned around your operations.</p>
+                                <p>Disruptive tie-ins, shutdowns, and utility work are restricted to pre-approved after-hours windows with facility sign-off. The schedule serves the facility, not the build: work hours, deliveries, and access are planned around your operations.</p>
                             </div>
                         </details>
                     </div>
@@ -1947,7 +1966,7 @@
                                 <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
                             </summary>
                             <div class="faq-answer">
-                                <p>Yes — we plan and deliver work in HCAI-regulated facilities, coordinating phasing, inspections, and documentation with your Inspector of Record. Our <a href="#/tools" data-route="/tools">compliance roadmap tool</a> maps the permit path for your project type.</p>
+                                <p>Yes. We plan and deliver work in HCAI-regulated facilities, coordinating phasing, inspections, and documentation with your Inspector of Record. Our <a href="#/tools" data-route="/tools">compliance roadmap tool</a> maps the permit path for your project type.</p>
                             </div>
                         </details>
                         <details class="faq-item">
@@ -1955,7 +1974,7 @@
                                 <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
                             </summary>
                             <div class="faq-answer">
-                                <p>Your brief goes straight to our estimating team and we respond within one business day. From there we schedule a facility walk — we listen on site before we quote, so the proposal reflects your real operational constraints, not assumptions.</p>
+                                <p>Your brief goes straight to our estimating team and we respond within one business day. From there we schedule a facility walk. We listen on site before we quote, so the proposal reflects your real operational constraints, not assumptions.</p>
                             </div>
                         </details>
                     </div>
@@ -1983,16 +2002,16 @@
                 "@context": "https://schema.org",
                 "@type": "FAQPage",
                 "mainEntity": [
-                    { "@type": "Question", "name": "How do we start a project with Selvaggi Built?", "acceptedAnswer": { "@type": "Answer", "text": "Start an RFP from any page — describe your project in a line or two and the scoping assistant structures it into a formal brief for the estimating team — or contact us directly; we respond within one business day. We walk the facility before we quote." } },
+                    { "@type": "Question", "name": "How do we start a project with Selvaggi Built?", "acceptedAnswer": { "@type": "Answer", "text": "Start an RFP from any page: describe your project in a line or two and the scoping assistant structures it into a formal brief for the estimating team. Or contact us directly; we respond within one business day. We walk the facility before we quote." } },
                     { "@type": "Question", "name": "What areas does Selvaggi Built serve?", "acceptedAnswer": { "@type": "Answer", "text": "California only. Selvaggi Built is based in Anaheim and builds across Southern California's healthcare facilities under CSLB License #1079406." } },
                     { "@type": "Question", "name": "What types of facilities does Selvaggi Built build in?", "acceptedAnswer": { "@type": "Answer", "text": "Hospitals, medical office buildings, surgery centers, behavioral health facilities, imaging and diagnostic suites, and clinical laboratories." } },
-                    { "@type": "Question", "name": "Does Selvaggi Built take on small projects, or only major renovations?", "acceptedAnswer": { "@type": "Answer", "text": "Both — from focused refurbishments such as a nurses station or dining room to multi-phase renovation programs, all inside active healthcare environments." } },
-                    { "@type": "Question", "name": "Can Selvaggi Built renovate while a facility stays open?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — that is the core of the work. The Zero-Disruption Protocol engineers the build sequence around facility operations: phasing, containment, infection control, utility shutdowns, access, and daily documentation, so patient care continues." } },
+                    { "@type": "Question", "name": "Does Selvaggi Built take on small projects, or only major renovations?", "acceptedAnswer": { "@type": "Answer", "text": "Both: from focused refurbishments such as a nurses station or dining room to multi-phase renovation programs, all inside active healthcare environments." } },
+                    { "@type": "Question", "name": "Can Selvaggi Built renovate while a facility stays open?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. That is the core of the work. The Zero-Disruption Protocol engineers the build sequence around facility operations: phasing, containment, infection control, utility shutdowns, access, and daily documentation, so patient care continues." } },
                     { "@type": "Question", "name": "How are patients and staff kept safe during construction?", "acceptedAnswer": { "@type": "Answer", "text": "Containment is planned before mobilization: ICRA barriers, rigid wall systems, HEPA-filtered negative air machines, sealed debris routes, and continuous monitoring. Every phase is reviewed with facility directors and Inspectors of Record." } },
                     { "@type": "Question", "name": "Will there be noise, shutdowns, or interruptions to care?", "acceptedAnswer": { "@type": "Answer", "text": "Disruptive tie-ins, shutdowns, and utility work are restricted to pre-approved after-hours windows with facility sign-off. Work hours, deliveries, and access are planned around facility operations." } },
                     { "@type": "Question", "name": "What ICRA level does Selvaggi Built work under?", "acceptedAnswer": { "@type": "Answer", "text": "Selvaggi Built regularly executes ICRA Level 3 and Level 4 containment. A free ICRA Level Assessor on the Tools page generates the barrier tier, negative-pressure specification, and mitigation checklist for any project." } },
-                    { "@type": "Question", "name": "Does Selvaggi Built work on HCAI (formerly OSHPD) projects?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — work in HCAI-regulated facilities is planned and delivered with phasing, inspections, and documentation coordinated with the facility's Inspector of Record." } },
-                    { "@type": "Question", "name": "What happens after an RFP is submitted?", "acceptedAnswer": { "@type": "Answer", "text": "The brief goes to the estimating team, which responds within one business day, followed by a facility walk before any quote — so the proposal reflects real operational constraints." } }
+                    { "@type": "Question", "name": "Does Selvaggi Built work on HCAI (formerly OSHPD) projects?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Work in HCAI-regulated facilities is planned and delivered with phasing, inspections, and documentation coordinated with the facility's Inspector of Record." } },
+                    { "@type": "Question", "name": "What happens after an RFP is submitted?", "acceptedAnswer": { "@type": "Answer", "text": "The brief goes to the estimating team, which responds within one business day, followed by a facility walk before any quote, so the proposal reflects real operational constraints." } }
                 ]
             }
             </script>
@@ -2101,7 +2120,7 @@
                 slug: 'torrance-nurses-station',
                 sector: 'hospital',
                 sectorLabel: 'Hospital',
-                title: "Torrance Memorial Medical Center — 4th Tower Nurses Station",
+                title: "Torrance Memorial Medical Center: 4th Tower Nurses Station",
                 sqft: "600 SF",
                 schedule: null,
                 compliance: "ICRA Level 4 / HCAI",
@@ -2121,7 +2140,7 @@
                 slug: 'canyon-ridge-patient-rooms',
                 sector: 'behavioral',
                 sectorLabel: 'Behavioral Health',
-                title: "Canyon Ridge Behavioral Health — Patient Room Renovations",
+                title: "Canyon Ridge Behavioral Health: Patient Room Renovations",
                 sqft: "17,766 SF",
                 schedule: "15 months",
                 compliance: "ICRA Level 3",
@@ -2141,11 +2160,11 @@
                 slug: 'del-amo-dining',
                 sector: 'behavioral',
                 sectorLabel: 'Behavioral Health',
-                title: "Del Amo Behavioral Health — Dining Room Refurbishment",
+                title: "Del Amo Behavioral Health: Dining Room Refurbishment",
                 sqft: "1,700 SF",
                 schedule: null,
                 compliance: "ICRA Level 3",
-                outcomeLine: "Two behavioral health dining rooms refreshed with floating solid-surface counters, integrated equipment enclosures, and new flooring — completed in an occupied facility.",
+                outcomeLine: "Two behavioral health dining rooms refreshed with floating solid-surface counters, integrated equipment enclosures, and new flooring, completed in an occupied facility.",
                 challenge: "The existing dining room counters at Del Amo ITU and Del Sol Dining Rooms were outdated and did not provide the desired functionality or appearance for the facility. The project required the removal of existing counters, cabinets, and wall protection while working within an occupied healthcare environment where dust control, safety, and minimal disruption to operations were critical considerations.",
                 approach: "The refurbishment included selective demolition of existing finishes and millwork, installation of concealed floating counter support brackets anchored directly to wall studs, construction of new support framing and cabinetry for water filtration systems, and installation of new solid surface floating counters. Additional improvements included new water filter and coffee dispenser enclosures, drywall repairs, complete interior painting of both dining rooms, and installation of approximately 1,700 square feet of Mannington glue-down LVT flooring. Infection control measures, including negative air pressure equipment and dust containment procedures, were implemented throughout construction to maintain a safe environment for patients and staff.",
                 outcome: "The project transformed both dining rooms with a modern floating counter design that improved functionality, accessibility, and aesthetics. The new solid surface counters, integrated equipment enclosures, refreshed finishes, and upgraded flooring created a cleaner, more durable, and visually appealing environment while supporting daily facility operations. The completed renovations enhanced the overall dining experience and delivered a long-lasting solution aligned with the facility's operational needs and design objectives.",
@@ -2306,10 +2325,10 @@
                 date: '2026-06-03',
                 dateDisplay: 'June 3, 2026',
                 readTime: '8 min read',
-                excerpt: 'The Infection Control Risk Assessment decides how every healthcare construction project is contained. Here is how the matrix works — and what the highest levels demand in the field.',
+                excerpt: 'The Infection Control Risk Assessment decides how every healthcare construction project is contained. Here is how the matrix works, and what the highest levels demand in the field.',
                 metaDescription: 'ICRA levels explained for healthcare construction: how the ICRA matrix assigns Class I–IV precautions, what Class III and IV containment require, ICRA 2.0 changes, and common containment failures.',
                 body: `
-                    <p>Every construction project inside a healthcare facility — from a one-day ceiling inspection to a full sterile-core rebuild — starts with the same question: what level of infection control containment does this work require? The <strong>Infection Control Risk Assessment (ICRA)</strong> is how that question gets answered. Get it right and construction proceeds safely alongside patient care. Get it wrong and construction dust can carry Aspergillus and other pathogens into spaces occupied by the patients least able to fight them.</p>
+                    <p>Every construction project inside a healthcare facility, from a one-day ceiling inspection to a full sterile-core rebuild, starts with the same question: what level of infection control containment does this work require? The <strong>Infection Control Risk Assessment (ICRA)</strong> is how that question gets answered. Get it right and construction proceeds safely alongside patient care. Get it wrong and construction dust can carry Aspergillus and other pathogens into spaces occupied by the patients least able to fight them.</p>
 
                     <h2>What is an ICRA?</h2>
                     <p>An ICRA is a documented, multidisciplinary planning step required before construction, renovation, or maintenance work begins in a healthcare environment. It weighs what the work will disturb against who is nearby, then prescribes containment precautions proportional to that risk. Accrediting surveyors treat it as non-negotiable, and in practice no California hospital will let a contractor mobilize without an approved ICRA permit posted at the work area.</p>
@@ -2317,19 +2336,19 @@
                     <h2>How the ICRA matrix works</h2>
                     <p>The classic matrix takes two inputs and produces one output:</p>
                     <ol>
-                        <li><strong>Construction activity type (A through D).</strong> Type A covers non-invasive work such as inspection or painting over prepared surfaces. Type B covers small-scale, short-duration work that generates minimal dust. Type C covers work that generates moderate to high dust — demolishing wall assemblies, sanding, above-ceiling work. Type D covers major demolition, multi-shift renovation, and new construction.</li>
+                        <li><strong>Construction activity type (A through D).</strong> Type A covers non-invasive work such as inspection or painting over prepared surfaces. Type B covers small-scale, short-duration work that generates minimal dust. Type C covers work that generates moderate to high dust: demolishing wall assemblies, sanding, above-ceiling work. Type D covers major demolition, multi-shift renovation, and new construction.</li>
                         <li><strong>Patient risk group.</strong> Every adjacent space is classified from low risk (office and public areas) through medium and high (outpatient clinics, emergency, surgical recovery, labs) to highest risk (operating rooms, ICU, oncology, transplant units, central sterile processing).</li>
-                        <li><strong>The resulting precaution class (I through IV).</strong> Cross-reference the activity type against the highest applicable patient risk group and the matrix assigns the precaution class — what most field teams simply call the ICRA level.</li>
+                        <li><strong>The resulting precaution class (I through IV).</strong> Cross-reference the activity type against the highest applicable patient risk group and the matrix assigns the precaution class, which is what most field teams simply call the ICRA level.</li>
                     </ol>
                     <p>In 2022 the American Society for Health Care Engineering published <strong>ICRA 2.0</strong>, which refined the matrix, strengthened pre-construction meeting requirements, and added a fifth precaution class for the highest-risk combinations. Many California facilities still speak the familiar Class I–IV language, so confirm which version your infection prevention team uses before writing a containment plan.</p>
 
                     <h2>What Class III containment requires</h2>
                     <ul>
-                        <li>Dust barriers sealed from floor to deck — sheet plastic at minimum, rigid barrier walls for longer-duration work — erected <strong>before</strong> any demolition begins.</li>
+                        <li>Dust barriers sealed from floor to deck (sheet plastic at minimum, rigid barrier walls for longer-duration work), erected <strong>before</strong> any demolition begins.</li>
                         <li>Negative air pressure inside the work zone, maintained with HEPA-filtered air machines exhausting appropriately.</li>
                         <li>Debris removed in tightly covered, sealed carts along pre-approved routes.</li>
                         <li>Walk-off mats at the exit and HEPA vacuuming of the work area.</li>
-                        <li>Barriers stay up until the project is complete, cleaned, and inspected — not until the trade work happens to finish.</li>
+                        <li>Barriers stay up until the project is complete, cleaned, and inspected, not until the trade work happens to finish.</li>
                     </ul>
 
                     <h2>What Class IV adds on top</h2>
@@ -2337,7 +2356,7 @@
                         <li>An <strong>anteroom</strong> at the entry, so workers pass through a controlled buffer rather than stepping directly from containment into a clinical corridor.</li>
                         <li>All penetrations, joints, and seams in the barrier sealed airtight.</li>
                         <li>Workers HEPA-vacuumed or de-gowned of coveralls in the anteroom before exiting.</li>
-                        <li>Continuous negative-pressure monitoring — a manometer with logged readings, not a strip of tissue taped to the barrier.</li>
+                        <li>Continuous negative-pressure monitoring: a manometer with logged readings, not a strip of tissue taped to the barrier.</li>
                         <li>Heightened daily inspection and documentation for the life of the project.</li>
                     </ul>
 
@@ -2354,7 +2373,7 @@
                     </ul>
 
                     <h2>Estimate your ICRA class in about a minute</h2>
-                    <p>Our free <a href="#/tools" data-route="/tools">ICRA Level Assessor</a> takes your construction activity type, patient risk group, duration, and adjacent occupancy and generates a reference containment matrix you can bring to your infection prevention team. It is a planning aid, not a permit — final classification always belongs to your facility's infection preventionist. If you would rather talk it through with a contractor who builds under Class IV containment routinely, <a href="#/contact" data-route="/contact">contact us</a>.</p>
+                    <p>Our free <a href="#/tools" data-route="/tools">ICRA Level Assessor</a> takes your construction activity type, patient risk group, duration, and adjacent occupancy and generates a reference containment matrix you can bring to your infection prevention team. It is a planning aid, not a permit; final classification always belongs to your facility's infection preventionist. If you would rather talk it through with a contractor who builds under Class IV containment routinely, <a href="#/contact" data-route="/contact">contact us</a>.</p>
                 `
             },
             {
@@ -2367,21 +2386,21 @@
                 excerpt: 'OSHPD became HCAI, but the review process facility teams plan around is the same. What HCAI has jurisdiction over, the permit path step by step, and why hospital projects stall.',
                 metaDescription: 'A facility manager’s guide to HCAI (formerly OSHPD) hospital building permits in California: jurisdiction, the plan review and Inspector of Record process, OSHPD 1–5 categories, and schedule planning.',
                 body: `
-                    <p>If your facility is planning construction in California, the first acronym on the critical path is <strong>HCAI</strong> — and if you have been doing this a while, you probably still call it OSHPD. Understanding what the agency reviews, what it does not, and how its permit path actually flows is the difference between a schedule you can defend and one that quietly slips a quarter.</p>
+                    <p>If your facility is planning construction in California, the first acronym on the critical path is <strong>HCAI</strong>, and if you have been doing this a while, you probably still call it OSHPD. Understanding what the agency reviews, what it does not, and how its permit path actually flows is the difference between a schedule you can defend and one that quietly slips a quarter.</p>
 
                     <h2>OSHPD became HCAI in 2021</h2>
-                    <p>The Office of Statewide Health Planning and Development (OSHPD) was renamed the <strong>Department of Health Care Access and Information (HCAI)</strong> effective July 1, 2021. The hospital building safety program — plan review, permitting, and construction oversight for health facilities — carried over intact. The people, the process, and most of the paperwork are continuous; only the letterhead changed. The industry still uses the old building categories, so you will hear "OSHPD 1" through "OSHPD 5" on job sites for years to come.</p>
+                    <p>The Office of Statewide Health Planning and Development (OSHPD) was renamed the <strong>Department of Health Care Access and Information (HCAI)</strong> effective July 1, 2021. The hospital building safety program (plan review, permitting, and construction oversight for health facilities) carried over intact. The people, the process, and most of the paperwork are continuous; only the letterhead changed. The industry still uses the old building categories, so you will hear "OSHPD 1" through "OSHPD 5" on job sites for years to come.</p>
 
                     <h2>What HCAI has jurisdiction over</h2>
-                    <p>HCAI reviews and inspects construction at California's general acute care hospitals, acute psychiatric hospitals, and skilled nursing facilities — the building stock where structural and life-safety failure has the highest human cost. Most medical office buildings and many outpatient clinics permit through the <strong>local city or county building department</strong> instead, even when the tenant is a health system. Establishing which jurisdiction owns your project is step zero of any healthcare renovation, because the answer drives the review timeline, the inspection model, and the documentation standard.</p>
+                    <p>HCAI reviews and inspects construction at California's general acute care hospitals, acute psychiatric hospitals, and skilled nursing facilities: the building stock where structural and life-safety failure has the highest human cost. Most medical office buildings and many outpatient clinics permit through the <strong>local city or county building department</strong> instead, even when the tenant is a health system. Establishing which jurisdiction owns your project is step zero of any healthcare renovation, because the answer drives the review timeline, the inspection model, and the documentation standard.</p>
 
                     <h2>The permit path, step by step</h2>
                     <ol>
                         <li><strong>Design and submission.</strong> Your architect and engineers prepare construction documents and submit them to HCAI for plan review.</li>
                         <li><strong>Plan review and back-check.</strong> HCAI reviewers issue comments; the design team responds and resubmits. Clean, complete drawings move through in far fewer cycles than optimistic ones.</li>
                         <li><strong>Permit issuance.</strong> Once approved, HCAI issues the building permit for the defined scope.</li>
-                        <li><strong>Inspector of Record (IOR).</strong> The owner retains an HCAI-certified IOR who provides continuous inspection throughout construction — a stronger oversight model than the periodic city inspections most commercial contractors know.</li>
-                        <li><strong>Construction with documented field changes.</strong> Conditions discovered in the field — and in occupied renovation there are always some — must be captured in amended construction documents and approved, not improvised.</li>
+                        <li><strong>Inspector of Record (IOR).</strong> The owner retains an HCAI-certified IOR who provides continuous inspection throughout construction, a stronger oversight model than the periodic city inspections most commercial contractors know.</li>
+                        <li><strong>Construction with documented field changes.</strong> Conditions discovered in the field (and in occupied renovation there are always some) must be captured in amended construction documents and approved, not improvised.</li>
                         <li><strong>Close-out.</strong> Final inspections, documentation, and sign-off before the space returns to service.</li>
                     </ol>
 
@@ -2397,7 +2416,7 @@
                     <p>HCAI oversight adds review time, inspection cost, and documentation discipline that simply do not exist in standard commercial tenant improvement work. Budget for it explicitly, and weight contractor experience heavily: a builder who works under HCAI oversight and <a href="#/insights/icra-levels-explained" data-route="/insights/icra-levels-explained">ICRA containment</a> every week plans those costs from day one instead of discovering them as change orders.</p>
 
                     <h2>Map your compliance path early</h2>
-                    <p>Our <a href="#/tools" data-route="/tools">Process and Compliance Roadmap tool</a> generates a baseline phasing and HCAI compliance outline from your facility type and scope — a useful first artifact for planning meetings. When you are ready to pressure-test it against real site conditions, <a href="#/contact" data-route="/contact">talk to our estimating team</a>.</p>
+                    <p>Our <a href="#/tools" data-route="/tools">Process and Compliance Roadmap tool</a> generates a baseline phasing and HCAI compliance outline from your facility type and scope, a useful first artifact for planning meetings. When you are ready to pressure-test it against real site conditions, <a href="#/contact" data-route="/contact">talk to our estimating team</a>.</p>
                 `
             },
             {
@@ -2410,10 +2429,10 @@
                 excerpt: 'Patient census does not drop because you are replacing flooring. The playbook for occupied healthcare renovation: investigation, containment, phasing, and communication.',
                 metaDescription: 'How occupied hospital renovation works: pre-construction investigation, ICRA containment and negative air, after-hours tie-ins, interim life safety measures, and stakeholder communication.',
                 body: `
-                    <p>A hospital is a living system. It admits patients at 2 a.m., runs surgical schedules five days a week, and cannot pause because a corridor needs new flooring or a nurses station is being rebuilt. Renovating inside that system is a different discipline from commercial construction — not a harder version of the same job, but a different job. Here is the playbook we run on every occupied-facility project.</p>
+                    <p>A hospital is a living system. It admits patients at 2 a.m., runs surgical schedules five days a week, and cannot pause because a corridor needs new flooring or a nurses station is being rebuilt. Renovating inside that system is a different discipline from commercial construction: not a harder version of the same job, but a different job. Here is the playbook we run on every occupied-facility project.</p>
 
                     <h2>Start with the people, not the plans</h2>
-                    <p>Before sequencing any work, sit down with the people the work will touch: nursing leadership, infection prevention, facilities engineering, security, environmental services. They know which corridor is the crash-cart route, which hours the imaging suite peaks, which door absolutely cannot alarm at night. Then walk the site during the hours you intend to work — a unit at 10 p.m. is a different place than the same unit at 10 a.m.</p>
+                    <p>Before sequencing any work, sit down with the people the work will touch: nursing leadership, infection prevention, facilities engineering, security, environmental services. They know which corridor is the crash-cart route, which hours the imaging suite peaks, which door absolutely cannot alarm at night. Then walk the site during the hours you intend to work; a unit at 10 p.m. is a different place than the same unit at 10 a.m.</p>
 
                     <h2>Investigate before you cut</h2>
                     <p>Occupied healthcare buildings hide decades of undocumented conditions above ceilings and inside walls. We run ground-penetrating radar before saw-cutting, trace and map critical utilities, and survey above-ceiling congestion in every affected area. An hour of investigation is cheaper than an unplanned outage on a line that turned out to feed an operating room.</p>
@@ -2421,19 +2440,19 @@
                     <h2>Containment is a system, not a wall</h2>
                     <p>Dust control in an active facility means a complete system built and verified before demolition starts: rigid barrier walls sealed to the deck, an anteroom at the entry, HEPA-filtered negative air machines holding the work zone under negative pressure, logged manometer readings, walk-off mats, and sealed debris carts on pre-approved routes. The required tier comes from the facility's <a href="#/insights/icra-levels-explained" data-route="/insights/icra-levels-explained">ICRA assessment</a>; holding that tier for the full duration of the project comes from daily superintendent discipline.</p>
 
-                    <h2>Phase around operations — not the other way around</h2>
+                    <h2>Phase around operations, not the other way around</h2>
                     <ul>
                         <li><strong>Disruptive tie-ins go after hours.</strong> Utility shutdowns, loud demolition, and anything touching life-safety systems get scheduled into pre-approved windows with facility sign-off.</li>
-                        <li><strong>Interim life safety measures (ILSM)</strong> are planned wherever the work affects egress paths, fire barriers, or alarm coverage — before the work starts, not after a surveyor asks.</li>
+                        <li><strong>Interim life safety measures (ILSM)</strong> are planned wherever the work affects egress paths, fire barriers, or alarm coverage, before the work starts, not after a surveyor asks.</li>
                         <li><strong>Noise and vibration have curfews.</strong> Hammer drilling above a recovery unit gets a schedule, not an apology.</li>
                         <li><strong>Every phase has an approved fallback.</strong> If a tie-in window closes early, the plan says exactly how the system returns to service.</li>
                     </ul>
 
                     <h2>Communicate like clinical staff depend on it</h2>
-                    <p>They do. A daily look-ahead to unit leadership — what is happening, where, how loud, until when — costs the project team fifteen minutes and buys the kind of trust that keeps a renovation welcome in the building. Surprises, even small ones, are how contractors get escorted out of hospitals.</p>
+                    <p>They do. A daily look-ahead to unit leadership (what is happening, where, how loud, until when) costs the project team fifteen minutes and buys the kind of trust that keeps a renovation welcome in the building. Surprises, even small ones, are how contractors get escorted out of hospitals.</p>
 
                     <h2>What success looks like</h2>
-                    <p>Zero infection-control events. Zero unplanned interruptions to clinical operations. A facility staff that barely noticed the build happening next to them. That is the standard we held rebuilding an active nurses station under full ICRA Level 4 containment at Torrance Memorial — <a href="#/projects" data-route="/projects">read the case study</a> — and it is the standard any facility should hold its contractor to. Planning a project in an occupied building? <a href="#/contact" data-route="/contact">Start the conversation</a>.</p>
+                    <p>Zero infection-control events. Zero unplanned interruptions to clinical operations. A facility staff that barely noticed the build happening next to them. That is the standard we held rebuilding an active nurses station under full ICRA Level 4 containment at Torrance Memorial (<a href="#/projects" data-route="/projects">read the case study</a>), and it is the standard any facility should hold its contractor to. Planning a project in an occupied building? <a href="#/contact" data-route="/contact">Start the conversation</a>.</p>
                 `
             },
             {
@@ -2446,31 +2465,31 @@
                 excerpt: 'In behavioral health, the built environment is part of patient safety. What anti-ligature actually means, where the requirements come from, and the details surveyors flag.',
                 metaDescription: 'Anti-ligature requirements in behavioral health facility construction: fixtures, door hardware, tamper-resistant details, FGI and licensing standards, and how to renovate occupied psychiatric units safely.',
                 body: `
-                    <p>In most construction, finish selections are about durability and aesthetics. In behavioral health, they are part of the clinical safety model. Every fixture, fastener, and door in a psychiatric environment is evaluated against one question: could a patient in crisis use this to harm themselves? Building to that standard — and renovating occupied units to meet it — is specialized work.</p>
+                    <p>In most construction, finish selections are about durability and aesthetics. In behavioral health, they are part of the clinical safety model. Every fixture, fastener, and door in a psychiatric environment is evaluated against one question: could a patient in crisis use this to harm themselves? Building to that standard, and renovating occupied units to meet it, is specialized work.</p>
 
                     <h2>What "anti-ligature" actually means</h2>
                     <p>An anti-ligature (or ligature-resistant) environment eliminates points where a cord, sheet, or clothing could be attached and hold weight. In practice that means sloped top surfaces instead of flat ledges, fully enclosed or recessed fixtures, load-release hardware designed to give way under weight, and continuous geometry that leaves nothing to tie to. It applies to everything a patient can reach: plumbing, doors, HVAC grilles, lighting, furniture, window treatments.</p>
 
                     <h2>Where the requirements come from</h2>
-                    <p>There is no single "anti-ligature code." The standard emerges from several overlapping sources: the FGI Guidelines' behavioral and mental health provisions, state licensing requirements for psychiatric facilities, accreditation surveys that treat ligature risk as a top patient-safety focus, and — most importantly — the facility's own ligature risk assessment. The risk assessment defines which areas require the full standard (patient rooms, seclusion rooms, patient bathrooms) and which allow measured relaxation under staff observation.</p>
+                    <p>There is no single "anti-ligature code." The standard emerges from several overlapping sources: the FGI Guidelines' behavioral and mental health provisions, state licensing requirements for psychiatric facilities, accreditation surveys that treat ligature risk as a top patient-safety focus, and, most importantly, the facility's own ligature risk assessment. The risk assessment defines which areas require the full standard (patient rooms, seclusion rooms, patient bathrooms) and which allow measured relaxation under staff observation.</p>
 
                     <h2>The details that get flagged</h2>
                     <ul>
                         <li><strong>Door hardware:</strong> continuous hinges, sloped-top closers or concealed closers, anti-ligature levers or pulls, and top-of-door alarm systems where the risk assessment requires them.</li>
                         <li><strong>Plumbing fixtures:</strong> ligature-resistant showerheads, faucets, and toilet hardware; no exposed piping.</li>
-                        <li><strong>Fasteners:</strong> tamper-resistant (pin-in-torx or equivalent) at every accessible fixture and panel — one standard screw in a grille is a survey finding.</li>
+                        <li><strong>Fasteners:</strong> tamper-resistant (pin-in-torx or equivalent) at every accessible fixture and panel; one standard screw in a grille is a survey finding.</li>
                         <li><strong>Surfaces and ceilings:</strong> impact-resistant wall assemblies and secured, gasketed ceiling systems patients cannot lift or breach.</li>
                         <li><strong>Glazing and mirrors:</strong> polycarbonate or laminated safety glazing in patient-accessible areas.</li>
                         <li><strong>Furniture:</strong> weighted or anchored, with no removable or breakable components that become weapons or ligature points.</li>
-                        <li><strong>Sight lines:</strong> layouts that preserve staff observation — a beautiful alcove that hides a patient from the nurses station is a design failure.</li>
+                        <li><strong>Sight lines:</strong> layouts that preserve staff observation; a beautiful alcove that hides a patient from the nurses station is a design failure.</li>
                     </ul>
 
                     <h2>Renovating an occupied behavioral unit</h2>
-                    <p>Beyond <a href="#/insights/renovating-active-hospital-without-shutdown" data-route="/insights/renovating-active-hospital-without-shutdown">the usual occupied-facility discipline</a>, behavioral health adds a layer of security protocol: strict tool control with counted inventory in and out every shift, secured material staging, vetted and badged workers, and coordination with clinical staff on patient movement around work zones. A missing screwdriver in a psychiatric unit is not a lost tool — it is a reportable safety event. Contractors must run their site like it matters, because it does.</p>
+                    <p>Beyond <a href="#/insights/renovating-active-hospital-without-shutdown" data-route="/insights/renovating-active-hospital-without-shutdown">the usual occupied-facility discipline</a>, behavioral health adds a layer of security protocol: strict tool control with counted inventory in and out every shift, secured material staging, vetted and badged workers, and coordination with clinical staff on patient movement around work zones. A missing screwdriver in a psychiatric unit is not a lost tool; it is a reportable safety event. Contractors must run their site like it matters, because it does.</p>
 
                     <h2>Questions to ask your contractor</h2>
                     <ul>
-                        <li>Have you delivered behavioral health projects in occupied facilities? Ask for specifics — we have, at <a href="#/projects" data-route="/projects">Del Amo Behavioral Health</a> among others.</li>
+                        <li>Have you delivered behavioral health projects in occupied facilities? Ask for specifics; we have, at <a href="#/projects" data-route="/projects">Del Amo Behavioral Health</a> among others.</li>
                         <li>What is your tool-control procedure, in writing?</li>
                         <li>How do you verify tamper-resistant fastening at closeout?</li>
                         <li>How do you coordinate daily with unit staff on patient safety?</li>
@@ -2481,40 +2500,40 @@
             {
                 slug: 'healthcare-renovation-cost-drivers',
                 category: 'Planning',
-                title: 'Seven Cost Drivers of Healthcare Renovation — and How to Control Them',
+                title: 'Seven Cost Drivers of Healthcare Renovation, and How to Control Them',
                 date: '2026-07-16',
                 dateDisplay: 'July 16, 2026',
                 readTime: '6 min read',
                 excerpt: 'Healthcare interiors cost multiples of standard commercial work for structural reasons, not markup. The seven drivers behind the number, and how disciplined planning keeps each one honest.',
                 metaDescription: 'What drives healthcare renovation costs: ICRA containment, after-hours labor, HCAI review and inspection, above-ceiling unknowns, MEP density, specialty materials, and extended general conditions.',
                 body: `
-                    <p>Facility directors comparing a healthcare renovation quote against their last office tenant improvement often have the same reaction: why is this so much more per square foot? The answer is structural, not markup. Healthcare interior work carries real cost drivers that standard commercial work does not — and understanding them is how you budget accurately and evaluate bids intelligently.</p>
+                    <p>Facility directors comparing a healthcare renovation quote against their last office tenant improvement often have the same reaction: why is this so much more per square foot? The answer is structural, not markup. Healthcare interior work carries real cost drivers that standard commercial work does not, and understanding them is how you budget accurately and evaluate bids intelligently.</p>
 
                     <h2>1. Infection control containment</h2>
-                    <p>Rigid barrier walls, anterooms, HEPA negative-air machines running around the clock, daily monitoring and logs — <a href="#/insights/icra-levels-explained" data-route="/insights/icra-levels-explained">Class III and IV containment</a> is a construction project before the construction project. It also slows production: every worker, tool, and cart moves through controlled entry points for the life of the job.</p>
+                    <p>Rigid barrier walls, anterooms, HEPA negative-air machines running around the clock, daily monitoring and logs: <a href="#/insights/icra-levels-explained" data-route="/insights/icra-levels-explained">Class III and IV containment</a> is a construction project before the construction project. It also slows production: every worker, tool, and cart moves through controlled entry points for the life of the job.</p>
 
                     <h2>2. After-hours and phased labor</h2>
                     <p>Occupied facilities push disruptive work into nights and weekends, which carries premium labor rates and shorter effective shifts. Phasing a floor into three stages so the department keeps operating means three mobilizations, three sets of temporary protection, three punch cycles.</p>
 
                     <h2>3. Regulatory review and inspection</h2>
-                    <p>Projects under <a href="#/insights/hcai-oshpd-hospital-permits-california" data-route="/insights/hcai-oshpd-hospital-permits-california">HCAI jurisdiction</a> carry plan review cycles, a continuously present Inspector of Record, and documentation discipline that adds cost directly and indirectly through schedule. It is the price of building safely in the most consequential building stock in California — but it must be in the budget from day one.</p>
+                    <p>Projects under <a href="#/insights/hcai-oshpd-hospital-permits-california" data-route="/insights/hcai-oshpd-hospital-permits-california">HCAI jurisdiction</a> carry plan review cycles, a continuously present Inspector of Record, and documentation discipline that adds cost directly and indirectly through schedule. It is the price of building safely in the most consequential building stock in California, but it must be in the budget from day one.</p>
 
                     <h2>4. What's above the ceiling</h2>
-                    <p>Decades of accumulated infrastructure — med-gas lines, data, pneumatic tube systems, abandoned conduit nobody labeled — live above healthcare ceilings. Renovation means working around all of it without interrupting any of it. Pre-construction investigation shrinks this risk; it never eliminates it, which is why honest healthcare budgets carry real contingency.</p>
+                    <p>Decades of accumulated infrastructure (med-gas lines, data, pneumatic tube systems, abandoned conduit nobody labeled) live above healthcare ceilings. Renovation means working around all of it without interrupting any of it. Pre-construction investigation shrinks this risk; it never eliminates it, which is why honest healthcare budgets carry real contingency.</p>
 
                     <h2>5. MEP density</h2>
                     <p>A patient care space carries mechanical, electrical, and plumbing systems at a density office space never approaches: medical gas, isolation-capable HVAC, emergency power branches, nurse call, specialized lighting. MEP routinely dominates the trade budget on healthcare interiors.</p>
 
                     <h2>6. Specialty materials and lead times</h2>
-                    <p>Ligature-resistant fixtures, lead-lined assemblies, hospital-grade door hardware, seamless flooring systems rated for clinical cleaning — healthcare products cost more and arrive slower. Long-lead procurement has to start at contract, not at the phase that needs the product.</p>
+                    <p>Ligature-resistant fixtures, lead-lined assemblies, hospital-grade door hardware, seamless flooring systems rated for clinical cleaning: healthcare products cost more and arrive slower. Long-lead procurement has to start at contract, not at the phase that needs the product.</p>
 
                     <h2>7. General conditions on a stretched schedule</h2>
-                    <p>Supervision, temporary protection, negative-air rental, and site management run for every week the project exists. Since containment and phasing extend duration, they quietly extend general conditions too. When comparing bids, look hard at whether each contractor's schedule assumptions are realistic — the cheapest bid with a fantasy schedule is the most expensive bid on the project.</p>
+                    <p>Supervision, temporary protection, negative-air rental, and site management run for every week the project exists. Since containment and phasing extend duration, they quietly extend general conditions too. When comparing bids, look hard at whether each contractor's schedule assumptions are realistic; the cheapest bid with a fantasy schedule is the most expensive bid on the project.</p>
 
                     <h2>How to keep all seven honest</h2>
                     <ul>
                         <li>Invest in pre-construction investigation before locking the budget.</li>
-                        <li>Require containment, after-hours premiums, and compliance costs as explicit line items — vagueness there becomes change orders later.</li>
+                        <li>Require containment, after-hours premiums, and compliance costs as explicit line items; vagueness there becomes change orders later.</li>
                         <li>Pressure-test the phasing plan against how your facility actually operates.</li>
                         <li>Weight contractor healthcare experience heavily; tuition for a contractor learning healthcare on your project is the most expensive line item never written down.</li>
                     </ul>
@@ -2975,16 +2994,16 @@
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRfpModal(); });
 
         /* ============================================================
-           ASK-RFP PILL — one-line project intake that feeds the RFP modal.
+           ASK-RFP PILL: one-line project intake that feeds the RFP modal.
            Rotating example briefs while empty; on submit the typed text
            disintegrates into dust (canvas), then the modal opens prefilled.
            ============================================================ */
         const ASK_RFP_EXAMPLES = [
             '3rd floor sterile core renovation, 8 weeks, adjacent OR must stay live…',
-            'Nurses station rebuild under ICRA Level 4 — patient care cannot pause…',
+            'Nurses station rebuild under ICRA Level 4, patient care cannot pause…',
             'Six behavioral health patient rooms, anti-ligature spec, phased turnover…',
             'Imaging suite upgrade, after-hours utility tie-ins, HCAI permit pending…',
-            '8,000 SF medical office TI — clinic stays open through construction…'
+            '8,000 SF medical office TI, clinic stays open through construction…'
         ];
         const askRfpReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -3033,7 +3052,7 @@
                 if (busy) return;
                 const text = input.value.trim();
                 if (!text) {
-                    // No example-text submits here — this feeds a real estimating queue.
+                    // No example-text submits here; this feeds a real estimating queue.
                     pill.classList.remove('is-rejected');
                     void pill.offsetWidth;
                     pill.classList.add('is-rejected');
@@ -3058,7 +3077,10 @@
                 const dpr = Math.min(window.devicePixelRatio || 1, 2);
                 const baseW = Math.max(field.clientWidth, 1);
                 const H = Math.max(field.clientHeight, 1);
-                const OVERHANG = 90; // right-edge room so dust drifts past the pill
+                // Right-edge room so dust drifts past the pill, clamped so the
+                // canvas never extends past the viewport (no transient overflow).
+                const room = document.documentElement.clientWidth - field.getBoundingClientRect().right - 4;
+                const OVERHANG = Math.max(0, Math.min(90, Math.floor(room)));
                 const W = baseW + OVERHANG;
                 canvas.width = W * dpr;
                 canvas.height = H * dpr;
@@ -3123,7 +3145,7 @@
 
                 let start = 0, opened = false;
                 // The modal handoff must not depend on the rAF loop (which
-                // browsers throttle in edge cases) — a timer guarantees it.
+                // browsers throttle in edge cases); a timer guarantees it.
                 setTimeout(() => { if (!opened) { opened = true; onWaveDone(); } }, waveEnd + 400);
                 function frame(now) {
                     if (!start) start = now;
