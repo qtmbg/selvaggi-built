@@ -20,12 +20,12 @@ SELVAGGI WEBSITE/
 ├── .env.example            ← copy to server/.env, fill in keys
 ├── .gitignore              ← never commit .env or node_modules
 └── server/
-    ├── server.js           ← Claude Sonnet proxy + contact CRM relay
+    ├── server.js           ← Gemini AI proxy + Resend contact relay
     └── package.json        ← express + dotenv
 ```
 
 The SPA is one file by design (no build step). The proxy is a tiny Node/Express
-service that holds the Anthropic key and the CRM webhook out of the browser.
+service that holds the Gemini key and the Resend key out of the browser.
 
 ---
 
@@ -66,7 +66,7 @@ design.
 
 ```
 cp .env.example server/.env
-# Fill in ANTHROPIC_API_KEY and CRM_WEBHOOK_URL (see Section 5)
+# Fill in GEMINI_API_KEY and RESEND_API_KEY / RESEND_FROM (see Sections 4 and 5)
 
 cd server
 npm install
@@ -75,8 +75,8 @@ npm start
 
 The proxy serves the SPA on `http://localhost:3000` and exposes:
 
-- `POST /api/ai`       Claude Sonnet calls (rfp / icra / estimator)
-- `POST /api/contact`  CRM webhook relay
+- `POST /api/ai`       Gemini calls (rfp / icra / estimator)
+- `POST /api/contact`  Resend email relay
 
 ---
 
@@ -87,12 +87,12 @@ Front end calls `POST /api/ai` with `{ tool, payload }`. The proxy:
 1. Validates the `tool` is one of `rfp`, `icra`, `estimator`.
 2. Loads the matching server-side system prompt (the prompts are **never**
    sent to the browser).
-3. Calls `POST https://api.anthropic.com/v1/messages` with
-   `model = process.env.ANTHROPIC_MODEL` (default `claude-sonnet-4-6`),
-   `anthropic-version: 2023-06-01`, the system prompt, and the user message.
+3. Calls `POST https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent`
+   with `model = process.env.GEMINI_MODEL` (default `gemini-2.5-flash`, free tier),
+   the system prompt, and the user message.
 4. Returns `{ content: <html string> }` to the browser.
 
-If `ANTHROPIC_API_KEY` is missing, the endpoint responds `503` and the front end
+If `GEMINI_API_KEY` is missing, the endpoint responds `503` and the front end
 renders the "Backend required" state.
 
 Per-IP rate limit: 12 requests / 60 seconds.
@@ -112,17 +112,16 @@ Do not loosen this without sign-off.
 
 ## 5. Contact form
 
-Front end calls `POST /api/contact`. The proxy forwards the payload to
-`CRM_WEBHOOK_URL` (with optional `CRM_AUTH_HEADER`).
+Front end calls `POST /api/contact`. The proxy formats the payload as an email
+and sends it via Resend to `SALES_INBOX` using `RESEND_API_KEY` and
+`RESEND_FROM` (a sender address on a domain verified in Resend).
 
-**Until `CRM_WEBHOOK_URL` is configured, the endpoint returns 503.** The front
-end never tells the user "message received" without a successful POST. This is
-intentional. Do not change this behavior.
+**Until `RESEND_API_KEY` / `RESEND_FROM` are configured, the endpoint returns
+503.** The front end never tells the user "message received" without a
+successful send. This is intentional. Do not change this behavior.
 
-Recommended targets:
-- A CRM webhook (Salesforce, HubSpot, Pipedrive)
-- A transactional email relay (Postmark, SendGrid, Amazon SES) that forwards to
-  `sales@selvaggibuilt.com`
+Expected volume is low (roughly 50 submissions/month across contact + RFP
+modal), well inside Resend's free tier (3,000 emails/month).
 
 The same endpoint receives RFP modal submissions, identified by `kind: 'rfp'`
 in the payload.
@@ -198,8 +197,8 @@ checked. Highlights:
 3. All six insight articles migrated and scrubbed of banned scope language
 4. At least one real attributed testimonial with signed release
 5. Privacy Policy, Accessibility Statement, Terms of Use published
-6. Production CRM webhook configured (`CRM_WEBHOOK_URL`)
-7. Anthropic API key configured (`ANTHROPIC_API_KEY`)
+6. Resend configured and domain verified (`RESEND_API_KEY`, `RESEND_FROM`)
+7. Gemini API key configured (`GEMINI_API_KEY`)
 8. Official LinkedIn URL added
 9. CD logo files swapped in (favicon + header + footer)
 
@@ -215,7 +214,7 @@ grep -c "." index.html ASSET-MANIFEST.md README.md
 # Expected: 0 0 0
 
 # No client-side AI vendor identifiers
-grep -cE "(g.emini|openai|anthropic|claude-key)" index.html
+grep -cE "(gemini-key|openai|anthropic|claude-key)" index.html
 # Expected: 0
 
 # Every placeholder is labeled

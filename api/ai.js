@@ -1,7 +1,7 @@
 // ============================================================
 // /api/ai  (Vercel serverless function)
-// Routes RFP / ICRA / Estimator calls to Claude Sonnet.
-// Key is held server-side via ANTHROPIC_API_KEY env var.
+// Routes RFP / ICRA / Estimator calls to Google Gemini (free tier).
+// Key is held server-side via GEMINI_API_KEY env var.
 // Never expose this endpoint's logic or prompts to the client.
 // ============================================================
 
@@ -27,7 +27,8 @@ Do NOT output dollar figures, budget ranges, $/SF figures, or any pricing. Prici
 Tone: expert, restrained, objective. No em dashes. No marketing language. State that the output is baseline estimation only, not a contractual schedule, subject to site conditions and facility sign-off.`
 };
 
-// Tiny per-instance rate limit. Cold starts reset it; good enough.
+// Tiny per-instance rate limit. Cold starts reset it; good enough,
+// and keeps us comfortably under Gemini's free-tier RPM ceiling.
 const buckets = new Map();
 function rateLimit(req) {
     const ip = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown';
@@ -48,8 +49,8 @@ module.exports = async function handler(req, res) {
     }
     if (!rateLimit(req)) return res.status(429).json({ error: 'rate_limited' });
 
-    const KEY = process.env.ANTHROPIC_API_KEY;
-    const MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+    const KEY = process.env.GEMINI_API_KEY;
+    const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
     if (!KEY) return res.status(503).json({ error: 'backend_unavailable' });
 
     const body = req.body || {};
@@ -75,31 +76,29 @@ module.exports = async function handler(req, res) {
     }
 
     try {
-        const r = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': KEY,
-                'anthropic-version': '2023-06-01'
-            },
-            body: JSON.stringify({
-                model: MODEL,
-                max_tokens: 1500,
-                system: PROMPTS[tool],
-                messages: [{ role: 'user', content: userText }]
-            })
-        });
+        const r = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${KEY}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    system_instruction: { parts: [{ text: PROMPTS[tool] }] },
+                    contents: [{ role: 'user', parts: [{ text: userText }] }],
+                    generationConfig: { maxOutputTokens: 1500 }
+                })
+            }
+        );
         if (!r.ok) {
             const errText = await r.text();
-            console.error('[anthropic]', r.status, errText.slice(0, 400));
+            console.error('[gemini]', r.status, errText.slice(0, 400));
             return res.status(502).json({ error: 'upstream_error' });
         }
         const data = await r.json();
-        const blocks = (data.content || []).filter(b => b.type === 'text');
-        const text = blocks.map(b => b.text).join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
+        const parts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
+        const text = parts.map(p => p.text || '').join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
         return res.status(200).json({ content: text });
     } catch (err) {
-        console.error('[anthropic] exception', err);
+        console.error('[gemini] exception', err);
         return res.status(502).json({ error: 'upstream_error' });
     }
 };

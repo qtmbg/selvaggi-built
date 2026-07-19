@@ -227,6 +227,6 @@ Site is **NOT launch-ready** until:
 - [ ] `C3a` LinkedIn URL added
 - [ ] `C4a` office map embedded
 - [ ] All `E*` legal pages drafted and published
-- [ ] `.env` configured with `ANTHROPIC_API_KEY` and `CRM_WEBHOOK_URL`
+- [ ] `.env` configured with `GEMINI_API_KEY` and `RESEND_API_KEY`/`RESEND_FROM`
 - [ ] At least 30 of 42 stock images replaced with real photography (rest before public launch)
 - [ ] CD logo files swapped in (A1, A2, A3)

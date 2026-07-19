@@ -2,7 +2,7 @@
   "name": "selvaggi-built-web",
   "version": "0.1.0",
   "private": true,
-  "description": "Selvaggi Built marketing site. Static SPA + Vercel serverless functions for the Claude Sonnet AI proxy and the contact CRM relay.",
+  "description": "Selvaggi Built marketing site. Static SPA + Vercel serverless functions for the Gemini AI proxy and the Resend contact relay.",
   "engines": {
     "node": ">=18.17.0"
   },

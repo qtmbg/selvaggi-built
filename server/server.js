@@ -1,17 +1,18 @@
 // ============================================================
 // Selvaggi Built. AI Proxy
 // Front end calls /api/ai and /api/contact. This server holds
-// the Anthropic API key server-side and routes the three tools
-// (rfp, icra, estimator) through Claude Sonnet.
+// the Gemini API key server-side and routes the three tools
+// (rfp, icra, estimator) through Google Gemini (free tier), and
+// sends contact-form submissions to SALES_INBOX via Resend.
 // ============================================================
 //
 // REQUIRED env vars (.env, never committed):
-//   ANTHROPIC_API_KEY        Anthropic key
-//   ANTHROPIC_MODEL          e.g. claude-sonnet-4-6
+//   GEMINI_API_KEY           Google AI Studio key (free tier)
+//   GEMINI_MODEL             e.g. gemini-2.5-flash
 //   PORT                     default 3000
-//   CRM_WEBHOOK_URL          [REQUIRED before launch] CRM ingest URL
-//   CRM_AUTH_HEADER          [OPTIONAL] auth header value for CRM
-//   SALES_INBOX              fallback email if CRM webhook absent
+//   RESEND_API_KEY           [REQUIRED before launch] Resend key
+//   RESEND_FROM              verified sender, e.g. "Selvaggi Built Website <notifications@selvaggibuilt.com>"
+//   SALES_INBOX              inbox that receives form submissions
 //
 // Run:
 //   cd server && npm install && npm start
@@ -22,16 +23,15 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
 const express = require('express');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
-const MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
-const KEY = process.env.ANTHROPIC_API_KEY;
+const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const KEY = process.env.GEMINI_API_KEY;
 
 if (!KEY) {
-    console.warn('[selvaggi-built] WARNING: ANTHROPIC_API_KEY is not set. /api/ai will respond 503.');
+    console.warn('[selvaggi-built] WARNING: GEMINI_API_KEY is not set. /api/ai will respond 503.');
 }
 
 const app = express();
@@ -78,7 +78,7 @@ Tone: expert, restrained, objective. No em dashes. No marketing language. State 
 };
 
 // ============================================================
-// /api/ai. Claude Sonnet
+// /api/ai. Google Gemini
 // Body: { tool: 'rfp' | 'icra' | 'estimator', payload: object }
 // ============================================================
 app.post('/api/ai', rateLimit, async (req, res) => {
@@ -106,74 +106,106 @@ app.post('/api/ai', rateLimit, async (req, res) => {
     }
 
     try {
-        const r = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': KEY,
-                'anthropic-version': '2023-06-01'
-            },
-            body: JSON.stringify({
-                model: MODEL,
-                max_tokens: 1500,
-                system: PROMPTS[tool],
-                messages: [{ role: 'user', content: userText }]
-            })
-        });
+        const r = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${KEY}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    system_instruction: { parts: [{ text: PROMPTS[tool] }] },
+                    contents: [{ role: 'user', parts: [{ text: userText }] }],
+                    generationConfig: { maxOutputTokens: 1500 }
+                })
+            }
+        );
         if (!r.ok) {
             const errText = await r.text();
-            console.error('[anthropic]', r.status, errText.slice(0, 400));
+            console.error('[gemini]', r.status, errText.slice(0, 400));
             return res.status(502).json({ error: 'upstream_error' });
         }
         const data = await r.json();
-        const blocks = (data.content || []).filter(b => b.type === 'text');
-        const text = blocks.map(b => b.text).join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
+        const parts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
+        const text = parts.map(p => p.text || '').join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
         res.json({ content: text });
     } catch (err) {
-        console.error('[anthropic] exception', err);
+        console.error('[gemini] exception', err);
         res.status(502).json({ error: 'upstream_error' });
     }
 });
 
 // ============================================================
-// /api/contact. STUB
-// REQUIRED before launch: connect to the production CRM
-// (Salesforce, HubSpot, Pipedrive, etc.) or to a sales inbox
-// via Postmark / SendGrid / SES. The stub returns 503 unless
-// CRM_WEBHOOK_URL is configured, so the front end NEVER tells
-// a user "message received" without a successful POST.
+// /api/contact. Sends submissions to SALES_INBOX via Resend.
+// Returns 503 until RESEND_API_KEY / RESEND_FROM are configured,
+// so the front end NEVER tells a user "message received" without
+// a successful send.
 // ============================================================
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function buildEmail(body) {
+    if (body.kind === 'rfp') {
+        return {
+            subject: 'Selvaggi Built website — RFP draft submission',
+            html: `<h2>RFP draft submission</h2>
+<h3>Raw notes</h3><p>${escapeHtml(body.raw || '').replace(/\n/g, '<br>')}</p>
+<h3>Generated draft</h3><p>${escapeHtml(body.draft || '').replace(/\n/g, '<br>')}</p>`
+        };
+    }
+    return {
+        subject: `Selvaggi Built website — contact form: ${escapeHtml(body.name || 'unknown')}`,
+        html: `<h2>New contact form submission</h2>
+<p><strong>Name:</strong> ${escapeHtml(body.name || '')}</p>
+<p><strong>Organization:</strong> ${escapeHtml(body.organization || '')}</p>
+<p><strong>Email:</strong> ${escapeHtml(body.email || '')}</p>
+<p><strong>Phone:</strong> ${escapeHtml(body.phone || '')}</p>
+<p><strong>Message:</strong><br>${escapeHtml(body.message || '').replace(/\n/g, '<br>')}</p>`
+    };
+}
+
 app.post('/api/contact', rateLimit, async (req, res) => {
     const body = req.body || {};
     if (!body || !body.kind) return res.status(400).json({ error: 'missing_kind' });
 
-    const webhook = process.env.CRM_WEBHOOK_URL;
-    if (!webhook) {
-        console.warn('[contact] CRM_WEBHOOK_URL not configured. Payload kept in log only.');
+    const RKEY = process.env.RESEND_API_KEY;
+    const FROM = process.env.RESEND_FROM;
+    const TO = process.env.SALES_INBOX || 'sales@selvaggibuilt.com';
+    if (!RKEY || !FROM) {
+        console.warn('[contact] RESEND_API_KEY/RESEND_FROM not configured. Payload kept in log only.');
         console.log('[contact:unsent]', JSON.stringify(body));
-        return res.status(503).json({ error: 'crm_not_configured' });
+        return res.status(503).json({ error: 'email_not_configured' });
     }
 
     try {
-        const headers = { 'Content-Type': 'application/json' };
-        if (process.env.CRM_AUTH_HEADER) headers['Authorization'] = process.env.CRM_AUTH_HEADER;
-        const r = await fetch(webhook, {
+        const { subject, html } = buildEmail(body);
+        const r = await fetch('https://api.resend.com/emails', {
             method: 'POST',
-            headers,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${RKEY}`
+            },
             body: JSON.stringify({
-                source: 'selvaggibuilt.com',
-                received_at: new Date().toISOString(),
-                ...body
+                from: FROM,
+                to: [TO],
+                reply_to: body.email || undefined,
+                subject,
+                html
             })
         });
         if (!r.ok) {
-            console.error('[contact] CRM responded', r.status);
-            return res.status(502).json({ error: 'crm_error' });
+            const errText = await r.text();
+            console.error('[resend]', r.status, errText.slice(0, 400));
+            return res.status(502).json({ error: 'email_error' });
         }
         res.json({ ok: true });
     } catch (err) {
-        console.error('[contact] exception', err);
-        res.status(502).json({ error: 'crm_error' });
+        console.error('[resend] exception', err);
+        res.status(502).json({ error: 'email_error' });
     }
 });
 
@@ -187,5 +219,5 @@ app.get('/', (req, res) => res.sendFile(path.join(staticRoot, 'index.html')));
 app.listen(PORT, () => {
     console.log(`[selvaggi-built] proxy listening on http://localhost:${PORT}`);
     console.log(`[selvaggi-built] model: ${MODEL}`);
-    console.log(`[selvaggi-built] CRM webhook: ${process.env.CRM_WEBHOOK_URL ? 'configured' : 'NOT configured (form will 503)'}`);
+    console.log(`[selvaggi-built] Resend: ${process.env.RESEND_API_KEY ? 'configured' : 'NOT configured (form will 503)'}`);
 });

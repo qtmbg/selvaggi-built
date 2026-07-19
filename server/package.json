@@ -2,7 +2,7 @@
   "name": "selvaggi-built-proxy",
   "version": "0.1.0",
   "private": true,
-  "description": "Backend proxy for the Selvaggi Built site. Holds the Anthropic API key server-side, routes RFP/ICRA/Estimator calls to Claude Sonnet, and POSTs contact form submissions to a CRM webhook.",
+  "description": "Backend proxy for the Selvaggi Built site. Holds the Gemini API key server-side, routes RFP/ICRA/Estimator calls to Google Gemini, and sends contact form submissions to the sales inbox via Resend.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
