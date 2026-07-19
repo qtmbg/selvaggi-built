@@ -130,6 +130,88 @@
         .view { display: none; opacity: 0; transition: opacity 0.4s ease; }
         .view.active { display: block; opacity: 1; }
 
+        /* Ask-RFP pill — the one-line project intake that feeds the RFP modal.
+           A rotating example brief cycles in the empty input; on submit the
+           typed text disintegrates into dust (canvas) and the RFP modal opens
+           prefilled. Markup lives in the home CTA and Tools brief sections. */
+        .ask-rfp-pill {
+            display: flex; align-items: center; gap: 10px;
+            height: 60px; padding: 0 8px 0 24px;
+            border-radius: 9999px;
+            background: var(--white);
+            border: 1px solid rgba(16, 24, 32, 0.25);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .ask-rfp-pill:focus-within {
+            border-color: var(--copper);
+            box-shadow: 0 2px 14px rgba(16, 24, 32, 0.07);
+        }
+        .ask-rfp-field { position: relative; flex: 1 1 auto; min-width: 0; height: 24px; }
+        .ask-rfp-clip { position: absolute; inset: 0; overflow: hidden; }
+        .ask-rfp-input {
+            position: absolute; inset: 0; width: 100%;
+            background: transparent; border: 0; outline: none !important;
+            font-size: 15px; color: var(--ebony);
+            transition: opacity 0.3s ease;
+        }
+        .ask-rfp-input:disabled { opacity: 0; }
+        .ask-rfp-ph {
+            pointer-events: none;
+            position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+            max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+            font-size: 15px; color: rgba(16, 24, 32, 0.42);
+            opacity: 1;
+            transition: opacity 0.32s ease, transform 0.32s ease, filter 0.32s ease;
+        }
+        .ask-rfp-ph.is-leaving { opacity: 0; transform: translateY(calc(-50% - 10px)); filter: blur(4px); }
+        .ask-rfp-ph.is-entering { opacity: 0; transform: translateY(calc(-50% + 10px)); filter: blur(4px); transition: none; }
+        .ask-rfp-ph.is-hidden { opacity: 0; transition: opacity 0.15s ease; }
+        /* Dust canvas overhangs the pill's right edge, so it must not be clipped. */
+        .ask-rfp-canvas { pointer-events: none; position: absolute; left: 0; top: 0; }
+        .ask-rfp-submit {
+            flex: 0 0 auto;
+            display: grid; place-items: center;
+            width: 44px; height: 44px; border-radius: 9999px;
+            background: var(--copper); color: var(--white);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .ask-rfp-submit:hover { transform: scale(1.06); background-color: #a56b3d; }
+        .ask-rfp-submit:active { transform: scale(0.92); }
+        .ask-rfp-submit:disabled { opacity: 0.6; transform: none; }
+        .ask-rfp-pill.is-rejected { animation: askRfpShake 0.4s ease; border-color: var(--copper); }
+        @keyframes askRfpShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(4px); }
+            75% { transform: translateX(-2px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ask-rfp-pill.is-rejected { animation: none; }
+            .ask-rfp-ph, .ask-rfp-input { transition: none; }
+        }
+
+        /* FAQ accordion — native <details>/<summary> so it works with no JS,
+           styled to the glass system. The copper plus rotates to an X on open. */
+        .faq-item { border-bottom: 1px solid rgba(16, 24, 32, 0.12); }
+        .faq-item summary {
+            display: flex; align-items: center; justify-content: space-between; gap: 20px;
+            padding: 22px 0; cursor: pointer; list-style: none;
+            font-weight: 600; font-size: 16px; letter-spacing: -0.01em;
+            color: var(--ebony);
+            transition: color 0.2s ease;
+        }
+        @media (min-width: 768px) { .faq-item summary { font-size: 17px; } }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary:hover { color: var(--copper); }
+        .faq-icon { flex: 0 0 auto; color: var(--copper); transition: transform 0.25s ease; }
+        .faq-item[open] .faq-icon { transform: rotate(45deg); }
+        .faq-answer { padding: 0 44px 24px 0; }
+        .faq-answer p { font-size: 15px; line-height: 1.7; color: rgba(16, 24, 32, 0.85); }
+        .faq-answer p + p { margin-top: 0.8em; }
+        .faq-answer a { color: var(--copper); font-weight: 600; }
+        .faq-answer a:hover { text-decoration: underline; }
+        @media (prefers-reduced-motion: reduce) { .faq-icon { transition: none; } }
+
         /* Insights article typography. The Tailwind preflight strips heading and
            list styles, so article bodies (rendered from the insights data) get
            their own editorial scale here. */
@@ -658,8 +740,9 @@
                 <img src="assets/logo/logo-horizontal-color.svg" alt="Selvaggi Built" class="h-8 md:h-9 w-auto">
             </a>
 
-            <div class="hidden lg:flex items-center gap-7 text-ebony text-[13px] font-medium tracking-subhead uppercase">
-                <a href="#/home" data-route="/home" class="nav-link">Home</a>
+            <!-- The logo is the Home link — keeping Home out of the desktop nav
+                 gives the 7 remaining items room to breathe at laptop widths. -->
+            <div class="hidden lg:flex items-center gap-4 xl:gap-8 text-ebony text-[12px] xl:text-[13px] font-medium tracking-subhead uppercase whitespace-nowrap">
                 <a href="#/expertise" data-route="/expertise" class="nav-link">Expertise</a>
                 <a href="#/how-we-work" data-route="/how-we-work" class="nav-link">How We Work</a>
                 <a href="#/projects" data-route="/projects" class="nav-link">Projects</a>
@@ -669,8 +752,8 @@
                 <a href="#/contact" data-route="/contact" class="nav-link">Contact</a>
             </div>
 
-            <div class="flex items-center gap-3">
-                <a href="#" onclick="openRfpModal(event)" class="hidden md:inline-flex btn-primary bg-copper text-white h-11 px-5 items-center justify-center font-medium text-[13px] uppercase tracking-subhead">
+            <div class="flex items-center gap-3 lg:ml-6 xl:ml-8">
+                <a href="#" onclick="openRfpModal(event)" class="hidden md:inline-flex btn-primary bg-copper text-white h-11 px-5 items-center justify-center whitespace-nowrap leading-none font-medium text-[13px] uppercase tracking-subhead">
                     Start an RFP
                 </a>
                 <button id="menuToggle" class="lg:hidden p-2 -mr-2 text-ebony" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -853,18 +936,70 @@
                 </div>
             </section>
 
+            <!-- Condensed FAQ — answers the three biggest pre-conversion questions
+                 in place; the full list lives at #/faq (also linked in the footer). -->
+            <section class="bg-white py-20 md:py-28 border-t border-ebony/10">
+                <div class="max-w-[860px] mx-auto px-6">
+                    <div class="flex flex-col md:flex-row md:items-baseline justify-between border-b border-ebony pb-4 mb-12 gap-4 reveal">
+                        <div class="flex items-baseline gap-4">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">04</span>
+                            <h2 class="text-[28px] md:text-[40px] font-semibold text-ebony tracking-tighter">Common questions</h2>
+                        </div>
+                        <a href="#/faq" data-route="/faq" class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead">All FAQs</a>
+                    </div>
+                    <div class="reveal">
+                        <details class="faq-item">
+                            <summary>Can you renovate while our facility stays open?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>That is the core of what we do. Our Zero-Disruption Protocol engineers the build sequence around facility operations — phasing, containment, infection control, shutdowns, access, and daily documentation — so patient care continues while construction moves forward.</p>
+                            </div>
+                        </details>
+                        <details class="faq-item">
+                            <summary>How do we start a project with you?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>Start an RFP below — one line is enough to begin — or <a href="#/contact" data-route="/contact">contact us</a> directly. We respond within one business day, and we walk the facility before we quote.</p>
+                            </div>
+                        </details>
+                        <details class="faq-item">
+                            <summary>What areas and facility types do you serve?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>California only — hospitals, medical office buildings, surgery centers, behavioral health facilities, imaging suites, and laboratories, under CSLB License #1079406. More detail in the <a href="#/faq" data-route="/faq">full FAQ</a>.</p>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </section>
+
             <!-- CTA -->
             <section class="bg-ivory py-20 md:py-28">
                 <div class="max-w-[720px] mx-auto px-6 text-center flex flex-col items-center reveal">
                     <span class="text-copper text-[12px] font-semibold uppercase tracking-caption mb-6">Ready to start</span>
                     <h2 class="text-[36px] md:text-[52px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Submit a project for review.</h2>
                     <p class="text-ebony/80 text-[17px] md:text-[19px] mb-10 max-w-[540px]">
-                        Send us your scope, schedule, and compliance tier. We respond within one business day.
+                        Describe it in one line — scope, schedule, constraints. Our scoping assistant turns it into a formal brief for our estimators.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                        <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Start an RFP</a>
-                        <a href="#/contact" data-route="/contact" class="btn-secondary border border-ebony text-ebony h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Contact us</a>
-                    </div>
+                    <form data-ask-rfp class="w-full max-w-[560px]" aria-label="Describe your project to start an RFP">
+                        <div class="ask-rfp-pill glass-btn">
+                            <div class="ask-rfp-field">
+                                <div class="ask-rfp-clip">
+                                    <input type="text" class="ask-rfp-input" aria-label="Describe your project" autocomplete="off" spellcheck="false">
+                                    <span class="ask-rfp-ph" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <button type="submit" class="ask-rfp-submit" aria-label="Start an RFP with this description">
+                                <svg class="w-[18px] h-[18px]" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="text-ebony/70 text-[14px] mt-6">
+                        Prefer to talk it through first? <a href="#/contact" data-route="/contact" class="text-copper font-semibold hover:underline">Contact us</a> — we respond within one business day.
+                    </p>
                 </div>
             </section>
         </section>
@@ -1337,9 +1472,21 @@
                     <span class="text-copper text-[12px] font-semibold uppercase tracking-caption block mb-3">Intelligent scoping</span>
                     <h2 class="text-[26px] md:text-[34px] font-semibold text-ebony mb-4 tracking-tighter">Project Brief Builder</h2>
                     <p class="text-ebony/80 text-[16px] max-w-[620px] mx-auto mb-8">
-                        Have rough notes from a planning meeting? Paste them in and our scoping assistant structures them into a formal brief — scope, phasing constraints, compliance flags — ready to submit directly to our estimating team.
+                        Have rough notes from a planning meeting? Start with one line — our scoping assistant structures it into a formal brief — scope, phasing constraints, compliance flags — ready to submit directly to our estimating team.
                     </p>
-                    <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Draft your project brief</a>
+                    <form data-ask-rfp class="w-full max-w-[560px] mx-auto" aria-label="Describe your project to draft a brief">
+                        <div class="ask-rfp-pill glass-btn">
+                            <div class="ask-rfp-field">
+                                <div class="ask-rfp-clip">
+                                    <input type="text" class="ask-rfp-input" aria-label="Describe your project" autocomplete="off" spellcheck="false">
+                                    <span class="ask-rfp-ph" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <button type="submit" class="ask-rfp-submit" aria-label="Draft a project brief with this description">
+                                <svg class="w-[18px] h-[18px]" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </section>
         </section>
@@ -1692,6 +1839,164 @@
                 </div>
             </section>
         </section>
+
+        <!-- ============================================
+             FAQ
+             ============================================ -->
+        <section id="view-faq" class="view" data-view="/faq" data-title="FAQ | Selvaggi Built" data-description="Answers to common questions about healthcare construction in active California facilities: occupied-facility renovation, ICRA containment, HCAI coordination, project scope, and how to start an RFP with Selvaggi Built.">
+
+            <section class="bg-white py-20 md:py-28 border-b border-ebony/10">
+                <div class="max-w-[1280px] mx-auto px-6 text-center reveal">
+                    <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-caption mb-6 block">Questions</span>
+                    <h1 class="text-[44px] md:text-[64px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Frequently asked questions.</h1>
+                    <p class="text-ebony/80 text-[18px] md:text-[20px] max-w-[640px] mx-auto">
+                        What facility directors, planners, and infection preventionists ask us most — before, during, and after a project.
+                    </p>
+                </div>
+            </section>
+
+            <section class="bg-white py-16 md:py-24">
+                <div class="max-w-[860px] mx-auto px-6">
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">01</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Working with us</h2>
+                        </div>
+                        <details class="faq-item">
+                            <summary>How do we start a project with you?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>Start an RFP from any page — describe your project in a line or two and our scoping assistant structures it into a formal brief for our estimating team. If you would rather talk first, <a href="#/contact" data-route="/contact">contact us</a> directly; we respond within one business day.</p>
+                                <p>Either way, we walk the facility before we quote. Every plan starts with a clear understanding of patient care, staff workflow, access, safety, and infection control on your site.</p>
+                            </div>
+                        </details>
+                        <details class="faq-item">
+                            <summary>What areas do you serve?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>California only. We are based in Anaheim and build across Southern California's healthcare facilities under CSLB License #1079406.</p>
+                            </div>
+                        </details>
+                        <details class="faq-item">
+                            <summary>What types of facilities do you build in?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>Hospitals, medical office buildings, surgery centers, behavioral health facilities, imaging and diagnostic suites, and clinical laboratories. See <a href="#/expertise" data-route="/expertise">Expertise</a> for how we approach each sector.</p>
+                            </div>
+                        </details>
+                        <details class="faq-item">
+                            <summary>Do you take on small projects, or only major renovations?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>Both. Recent work ranges from focused refurbishments — a nurses station, behavioral health dining rooms — to multi-phase renovation programs. What matters is not the size of the project; it is that the work happens inside an active healthcare environment, and that is what our process is built for.</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">02</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Building in active facilities</h2>
+                        </div>
+                        <details class="faq-item">
+                            <summary>Can you renovate while our facility stays open?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>That is the core of what we do. Our Zero-Disruption Protocol engineers the build sequence around facility operations — phasing, containment, infection control, utility shutdowns, access, and daily documentation — so patient care continues while construction moves forward. Read more in <a href="#/how-we-work" data-route="/how-we-work">How We Work</a>.</p>
+                            </div>
+                        </details>
+                        <details class="faq-item">
+                            <summary>How do you keep patients and staff safe during construction?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>Containment is planned before tools are mobilized: ICRA barriers, rigid wall systems, HEPA-filtered negative air machines, sealed debris routes, and continuous superintendent monitoring to verify containment holds. Every phase is reviewed with facility directors and Inspectors of Record.</p>
+                            </div>
+                        </details>
+                        <details class="faq-item">
+                            <summary>Will there be noise, shutdowns, or interruptions to care?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>Disruptive tie-ins, shutdowns, and utility work are restricted to pre-approved after-hours windows with facility sign-off. The schedule serves the facility, not the build — work hours, deliveries, and access are planned around your operations.</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">03</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Compliance and process</h2>
+                        </div>
+                        <details class="faq-item">
+                            <summary>What ICRA level do you work under?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>We regularly execute ICRA Level 3 and Level 4 containment. Not sure what your project requires? Our free <a href="#/tools" data-route="/tools">ICRA Level Assessor</a> generates the barrier tier, negative-pressure specification, and mitigation checklist to share with your infection control team.</p>
+                            </div>
+                        </details>
+                        <details class="faq-item">
+                            <summary>Do you work on HCAI (formerly OSHPD) projects?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>Yes — we plan and deliver work in HCAI-regulated facilities, coordinating phasing, inspections, and documentation with your Inspector of Record. Our <a href="#/tools" data-route="/tools">compliance roadmap tool</a> maps the permit path for your project type.</p>
+                            </div>
+                        </details>
+                        <details class="faq-item">
+                            <summary>What happens after I submit an RFP?
+                                <svg class="faq-icon w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>Your brief goes straight to our estimating team and we respond within one business day. From there we schedule a facility walk — we listen on site before we quote, so the proposal reflects your real operational constraints, not assumptions.</p>
+                            </div>
+                        </details>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- CTA -->
+            <section class="bg-ivory py-20 md:py-28">
+                <div class="max-w-[720px] mx-auto px-6 text-center flex flex-col items-center reveal">
+                    <span class="text-copper text-[12px] font-semibold uppercase tracking-caption mb-6">Still have a question?</span>
+                    <h2 class="text-[36px] md:text-[52px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Ask us directly.</h2>
+                    <p class="text-ebony/80 text-[17px] md:text-[19px] mb-10 max-w-[540px]">
+                        If your question is about a specific project, the fastest path is a conversation. We respond within one business day.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                        <a href="#/contact" data-route="/contact" class="btn-primary bg-copper text-white h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Contact us</a>
+                        <a href="#" onclick="openRfpModal(event)" class="btn-secondary border border-ebony text-ebony h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Start an RFP</a>
+                    </div>
+                </div>
+            </section>
+
+            <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                    { "@type": "Question", "name": "How do we start a project with Selvaggi Built?", "acceptedAnswer": { "@type": "Answer", "text": "Start an RFP from any page — describe your project in a line or two and the scoping assistant structures it into a formal brief for the estimating team — or contact us directly; we respond within one business day. We walk the facility before we quote." } },
+                    { "@type": "Question", "name": "What areas does Selvaggi Built serve?", "acceptedAnswer": { "@type": "Answer", "text": "California only. Selvaggi Built is based in Anaheim and builds across Southern California's healthcare facilities under CSLB License #1079406." } },
+                    { "@type": "Question", "name": "What types of facilities does Selvaggi Built build in?", "acceptedAnswer": { "@type": "Answer", "text": "Hospitals, medical office buildings, surgery centers, behavioral health facilities, imaging and diagnostic suites, and clinical laboratories." } },
+                    { "@type": "Question", "name": "Does Selvaggi Built take on small projects, or only major renovations?", "acceptedAnswer": { "@type": "Answer", "text": "Both — from focused refurbishments such as a nurses station or dining room to multi-phase renovation programs, all inside active healthcare environments." } },
+                    { "@type": "Question", "name": "Can Selvaggi Built renovate while a facility stays open?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — that is the core of the work. The Zero-Disruption Protocol engineers the build sequence around facility operations: phasing, containment, infection control, utility shutdowns, access, and daily documentation, so patient care continues." } },
+                    { "@type": "Question", "name": "How are patients and staff kept safe during construction?", "acceptedAnswer": { "@type": "Answer", "text": "Containment is planned before mobilization: ICRA barriers, rigid wall systems, HEPA-filtered negative air machines, sealed debris routes, and continuous monitoring. Every phase is reviewed with facility directors and Inspectors of Record." } },
+                    { "@type": "Question", "name": "Will there be noise, shutdowns, or interruptions to care?", "acceptedAnswer": { "@type": "Answer", "text": "Disruptive tie-ins, shutdowns, and utility work are restricted to pre-approved after-hours windows with facility sign-off. Work hours, deliveries, and access are planned around facility operations." } },
+                    { "@type": "Question", "name": "What ICRA level does Selvaggi Built work under?", "acceptedAnswer": { "@type": "Answer", "text": "Selvaggi Built regularly executes ICRA Level 3 and Level 4 containment. A free ICRA Level Assessor on the Tools page generates the barrier tier, negative-pressure specification, and mitigation checklist for any project." } },
+                    { "@type": "Question", "name": "Does Selvaggi Built work on HCAI (formerly OSHPD) projects?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — work in HCAI-regulated facilities is planned and delivered with phasing, inspections, and documentation coordinated with the facility's Inspector of Record." } },
+                    { "@type": "Question", "name": "What happens after an RFP is submitted?", "acceptedAnswer": { "@type": "Answer", "text": "The brief goes to the estimating team, which responds within one business day, followed by a facility walk before any quote — so the proposal reflects real operational constraints." } }
+                ]
+            }
+            </script>
+        </section>
     </main>
 
     <!-- ============================================
@@ -1721,6 +2026,7 @@
                     <a href="#/insights" data-route="/insights" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Insights</a>
                     <a href="#/company" data-route="/company" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Company</a>
                     <a href="#/contact" data-route="/contact" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Contact</a>
+                    <a href="#/faq" data-route="/faq" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">FAQ</a>
                 </div>
 
                 <div class="md:col-span-3 flex flex-col gap-3">
@@ -2334,7 +2640,8 @@
             '/tools':        'view-tools',
             '/insights':     'view-insights',
             '/company':      'view-company',
-            '/contact':      'view-contact'
+            '/contact':      'view-contact',
+            '/faq':          'view-faq'
         };
 
         function parseHash() {
@@ -2666,6 +2973,200 @@
         }
         document.getElementById('rfpModal').addEventListener('click', function(e) { if (e.target === this) closeRfpModal(); });
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRfpModal(); });
+
+        /* ============================================================
+           ASK-RFP PILL — one-line project intake that feeds the RFP modal.
+           Rotating example briefs while empty; on submit the typed text
+           disintegrates into dust (canvas), then the modal opens prefilled.
+           ============================================================ */
+        const ASK_RFP_EXAMPLES = [
+            '3rd floor sterile core renovation, 8 weeks, adjacent OR must stay live…',
+            'Nurses station rebuild under ICRA Level 4 — patient care cannot pause…',
+            'Six behavioral health patient rooms, anti-ligature spec, phased turnover…',
+            'Imaging suite upgrade, after-hours utility tie-ins, HCAI permit pending…',
+            '8,000 SF medical office TI — clinic stays open through construction…'
+        ];
+        const askRfpReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        function initAskRfp(form) {
+            const pill = form.querySelector('.ask-rfp-pill');
+            const field = form.querySelector('.ask-rfp-field');
+            const input = form.querySelector('.ask-rfp-input');
+            const ph = form.querySelector('.ask-rfp-ph');
+            const submitBtn = form.querySelector('.ask-rfp-submit');
+            let phIndex = Math.floor(Math.random() * ASK_RFP_EXAMPLES.length);
+            let busy = false;
+
+            ph.textContent = ASK_RFP_EXAMPLES[phIndex];
+            pill.addEventListener('animationend', () => pill.classList.remove('is-rejected'));
+            input.addEventListener('input', () => ph.classList.toggle('is-hidden', !!input.value));
+
+            setInterval(() => {
+                if (busy || input.value) return;
+                if (askRfpReducedMotion.matches) {
+                    phIndex = (phIndex + 1) % ASK_RFP_EXAMPLES.length;
+                    ph.textContent = ASK_RFP_EXAMPLES[phIndex];
+                    return;
+                }
+                ph.classList.add('is-leaving');
+                setTimeout(() => {
+                    phIndex = (phIndex + 1) % ASK_RFP_EXAMPLES.length;
+                    ph.textContent = ASK_RFP_EXAMPLES[phIndex];
+                    ph.classList.remove('is-leaving');
+                    ph.classList.add('is-entering');
+                    requestAnimationFrame(() => requestAnimationFrame(() => ph.classList.remove('is-entering')));
+                }, 330);
+            }, 3200);
+
+            function handoff(text) {
+                document.getElementById('rfpInput').value = text;
+                openRfpModal();
+                busy = false;
+                input.disabled = false;
+                submitBtn.disabled = false;
+                input.value = '';
+                ph.classList.remove('is-hidden');
+            }
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (busy) return;
+                const text = input.value.trim();
+                if (!text) {
+                    // No example-text submits here — this feeds a real estimating queue.
+                    pill.classList.remove('is-rejected');
+                    void pill.offsetWidth;
+                    pill.classList.add('is-rejected');
+                    input.focus();
+                    return;
+                }
+                if (askRfpReducedMotion.matches) { handoff(text); return; }
+                busy = true;
+                input.disabled = true;
+                submitBtn.disabled = true;
+                disintegrate(text, () => handoff(text));
+            });
+
+            function disintegrate(text, onWaveDone) {
+                const canvas = document.createElement('canvas');
+                canvas.className = 'ask-rfp-canvas';
+                canvas.setAttribute('aria-hidden', 'true');
+                field.appendChild(canvas);
+                const ctx = canvas.getContext('2d');
+                if (!ctx) { canvas.remove(); onWaveDone(); return; }
+
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                const baseW = Math.max(field.clientWidth, 1);
+                const H = Math.max(field.clientHeight, 1);
+                const OVERHANG = 90; // right-edge room so dust drifts past the pill
+                const W = baseW + OVERHANG;
+                canvas.width = W * dpr;
+                canvas.height = H * dpr;
+                canvas.style.width = W + 'px';
+                canvas.style.height = H + 'px';
+                ctx.scale(dpr, dpr);
+
+                // Match the input's rendered text exactly, including its scroll
+                // offset when the brief is longer than the pill.
+                ctx.font = '15px Inter, ui-sans-serif, system-ui, sans-serif';
+                ctx.fillStyle = 'rgb(16,24,32)';
+                ctx.textBaseline = 'middle';
+                const scrollX = input.scrollLeft || 0;
+                ctx.fillText(text, -scrollX, H / 2);
+
+                const chars = Array.from(text);
+                const bounds = [];
+                let cursor = -scrollX;
+                for (const ch of chars) {
+                    const w = ctx.measureText(ch).width;
+                    bounds.push({ start: cursor, end: cursor + w });
+                    cursor += w;
+                }
+                const findCharIdx = (lx) => {
+                    let lo = 0, hi = bounds.length - 1;
+                    while (lo <= hi) {
+                        const mid = (lo + hi) >> 1;
+                        if (lx < bounds[mid].start) hi = mid - 1;
+                        else if (lx >= bounds[mid].end) lo = mid + 1;
+                        else return mid;
+                    }
+                    return Math.min(Math.max(lo, 0), bounds.length - 1);
+                };
+
+                // Right-to-left wave, capped so long briefs still hand off fast.
+                const step = Math.min(50, 900 / Math.max(chars.length, 1));
+                const jitter = step * 0.45;
+                const waveEnd = chars.length * step + 250;
+
+                const img = ctx.getImageData(0, 0, baseW * dpr, H * dpr);
+                const particles = [];
+                for (let y = 0; y < H * dpr; y += dpr) {
+                    for (let x = 0; x < baseW * dpr; x += dpr) {
+                        if (img.data[(y * baseW * dpr + x) * 4 + 3] > 110) {
+                            const lx = x / dpr, ly = y / dpr;
+                            const charIdx = findCharIdx(lx);
+                            const angle = (Math.random() - 0.5) * Math.PI * 0.6;
+                            const speed = 0.18 + Math.random() * 0.55;
+                            const sizeRoll = Math.random();
+                            particles.push({
+                                ox: lx, oy: ly,
+                                vx: Math.cos(angle) * speed + 0.12,
+                                vy: Math.sin(angle) * speed * 0.55,
+                                delay: (chars.length - 1 - charIdx) * step + Math.random() * jitter,
+                                life: 480 + Math.random() * 320,
+                                size: sizeRoll < 0.65 ? 1 : sizeRoll < 0.92 ? 1.4 : 1.8
+                            });
+                        }
+                    }
+                }
+                ctx.clearRect(0, 0, W, H);
+
+                let start = 0, opened = false;
+                // The modal handoff must not depend on the rAF loop (which
+                // browsers throttle in edge cases) — a timer guarantees it.
+                setTimeout(() => { if (!opened) { opened = true; onWaveDone(); } }, waveEnd + 400);
+                function frame(now) {
+                    if (!start) start = now;
+                    const elapsed = now - start;
+                    ctx.clearRect(0, 0, W, H);
+                    let alive = 0;
+                    for (const p of particles) {
+                        if (elapsed < p.delay) {
+                            // Tension shimmer just before this particle snaps.
+                            const ttd = p.delay - elapsed;
+                            let jx = 0, jy = 0;
+                            if (ttd < 80) {
+                                const t = 1 - ttd / 80;
+                                jx = (Math.random() - 0.5) * 0.5 * t;
+                                jy = (Math.random() - 0.5) * 0.5 * t;
+                            }
+                            ctx.fillStyle = 'rgb(16,24,32)';
+                            ctx.fillRect(p.ox + jx, p.oy + jy, p.size, p.size);
+                            alive++;
+                            continue;
+                        }
+                        const t = elapsed - p.delay;
+                        if (t > p.life) continue;
+                        alive++;
+                        const norm = t / p.life;
+                        const mt = t / 16;
+                        const wobble = Math.sin((p.ox + mt) * 0.22) * 0.4;
+                        const opacity = Math.cos((norm * Math.PI) / 2);
+                        ctx.fillStyle = 'rgba(16,24,32,' + opacity.toFixed(3) + ')';
+                        ctx.fillRect(p.ox + p.vx * mt + wobble * norm, p.oy + p.vy * mt, p.size, p.size);
+                    }
+                    if (!opened && elapsed >= waveEnd) { opened = true; onWaveDone(); }
+                    if (alive === 0) {
+                        if (!opened) onWaveDone();
+                        canvas.remove();
+                        return;
+                    }
+                    requestAnimationFrame(frame);
+                }
+                requestAnimationFrame(frame);
+            }
+        }
+        document.querySelectorAll('[data-ask-rfp]').forEach(initAskRfp);
 
         /* ============================================================
            MOBILE MENU
