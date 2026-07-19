@@ -11,6 +11,14 @@ README.md
 CLAUDE.md
 DOCTYPE html.docx
 .env.example
+Audit SEO /
+CLAUDE Operating - rules .md
+make_carousel.py
+__mobile_test_harness.html
+
+# Unrelated dev projects living in this folder
+selvaggi/
+selvaggi-built-video/
 
 # Local-only Express proxy (Vercel uses /api serverless functions instead)
 server/
