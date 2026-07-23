@@ -50,7 +50,13 @@ module.exports = async function handler(req, res) {
     if (!rateLimit(req)) return res.status(429).json({ error: 'rate_limited' });
 
     const KEY = process.env.GEMINI_API_KEY;
-    const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+    // Primary model first, then resilient fallbacks so a single overloaded or
+    // renamed model never leaves a client query unresolved.
+    const MODELS = [...new Set([
+        process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+        'gemini-flash-latest',
+        'gemini-2.0-flash'
+    ])];
     if (!KEY) return res.status(503).json({ error: 'backend_unavailable' });
 
     const body = req.body || {};
@@ -75,30 +81,53 @@ module.exports = async function handler(req, res) {
 - HCAI / Structural: ${(payload && payload.hcai) || ''}`;
     }
 
-    try {
-        const r = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${KEY}`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    system_instruction: { parts: [{ text: PROMPTS[tool] }] },
-                    contents: [{ role: 'user', parts: [{ text: userText }] }],
-                    generationConfig: { maxOutputTokens: 1500 }
-                })
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    let lastStatus = 0;
+
+    // Try each model; retry once on transient (429 / 5xx) errors before moving on.
+    for (const model of MODELS) {
+        for (let attempt = 0; attempt < 2; attempt++) {
+            try {
+                const r = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${KEY}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            system_instruction: { parts: [{ text: PROMPTS[tool] }] },
+                            contents: [{ role: 'user', parts: [{ text: userText }] }],
+                            generationConfig: { maxOutputTokens: 1500 }
+                        })
+                    }
+                );
+                if (r.ok) {
+                    const data = await r.json();
+                    const parts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
+                    const text = parts.map(p => p.text || '').join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
+                    return res.status(200).json({ content: text });
+                }
+                lastStatus = r.status;
+                const errText = await r.text();
+                console.error('[gemini]', model, r.status, errText.slice(0, 400));
+                // Auth/permission problem: the key itself is bad or blocked.
+                // No other model will fix it, so stop and report backend unavailable.
+                if (r.status === 401 || r.status === 403) {
+                    return res.status(503).json({ error: 'backend_unavailable' });
+                }
+                // Transient: brief backoff, then retry the same model.
+                if (r.status === 429 || r.status >= 500) {
+                    await sleep(400 * (attempt + 1));
+                    continue;
+                }
+                // 400/404 (bad or renamed model, etc.): try the next model.
+                break;
+            } catch (err) {
+                console.error('[gemini] exception', model, err);
+                lastStatus = 502;
+                await sleep(400 * (attempt + 1));
             }
-        );
-        if (!r.ok) {
-            const errText = await r.text();
-            console.error('[gemini]', r.status, errText.slice(0, 400));
-            return res.status(502).json({ error: 'upstream_error' });
         }
-        const data = await r.json();
-        const parts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
-        const text = parts.map(p => p.text || '').join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
-        return res.status(200).json({ content: text });
-    } catch (err) {
-        console.error('[gemini] exception', err);
-        return res.status(502).json({ error: 'upstream_error' });
     }
+    console.error('[gemini] all models failed, last status', lastStatus);
+    return res.status(502).json({ error: 'upstream_error' });
 };
