@@ -1,7 +1,7 @@
 // ============================================================
 // /api/ai  (Vercel serverless function)
-// Routes RFP / ICRA / Estimator calls to Google Gemini (free tier).
-// Key is held server-side via GEMINI_API_KEY env var.
+// Routes RFP / ICRA / Estimator calls to Anthropic Claude.
+// Key is held server-side via ANTHROPIC_API_KEY env var.
 // Never expose this endpoint's logic or prompts to the client.
 // ============================================================
 
@@ -28,7 +28,7 @@ Tone: expert, restrained, objective. No em dashes. No marketing language. State 
 };
 
 // Tiny per-instance rate limit. Cold starts reset it; good enough,
-// and keeps us comfortably under Gemini's free-tier RPM ceiling.
+// and keeps a single visitor from burning through prepaid credit.
 const buckets = new Map();
 function rateLimit(req) {
     const ip = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown';
@@ -49,13 +49,12 @@ module.exports = async function handler(req, res) {
     }
     if (!rateLimit(req)) return res.status(429).json({ error: 'rate_limited' });
 
-    const KEY = process.env.GEMINI_API_KEY;
-    // Primary model first, then resilient fallbacks so a single overloaded or
-    // renamed model never leaves a client query unresolved.
+    const KEY = process.env.ANTHROPIC_API_KEY;
+    // Primary model first, then a cheaper fallback so a single overloaded model
+    // never leaves a client query unresolved.
     const MODELS = [...new Set([
-        process.env.GEMINI_MODEL || 'gemini-2.5-flash',
-        'gemini-flash-latest',
-        'gemini-2.0-flash'
+        process.env.ANTHROPIC_MODEL || 'claude-sonnet-5',
+        'claude-haiku-4-5'
     ])];
     if (!KEY) return res.status(503).json({ error: 'backend_unavailable' });
 
@@ -88,27 +87,37 @@ module.exports = async function handler(req, res) {
     for (const model of MODELS) {
         for (let attempt = 0; attempt < 2; attempt++) {
             try {
-                const r = await fetch(
-                    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${KEY}`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            system_instruction: { parts: [{ text: PROMPTS[tool] }] },
-                            contents: [{ role: 'user', parts: [{ text: userText }] }],
-                            generationConfig: { maxOutputTokens: 1500 }
-                        })
-                    }
-                );
+                const reqBody = {
+                    model,
+                    max_tokens: 3000,
+                    system: PROMPTS[tool],
+                    messages: [{ role: 'user', content: userText }]
+                };
+                // Sonnet/Opus run adaptive "thinking" by default, which adds ~15s of
+                // latency and extra token cost. These prompts are format-strict, so we
+                // turn thinking off for a fast, low-cost response that keeps quality.
+                // (Haiku does not think by default, so it is left untouched.)
+                if (/claude-(sonnet|opus)/.test(model)) {
+                    reqBody.thinking = { type: 'disabled' };
+                }
+                const r = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-api-key': KEY,
+                        'anthropic-version': '2023-06-01'
+                    },
+                    body: JSON.stringify(reqBody)
+                });
                 if (r.ok) {
                     const data = await r.json();
-                    const parts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
-                    const text = parts.map(p => p.text || '').join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
+                    const parts = (data.content || []).filter(b => b && b.type === 'text').map(b => b.text || '');
+                    const text = parts.join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
                     return res.status(200).json({ content: text });
                 }
                 lastStatus = r.status;
                 const errText = await r.text();
-                console.error('[gemini]', model, r.status, errText.slice(0, 400));
+                console.error('[anthropic]', model, r.status, errText.slice(0, 400));
                 // Auth/permission problem: the key itself is bad or blocked.
                 // No other model will fix it, so stop and report backend unavailable.
                 if (r.status === 401 || r.status === 403) {
@@ -122,12 +131,12 @@ module.exports = async function handler(req, res) {
                 // 400/404 (bad or renamed model, etc.): try the next model.
                 break;
             } catch (err) {
-                console.error('[gemini] exception', model, err);
+                console.error('[anthropic] exception', model, err);
                 lastStatus = 502;
                 await sleep(400 * (attempt + 1));
             }
         }
     }
-    console.error('[gemini] all models failed, last status', lastStatus);
+    console.error('[anthropic] all models failed, last status', lastStatus);
     return res.status(502).json({ error: 'upstream_error' });
 };

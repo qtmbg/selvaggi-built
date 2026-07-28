@@ -27,14 +27,13 @@ const express = require('express');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
-// Primary model first, then resilient fallbacks so a single overloaded or
-// renamed model never leaves a client query unresolved.
+// Primary model first, then a cheaper fallback so a single overloaded model
+// never leaves a client query unresolved.
 const MODELS = [...new Set([
-    process.env.GEMINI_MODEL || 'gemini-2.5-flash',
-    'gemini-flash-latest',
-    'gemini-2.0-flash'
+    process.env.ANTHROPIC_MODEL || 'claude-sonnet-5',
+    'claude-haiku-4-5'
 ])];
-const KEY = process.env.GEMINI_API_KEY;
+const KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!KEY) {
     console.warn('[selvaggi-built] WARNING: GEMINI_API_KEY is not set. /api/ai will respond 503.');
@@ -84,7 +83,7 @@ Tone: expert, restrained, objective. No em dashes. No marketing language. State 
 };
 
 // ============================================================
-// /api/ai. Google Gemini
+// /api/ai. Anthropic Claude
 // Body: { tool: 'rfp' | 'icra' | 'estimator', payload: object }
 // ============================================================
 app.post('/api/ai', rateLimit, async (req, res) => {
@@ -118,27 +117,33 @@ app.post('/api/ai', rateLimit, async (req, res) => {
     for (const model of MODELS) {
         for (let attempt = 0; attempt < 2; attempt++) {
             try {
-                const r = await fetch(
-                    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${KEY}`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            system_instruction: { parts: [{ text: PROMPTS[tool] }] },
-                            contents: [{ role: 'user', parts: [{ text: userText }] }],
-                            generationConfig: { maxOutputTokens: 1500 }
-                        })
-                    }
-                );
+                const reqBody = {
+                    model,
+                    max_tokens: 3000,
+                    system: PROMPTS[tool],
+                    messages: [{ role: 'user', content: userText }]
+                };
+                if (/claude-(sonnet|opus)/.test(model)) {
+                    reqBody.thinking = { type: 'disabled' };
+                }
+                const r = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-api-key': KEY,
+                        'anthropic-version': '2023-06-01'
+                    },
+                    body: JSON.stringify(reqBody)
+                });
                 if (r.ok) {
                     const data = await r.json();
-                    const parts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
-                    const text = parts.map(p => p.text || '').join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
+                    const parts = (data.content || []).filter(b => b && b.type === 'text').map(b => b.text || '');
+                    const text = parts.join('\n').replace(/```html\n?/g, '').replace(/```\n?/g, '');
                     return res.json({ content: text });
                 }
                 lastStatus = r.status;
                 const errText = await r.text();
-                console.error('[gemini]', model, r.status, errText.slice(0, 400));
+                console.error('[anthropic]', model, r.status, errText.slice(0, 400));
                 if (r.status === 401 || r.status === 403) {
                     return res.status(503).json({ error: 'backend_unavailable' });
                 }
