@@ -10,19 +10,23 @@ single-page app plus two Vercel serverless functions. No build step, no framewor
 - **Vercel project:** `selvaggi-built` (deploy with the *same* Vercel account this is linked to)
 
 ## Architecture
-- **`index.html`** — the entire front end (~179 KB). Single-page app with **hash routing**
-  and a glass-morphism visual design. This file is ~95% of the project; most edits happen here.
-- **Routes (hash-based):** `#/home`, `#/expertise`, `#/projects` (+ `#/projects/<slug>`),
-  `#/tools`, `#/insights` (+ `#/insights/<slug>`), `#/company`, `#/how-we-work`, `#/contact`.
-  Vercel `cleanUrls` is on, so `/how-we-work` also resolves.
-- **Tools page (`#/tools`, "The Toolkit"):** hosts the ICRA Level Assessor, the Process and
+- **`index.html`** — the entire front end (~179 KB). Single-page app with **clean path-based
+  routing** (History API) and a glass-morphism visual design. This file is ~95% of the project;
+  most edits happen here.
+- **Routes (clean paths):** `/` (home), `/expertise`, `/projects` (+ `/projects/<slug>`),
+  `/tools`, `/insights` (+ `/insights/<slug>`), `/company`, `/how-we-work`, `/contact`, `/faq`.
+  A catch-all rewrite in `vercel.json` (`/((?!api/).*)` -> `/index`; extensionless because
+  `cleanUrls` is on — a `.html` destination 404s at the Edge) serves the SPA for every path.
+  A JS shim redirects any old `/#/route` bookmark to its clean path; each route sets its own
+  title/description/canonical, and there is a `sitemap.xml` + `robots.txt`.
+- **Tools page (`/tools`, "The Toolkit"):** hosts the ICRA Level Assessor, the Process and
   Compliance Roadmap generator (both moved from Expertise, which now cross-links to it),
   and a Project Brief Builder card that opens the RFP modal.
-- **Insights (`#/insights`):** the SEO article section. Articles live in the `insights` data
+- **Insights (`/insights`):** the SEO article section. Articles live in the `insights` data
   array in `index.html` (slug, category, dates, excerpt, metaDescription, HTML `body`).
   Article pages set their own title/meta description and inject BlogPosting JSON-LD.
   To add an article, append an entry to the array — no other wiring needed.
-- **`api/ai.js`** — Vercel serverless function. Server-side proxy to Google Gemini (free tier) for
+- **`api/ai.js`** — Vercel serverless function. Server-side proxy to Anthropic Claude for
   the RFP / ICRA / Estimator features. Holds the API key server-side; never expose it to the client.
 - **`api/contact.js`** — Vercel serverless function. Sends contact-form submissions to `SALES_INBOX`
   via Resend. Returns 503 until `RESEND_API_KEY` / `RESEND_FROM` are configured.
@@ -39,8 +43,8 @@ Then verify the live URL returns 200 and the changed route serves the new conten
 ## Environment variables (NOT in the repo — by design)
 Secrets live in Vercel's dashboard (Project → Settings → Environment Variables) and, for local
 runs, in `server/.env` (copy from `.env.example`). Required keys:
-- `GEMINI_API_KEY` — for `/api/ai` (free tier, from console.google.com / aistudio.google.com)
-- `GEMINI_MODEL` — default `gemini-2.5-flash`
+- `ANTHROPIC_API_KEY` — for `/api/ai` (prepaid; from console.anthropic.com, set a spend cap)
+- `ANTHROPIC_MODEL` — default `claude-sonnet-5` (code falls back to `claude-haiku-4-5`)
 - `RESEND_API_KEY` + `RESEND_FROM` — for `/api/contact` (Resend free tier, 3,000 emails/month;
   `RESEND_FROM` must be on a domain verified in Resend)
 - `SALES_INBOX` — sales@selvaggibuilt.com
