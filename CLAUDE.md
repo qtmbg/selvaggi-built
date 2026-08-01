@@ -67,6 +67,10 @@ Never commit `.env`. Never ship keys to the client.
 ## Conventions / things to know
 - Edits are almost always direct to `index.html`. Match the surrounding glass-morphism styling
   and the existing section-header rhythm (section headers use `mb-12`).
+- **Asset references must be root-relative** (`/assets/...`, never `assets/...`). There is no
+  `<base>` tag (deliberate — 14 in-page `#` anchors would break under one), so a relative path
+  resolves against the current route: on `/projects/<slug>` it becomes `/projects/assets/...`
+  → 404 → broken image. This was the root cause of the Aug 2026 "image breaks" report.
 - The site contains placeholder content awaiting client-provided assets — see `ASSET-MANIFEST.md`.
 - Client (Drew / CEO) reviews via the live Vercel URL, so deploy + verify before handing off.
 
