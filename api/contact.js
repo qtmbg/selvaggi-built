@@ -78,7 +78,10 @@ module.exports = async function handler(req, res) {
             body: JSON.stringify({
                 from: FROM,
                 to: [TO],
-                reply_to: body.email || undefined,
+                // Only set reply_to when the visitor's email is plausibly valid.
+                // An invalid reply_to makes Resend reject the ENTIRE send — a
+                // typo in the email field must never lose the lead itself.
+                reply_to: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email || '') ? body.email : undefined,
                 subject,
                 html
             })
