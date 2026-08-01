@@ -71,6 +71,22 @@ Never commit `.env`. Never ship keys to the client.
   `<base>` tag (deliberate — 14 in-page `#` anchors would break under one), so a relative path
   resolves against the current route: on `/projects/<slug>` it becomes `/projects/assets/...`
   → 404 → broken image. This was the root cause of the Aug 2026 "image breaks" report.
+- **Zero external render-time dependencies** (Aug 2026): the Tailwind Play CDN and Google Fonts
+  were replaced with self-hosted static assets. Tailwind is pre-built to
+  `assets/css/tailwind.css`; Inter is the self-hosted variable font at
+  `assets/fonts/inter-latin-var.woff2` + `assets/fonts/inter.css`.
+  **⚠️ If you add a Tailwind utility class that isn't already used somewhere in `index.html`,
+  you must rebuild the stylesheet** (the old CDN generated CSS at runtime; the static file
+  doesn't). Rebuild with:
+  ```bash
+  npx -y tailwindcss@3.4.17 -c tailwind.config.js -i tailwind-input.css \
+    -o assets/css/tailwind.css --minify
+  ```
+  (`tailwind.config.js` and `tailwind-input.css` are checked in at the repo root; the config
+  mirrors the old inline `tailwind.config` — custom colors map to the CSS variables, custom
+  letter-spacings `tighter/subhead/caption/logo`.) Dynamic class names built with `${...}`
+  must keep every possible class as a complete literal string in the file or the extractor
+  won't see it.
 - The site contains placeholder content awaiting client-provided assets — see `ASSET-MANIFEST.md`.
 - Client (Drew / CEO) reviews via the live Vercel URL, so deploy + verify before handing off.
 

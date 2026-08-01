@@ -24,34 +24,12 @@
 
     <link rel="icon" type="image/svg+xml" href="/assets/logo/favicon.svg">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        ebony: 'var(--ebony)',
-                        slate: 'var(--slate)',
-                        stone: 'var(--stone)',
-                        copper: 'var(--copper)',
-                        ivory: 'var(--ivory)',
-                        white: 'var(--white)',
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    letterSpacing: {
-                        tighter: '-0.015em',
-                        subhead: '0.08em',
-                        caption: '0.1em',
-                        logo: '0.02em',
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Self-hosted: no external render-time dependencies (no CDN, no Google Fonts).
+         Tailwind is pre-built to a static stylesheet — see CLAUDE.md for the rebuild
+         command when adding new utility classes. -->
+    <link rel="preload" href="/assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/assets/fonts/inter.css">
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
 
     <!-- JSON-LD: Organization + LocalBusiness -->
     <script type="application/ld+json">
