@@ -15,10 +15,23 @@ single-page app plus two Vercel serverless functions. No build step, no framewor
   most edits happen here.
 - **Routes (clean paths):** `/` (home), `/expertise`, `/projects` (+ `/projects/<slug>`),
   `/tools`, `/insights` (+ `/insights/<slug>`), `/company`, `/how-we-work`, `/contact`, `/faq`.
-  A catch-all rewrite in `vercel.json` (`/((?!api/).*)` -> `/index`; extensionless because
-  `cleanUrls` is on — a `.html` destination 404s at the Edge) serves the SPA for every path.
+  `vercel.json` rewrites an **explicit allowlist** of these paths to `/index` (extensionless
+  because `cleanUrls` is on — a `.html` destination 404s at the Edge).
+  **⚠️ Adding a new top-level route means adding it to the `rewrites` allowlist in `vercel.json`,
+  or it will 404.** New `/insights/<slug>` and `/projects/<slug>` entries need no config change.
+  The allowlist replaced an old `/((?!api/).*)` catch-all that served the SPA with a **200 for
+  every URL on the site** — that made every dead WordPress URL and every typo a soft-404 that
+  Google would happily index. Anything outside the allowlist now serves `404.html` with a real
+  HTTP 404.
   A JS shim redirects any old `/#/route` bookmark to its clean path; each route sets its own
   title/description/canonical, and there is a `sitemap.xml` + `robots.txt`.
+- **Legacy WordPress redirects:** `vercel.json` `redirects` maps the old WordPress URL set
+  (`/services/*`, `/case-studies/*`, `/project/*`, `/about-us`, `/contact-us`, the eight old blog
+  posts, etc.) to current pages with 308s. The inventory came from the Wayback Machine CDX API
+  (`http://web.archive.org/cdx/search/cdx?url=selvaggibuilt.com&matchType=domain&fl=original&collapse=urlkey`)
+  — re-run that if more legacy URLs surface. Note Vercel applies `trailingSlash` normalization
+  *before* custom redirects, so sources are written **without** trailing slashes; adding `/foo/`
+  variants creates dead rules.
 - **Tools page (`/tools`, "The Toolkit"):** hosts the ICRA Level Assessor, the Process and
   Compliance Roadmap generator (both moved from Expertise, which now cross-links to it),
   and a Project Brief Builder card that opens the RFP modal.

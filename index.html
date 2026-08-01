@@ -8,8 +8,18 @@
     <meta id="pageDescription" name="description" content="Selvaggi Built renovates active hospitals, surgery centers, and behavioral health facilities under HCAI and ICRA Level 4 protocols. CSLB #1079406. Anaheim, California.">
 
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Selvaggi Built, Inc.">
     <meta property="og:title" content="Selvaggi Built | Healthcare Interior Construction">
     <meta property="og:description" content="Active-facility healthcare interior renovation in California. Precision under pressure.">
+    <meta property="og:url" content="https://selvaggibuilt.com/">
+    <meta property="og:image" content="https://selvaggibuilt.com/assets/og/og-default.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Completed patient room renovation by Selvaggi Built.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Selvaggi Built | Healthcare Interior Construction">
+    <meta name="twitter:description" content="Active-facility healthcare interior renovation in California. Precision under pressure.">
+    <meta name="twitter:image" content="https://selvaggibuilt.com/assets/og/og-default.jpg">
     <meta name="theme-color" content="#101820">
 
     <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg">
@@ -739,7 +749,7 @@
     <!-- Primary nav -->
     <header class="glass sticky top-0 z-40">
         <nav class="max-w-[1280px] mx-auto h-20 px-6 flex justify-between items-center" aria-label="Main">
-            <a href="/home" data-route="/home" class="flex items-center" aria-label="Selvaggi Built home">
+            <a href="/" data-route="/home" class="flex items-center" aria-label="Selvaggi Built home">
                 <img src="assets/logo/logo-horizontal-color.svg" alt="Selvaggi Built" class="h-8 md:h-9 w-auto">
             </a>
 
@@ -767,7 +777,7 @@
         </nav>
 
         <div id="mobileMenu" class="glass lg:hidden absolute left-0 right-0 border-b border-ebony/10 shadow-xl shadow-ebony/10 px-6 py-8 flex flex-col gap-5 z-30">
-            <a href="/home" data-route="/home" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">Home</a>
+            <a href="/" data-route="/home" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">Home</a>
             <a href="/expertise" data-route="/expertise" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">Expertise</a>
             <a href="/how-we-work" data-route="/how-we-work" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">How We Work</a>
             <a href="/projects" data-route="/projects" class="mobile-link text-ebony text-[14px] font-medium tracking-subhead uppercase w-max">Projects</a>
@@ -2052,7 +2062,7 @@
         <div class="max-w-[1280px] mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-14">
                 <div class="md:col-span-4 flex flex-col">
-                    <a href="/home" data-route="/home" class="flex items-center mb-6" aria-label="Selvaggi Built home">
+                    <a href="/" data-route="/home" class="flex items-center mb-6" aria-label="Selvaggi Built home">
                         <img src="assets/logo/logo-horizontal-white.svg" alt="Selvaggi Built" class="h-9 w-auto">
                     </a>
                     <address class="text-ivory/90 text-[15px] not-italic mb-4">
@@ -2256,6 +2266,7 @@
             const p = projects.find(x => x.slug === slug);
             const root = document.getElementById('projectDetailRoot');
             if (!p) {
+                setRobots(true);
                 root.innerHTML = `<section class="py-32 text-center"><h1 class="text-[32px] font-semibold text-ebony">Project not found.</h1><p class="mt-4"><a href="/projects" data-route="/projects" class="text-copper">Back to all projects</a></p></section>`;
                 return;
             }
@@ -2624,6 +2635,7 @@
             const a = insights.find(x => x.slug === slug);
             const root = document.getElementById('insightDetailRoot');
             if (!a) {
+                setRobots(true);
                 root.innerHTML = `<section class="py-32 text-center"><h1 class="text-[32px] font-semibold text-ebony">Article not found.</h1><p class="mt-4"><a href="/insights" data-route="/insights" class="text-copper">Back to all insights</a></p></section>`;
                 setMeta('view-insight-detail');
                 setArticleJsonLd(null);
@@ -2743,10 +2755,30 @@
             link.href = SITE_URL + (path === '/home' ? '/' : path);
         }
 
+        // Unknown /projects/<slug> and /insights/<slug> URLs still resolve to a 200
+        // (the SPA rewrite serves index for them), so mark those "not found" states
+        // noindex rather than letting Google treat them as thin duplicate pages.
+        // Every real route clears the flag on each navigation.
+        function setRobots(noindex) {
+            let m = document.getElementById('pageRobots');
+            if (noindex) {
+                if (!m) {
+                    m = document.createElement('meta');
+                    m.setAttribute('name', 'robots');
+                    m.id = 'pageRobots';
+                    document.head.appendChild(m);
+                }
+                m.setAttribute('content', 'noindex, follow');
+            } else if (m) {
+                m.remove();
+            }
+        }
+
         function router() {
             const path = parseHash();
             highlightNav(path);
             setCanonical(path);
+            setRobots(false);
 
             if (path.startsWith('/projects/') && path.length > '/projects/'.length) {
                 const slug = path.replace('/projects/', '');
@@ -3388,8 +3420,11 @@
             if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.defaultPrevented) return;
             const route = a.getAttribute('data-route');
             if (!route) return;
+            // '/home' is the internal view key; the canonical URL for it is '/'.
+            // Pushing '/home' would put a duplicate of the homepage in the URL bar.
+            const target = route === '/home' ? '/' : route;
             e.preventDefault();
-            if (location.pathname !== route) history.pushState({}, '', route);
+            if (location.pathname !== target) history.pushState({}, '', target);
             router();
         });
         window.addEventListener('popstate', router);

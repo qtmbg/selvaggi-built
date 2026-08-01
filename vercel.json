@@ -5,8 +5,56 @@
   "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/project/torrance-nurses-station", "destination": "/projects/torrance-nurses-station", "permanent": true },
+    { "source": "/project/canyon-ridge-patient-rooms", "destination": "/projects/canyon-ridge-patient-rooms", "permanent": true },
+    { "source": "/project/del-amo-dining", "destination": "/projects/del-amo-dining", "permanent": true },
+    { "source": "/project/:path*", "destination": "/projects", "permanent": true },
+
+    { "source": "/projects/healthcare-architecture", "destination": "/expertise", "permanent": true },
+    { "source": "/projects/behavioral-health-hospitals", "destination": "/expertise", "permanent": true },
+    { "source": "/projects/hospital-seismic-mitigations", "destination": "/expertise", "permanent": true },
+    { "source": "/projects/preconstruction-services", "destination": "/how-we-work", "permanent": true },
+
+    { "source": "/services/hcai-projects", "destination": "/insights/hcai-oshpd-hospital-permits-california", "permanent": true },
+    { "source": "/services/oshpd-construction", "destination": "/insights/hcai-oshpd-hospital-permits-california", "permanent": true },
+    { "source": "/services/preconstruction-services", "destination": "/how-we-work", "permanent": true },
+    { "source": "/services/healthcare-construction-management", "destination": "/how-we-work", "permanent": true },
+    { "source": "/services/healthcare-construction-consulting", "destination": "/how-we-work", "permanent": true },
+    { "source": "/services/:path*", "destination": "/expertise", "permanent": true },
+
+    { "source": "/case-studies/:path*", "destination": "/projects", "permanent": true },
+
+    { "source": "/about-us", "destination": "/company", "permanent": true },
+    { "source": "/our-team", "destination": "/company", "permanent": true },
+    { "source": "/purpose-values", "destination": "/company", "permanent": true },
+    { "source": "/careers", "destination": "/company", "permanent": true },
+    { "source": "/faqs", "destination": "/faq", "permanent": true },
+    { "source": "/contact-us", "destination": "/contact", "permanent": true },
+    { "source": "/build-design", "destination": "/how-we-work", "permanent": true },
+    { "source": "/build_design", "destination": "/how-we-work", "permanent": true },
+    { "source": "/sample-page", "destination": "/", "permanent": true },
+    { "source": "/home", "destination": "/", "permanent": true },
+
+    { "source": "/how-to-reduce-costs-in-healthcare-construction-projects", "destination": "/insights/healthcare-renovation-cost-drivers", "permanent": true },
+    { "source": "/10-essential-tips-for-a-successful-hospital-construction-project", "destination": "/insights/renovating-active-hospital-without-shutdown", "permanent": true },
+    { "source": "/7-types-of-construction-contractors-choosing-the-right-one-for-your-healthcare-project", "destination": "/how-we-work", "permanent": true },
+    { "source": "/exploring-10-styles-in-medical-building-architecture", "destination": "/insights", "permanent": true },
+    { "source": "/what-you-should-know-about-medical-architecture", "destination": "/insights", "permanent": true },
+    { "source": "/what-makes-medical-building-construction-stand-out", "destination": "/insights", "permanent": true },
+    { "source": "/the-ultimate-guide-to-laboratory-construction", "destination": "/expertise", "permanent": true },
+    { "source": "/key-takeaways-from-leading-pharmaceutical-construction-projects", "destination": "/expertise", "permanent": true },
+
+    { "source": "/blog", "destination": "/insights", "permanent": true },
+    { "source": "/blog/:path*", "destination": "/insights", "permanent": true },
+    { "source": "/category/:path*", "destination": "/insights", "permanent": true },
+    { "source": "/author/:path*", "destination": "/insights", "permanent": true },
+    { "source": "/tag/:path*", "destination": "/insights", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index" }
+    { "source": "/(expertise|how-we-work|projects|tools|insights|company|contact|faq)", "destination": "/index" },
+    { "source": "/projects/:slug", "destination": "/index" },
+    { "source": "/insights/:slug", "destination": "/index" }
   ],
   "headers": [
     {
