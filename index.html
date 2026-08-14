@@ -7,19 +7,26 @@
     <title id="pageTitle">Selvaggi Built, Inc. | Healthcare Interior Construction</title>
     <meta id="pageDescription" name="description" content="Selvaggi Built renovates active hospitals, surgery centers, and behavioral health facilities under HCAI and ICRA Level 4 protocols. CSLB #1079406. Anaheim, California.">
 
-    <meta property="og:type" content="website">
+    <!-- Social cards. setSocialMeta() rewrites these per route, which Googlebot
+         honors because it renders JS. LinkedIn, Facebook, Slack, and X read raw
+         HTML only, so /api/og server-renders this same block for them — see the
+         rewrites in vercel.json. Keep the static defaults below accurate: they
+         are what any unhandled crawler sees. -->
+    <meta property="og:type" content="website" id="ogType">
     <meta property="og:site_name" content="Selvaggi Built, Inc.">
-    <meta property="og:title" content="Selvaggi Built | Healthcare Interior Construction">
-    <meta property="og:description" content="Active-facility healthcare interior renovation in California. Precision under pressure.">
-    <meta property="og:url" content="https://selvaggibuilt.com/">
-    <meta property="og:image" content="https://selvaggibuilt.com/assets/og/og-default.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Completed patient room renovation by Selvaggi Built.">
+    <meta property="og:title" content="Selvaggi Built | Healthcare Interior Construction" id="ogTitle">
+    <meta property="og:description" content="Active-facility healthcare interior renovation in California. Precision under pressure." id="ogDescription">
+    <meta property="og:url" content="https://selvaggibuilt.com/" id="ogUrl">
+    <meta property="og:image" content="https://selvaggibuilt.com/assets/og/og-default.jpg" id="ogImage">
+    <meta property="og:image:width" content="1200" id="ogImageWidth">
+    <meta property="og:image:height" content="630" id="ogImageHeight">
+    <meta property="og:image:alt" content="Completed patient room renovation by Selvaggi Built." id="ogImageAlt">
+    <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Selvaggi Built | Healthcare Interior Construction">
-    <meta name="twitter:description" content="Active-facility healthcare interior renovation in California. Precision under pressure.">
-    <meta name="twitter:image" content="https://selvaggibuilt.com/assets/og/og-default.jpg">
+    <meta name="twitter:image:alt" content="Completed patient room renovation by Selvaggi Built." id="twImageAlt">
+    <meta name="twitter:title" content="Selvaggi Built | Healthcare Interior Construction" id="twTitle">
+    <meta name="twitter:description" content="Active-facility healthcare interior renovation in California. Precision under pressure." id="twDescription">
+    <meta name="twitter:image" content="https://selvaggibuilt.com/assets/og/og-default.jpg" id="twImage">
     <meta name="theme-color" content="#101820">
 
     <link rel="icon" type="image/svg+xml" href="/assets/logo/favicon.svg">
@@ -372,11 +379,18 @@
             background-color: rgba(16, 24, 32, 0.82);
             backdrop-filter: blur(4px);
             z-index: 100; opacity: 0; pointer-events: none;
-            transition: opacity 0.4s ease;
+            /* visibility, not just opacity: an opacity-0 overlay stays in the tab
+               order and the accessibility tree, so keyboard and screen-reader users
+               would land inside a modal they cannot see. */
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0s linear 0.4s;
             display: flex; align-items: center; justify-content: center;
             padding: 1.5rem;
         }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-overlay.active {
+            opacity: 1; pointer-events: auto; visibility: visible;
+            transition: opacity 0.4s ease, visibility 0s linear 0s;
+        }
         .modal-content {
             background-color: var(--white);
             border: 1px solid var(--copper);
@@ -386,6 +400,14 @@
             position: relative;
         }
         .modal-overlay.active .modal-content { transform: translateY(0); }
+
+        /* Honeypot. Kept out of the layout, the tab order, and the a11y tree
+           without display:none, which some bots detect and skip. */
+        .hp-field {
+            position: absolute !important;
+            left: -9999px !important;
+            width: 1px; height: 1px; overflow: hidden;
+        }
 
         /* AI output area */
         .ai-output { display: none; border-top: 1px solid var(--ebony); padding-top: 1.5rem; margin-top: 1.5rem; }
@@ -399,6 +421,58 @@
         .ai-output li { margin-bottom: 0.25rem; }
         .ai-output-dark { border-top-color: rgba(245,240,230,0.3); color: var(--ivory); }
         .ai-output-dark h4 { color: var(--ivory); }
+
+        /* Secondary action inside the dark tool cards. The site's .btn-secondary is
+           ebony-on-light and disappears against the ebony tool panels, so the tool
+           surfaces get their own ivory-outline variant. Plain CSS, not a Tailwind
+           utility, so it survives the static stylesheet build. */
+        .tool-btn-ghost {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            height: 48px; padding: 0 24px;
+            border: 1px solid rgba(245, 240, 230, 0.45);
+            color: var(--ivory); background: transparent;
+            font-size: 14px; font-weight: 500; text-transform: uppercase;
+            letter-spacing: 0.06em; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .tool-btn-ghost:hover {
+            background: var(--ivory); color: var(--ebony); border-color: var(--ivory);
+        }
+        .tool-btn-ghost:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+
+        /* Printable result sheet. Facility planners have to hand ICRA output to
+           infection control and the architect of record, so the tools build a
+           standalone sheet and print that instead of the app shell. It is a direct
+           child of <body>; the print rule hides every sibling. */
+        .print-sheet { display: none; }
+        @media print {
+            body > *:not(.print-sheet) { display: none !important; }
+            .print-sheet {
+                display: block !important;
+                font-family: 'Inter', system-ui, sans-serif;
+                color: #101820;
+                background: #fff;
+            }
+            .print-sheet, .print-sheet * {
+                color: #101820 !important;
+                background: transparent !important;
+                text-shadow: none !important;
+                box-shadow: none !important;
+            }
+            .print-sheet .print-logo { height: 34px; width: auto; margin-bottom: 22px; }
+            .print-sheet h1 { font-size: 21px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 4px; }
+            .print-sheet .print-sub { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #6b6b6b !important; margin-bottom: 20px; }
+            .print-sheet h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.09em; margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #d8d3c8; }
+            .print-sheet h4 { font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
+            .print-sheet p, .print-sheet li { font-size: 12px; line-height: 1.65; }
+            .print-sheet ul, .print-sheet ol { padding-left: 18px; margin-bottom: 10px; }
+            .print-sheet ul { list-style: disc; }
+            .print-sheet table { width: 100%; border-collapse: collapse; }
+            .print-sheet td { font-size: 12px; padding: 5px 0; border-bottom: 1px solid #ece8de; vertical-align: top; }
+            .print-sheet td:first-child { width: 42%; color: #6b6b6b !important; }
+            .print-sheet .print-foot { margin-top: 26px; padding-top: 12px; border-top: 1px solid #d8d3c8; font-size: 10px; line-height: 1.55; color: #6b6b6b !important; }
+            @page { margin: 16mm; }
+        }
 
         /* Form inputs */
         input:focus, textarea:focus, select:focus {
@@ -1122,7 +1196,7 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <article class="glass border border-copper/40 block reveal">
+                        <article id="hospitals" class="glass border border-copper/40 block reveal scroll-mt-32">
                             <div class="photo aspect-[4/3]">
                                 <img src="/assets/sectors/sectors-hospitals-inpatient-corridor.webp" alt="Renovated hospital inpatient corridor with wood-look flooring, wall protection, and framed artwork" loading="lazy">
                                 <span class="photo-tag glass-dark">01. Hospitals</span>
@@ -1133,7 +1207,7 @@
                             </div>
                         </article>
 
-                        <article class="glass border border-copper/40 block reveal">
+                        <article id="medical-offices" class="glass border border-copper/40 block reveal scroll-mt-32">
                             <div class="photo aspect-[4/3]">
                                 <img src="/assets/sectors/sectors-medical-offices-nurse-station.webp" alt="Completed medical office nurse station with green glass counter and wood flooring renovated by Selvaggi Built" loading="lazy">
                                 <span class="photo-tag glass-dark">02. Medical Offices</span>
@@ -1144,7 +1218,7 @@
                             </div>
                         </article>
 
-                        <article class="glass border border-copper/40 block reveal">
+                        <article id="behavioral-health" class="glass border border-copper/40 block reveal scroll-mt-32">
                             <div class="photo aspect-[4/3]">
                                 <img src="/assets/sectors/sectors-behavioral-health-patient-room-canyon-ridge.webp" alt="Anti-ligature behavioral health patient room with platform beds, flush-mount sink, and therapeutic mural at Canyon Ridge" loading="lazy">
                                 <span class="photo-tag glass-dark">03. Behavioral</span>
@@ -1155,7 +1229,7 @@
                             </div>
                         </article>
 
-                        <article class="glass border border-copper/40 block reveal">
+                        <article id="imaging" class="glass border border-copper/40 block reveal scroll-mt-32">
                             <div class="photo aspect-[4/3]">
                                 <img src="/assets/sectors/sectors-imaging-diagnostic-mammography-suite.webp" alt="Mammography suite renovation with new cabinetry and 3D imaging equipment installed in an active hospital facility" loading="lazy">
                                 <span class="photo-tag glass-dark">04. Imaging</span>
@@ -1166,7 +1240,7 @@
                             </div>
                         </article>
 
-                        <article class="glass border border-copper/40 block reveal">
+                        <article id="surgery-centers" class="glass border border-copper/40 block reveal scroll-mt-32">
                             <div class="photo aspect-[4/3]">
                                 <img src="/assets/sectors/sectors-surgery-centers-operating-room.webp" alt="Clean outpatient surgery center operating room with surgical lighting, adjustable table, and natural light" loading="lazy">
                                 <span class="photo-tag glass-dark">05. Surgery</span>
@@ -1177,7 +1251,7 @@
                             </div>
                         </article>
 
-                        <article class="glass border border-copper/40 block reveal">
+                        <article id="laboratory" class="glass border border-copper/40 block reveal scroll-mt-32">
                             <div class="photo aspect-[4/3]">
                                 <img src="/assets/sectors/sectors-laboratory-pathology-clinical-lab.webp" alt="Active clinical laboratory renovation with new casework, equipment, and biosafety infrastructure by Selvaggi Built" loading="lazy">
                                 <span class="photo-tag glass-dark">06. Laboratory</span>
@@ -1383,6 +1457,13 @@
                         <div id="icraOutputArea" class="ai-output ai-output-dark">
                             <div id="icraContent" class="text-ivory text-[15px]"></div>
                             <p class="text-[12px] text-ivory/60 mt-6 italic">Disclaimer: Reference output only, based on current ICRA guidance. Final ICRA permits require authorization from facility Infection Prevention personnel prior to mobilization.</p>
+                            <div class="mt-6 pt-6 border-t border-ivory/20 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <p id="icraCtaCopy" class="text-ivory text-[15px] max-w-[420px]">We build to this standard inside occupied hospitals. Send us the project and we will confirm the containment plan on site.</p>
+                                <div class="flex flex-wrap gap-3">
+                                    <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Start an RFP</a>
+                                    <button type="button" onclick="printToolResult('icra')" class="tool-btn-ghost">Print / Save as PDF</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1461,12 +1542,13 @@
 
                         <div id="estimatorOutputArea" class="ai-output ai-output-dark">
                             <div id="estimatorContent" class="text-ivory text-[15px]"></div>
+                            <p class="text-[12px] text-ivory/60 italic mt-6 max-w-[480px]">Disclaimer: Baseline estimation only. Not a contractual schedule. Subject to site conditions, facility sign-off, and Inspector of Record review.</p>
                             <div class="mt-6 pt-6 border-t border-ivory/20 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                                <p class="text-[12px] text-ivory/60 italic max-w-[480px]">Disclaimer: Baseline estimation only. Not a contractual schedule. Subject to site conditions, facility sign-off, and Inspector of Record review.</p>
-                                <a href="#" onclick="openRfpModal(event)" class="link-arrow inline-flex items-center text-copper font-medium text-[14px] uppercase tracking-subhead">
-                                    Proceed to formal RFP
-                                    <svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
-                                </a>
+                                <p class="text-ivory text-[15px] max-w-[420px]">Ready to price this against your real constraints? We walk the facility before we quote.</p>
+                                <div class="flex flex-wrap gap-3">
+                                    <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Start an RFP</a>
+                                    <button type="button" onclick="printToolResult('estimator')" class="tool-btn-ghost">Print / Save as PDF</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1489,7 +1571,7 @@
                                     <span class="ask-rfp-ph" aria-hidden="true"></span>
                                 </div>
                             </div>
-                            <button type="submit" class="ask-rfp-submit" aria-label="Draft a project brief with this description">
+                            <button type="submit" class="ask-rfp-submit" aria-label="Start an RFP with this description">
                                 <svg class="w-[18px] h-[18px]" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
                             </button>
                         </div>
@@ -1821,14 +1903,20 @@
                                 <label for="c-message" class="text-[11px] font-semibold uppercase tracking-caption text-ebony">Project Details</label>
                                 <textarea id="c-message" name="message" rows="6" required class="border border-ebony p-4 text-ebony text-[15px] resize-none glass-input"></textarea>
                             </div>
-                            <div class="md:col-span-2 flex items-center justify-between gap-4">
+                            <!-- Honeypot: hidden from people, irresistible to bots. -->
+                            <div class="hp-field" aria-hidden="true">
+                                <label for="c-website">Website</label>
+                                <input id="c-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                            </div>
+                            <div class="md:col-span-2 flex flex-col sm:flex-row sm:items-center gap-4">
                                 <button type="submit" id="contactSubmit" class="btn-primary bg-copper text-white h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Send</button>
                                 <div id="contactSpinner" class="loader"></div>
+                                <span class="text-ebony/70 text-[13px]">We respond within one business day.</span>
                             </div>
                             <div id="contactStatus" class="md:col-span-2 text-[14px]" aria-live="polite"></div>
                         </form>
                         <p class="text-[12px] text-ebony/60 mt-6 italic">
-                            We use the details you provide only to respond to your inquiry. We never sell or share your information.
+                            We use the details you provide only to respond to your inquiry. We never sell or share your information. See our <a href="/privacy" data-route="/privacy" class="underline hover:text-copper transition-colors">Privacy Policy</a>.
                         </p>
                     </div>
                 </div>
@@ -2031,6 +2119,394 @@
             }
             </script>
         </section>
+        <!-- ============================================
+             PRIVACY POLICY
+             ============================================ -->
+        <section id="view-privacy" class="view" data-view="/privacy" data-title="Privacy Policy | Selvaggi Built" data-description="How Selvaggi Built handles information submitted through this site: what the contact form and planning tools collect, who processes it, how long it is kept, and your California CCPA/CPRA rights. No analytics, no tracking, no sale of personal information.">
+
+            <section class="bg-white py-20 md:py-28 border-b border-ebony/10">
+                <div class="max-w-[1280px] mx-auto px-6 text-center reveal">
+                    <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-caption mb-6 block">Legal</span>
+                    <h1 class="text-[44px] md:text-[64px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Privacy policy.</h1>
+                    <p class="text-ebony/80 text-[18px] md:text-[20px] max-w-[680px] mx-auto">
+                        We collect what we need to answer you and nothing else. This site runs no analytics, sets no cookies of its own, and holds no database of visitors.
+                    </p>
+                    <p class="text-ebony/60 text-[13px] mt-6">Last updated: August 15, 2026</p>
+                </div>
+            </section>
+
+            <section class="bg-white py-16 md:py-24">
+                <div class="max-w-[860px] mx-auto px-6">
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">01</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Who we are and what this covers</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>Selvaggi Built, Inc. is a California licensed contractor, CSLB #1079406, at 5100 E. La Palma Ave., Ste 110, Anaheim, CA 92807. We build healthcare interiors in California only.</p>
+                            <p>This policy covers this website and the two functions behind it: the contact relay that emails us your inquiry, and the assistant that generates output for the planning tools. It does not cover work performed under a signed construction contract. That work is governed by the contract, by any business associate agreement in place, and by your facility's own policies.</p>
+                            <p>This is a business-to-business site. It is intended for facility directors, planners, infection preventionists, architects, and their teams. It is not directed to children, and we do not knowingly collect information from anyone under 16.</p>
+                            <p><strong>Do not send patient information through this website.</strong> Our forms and tools exist to describe construction scope, not clinical data. If a project involves protected health information, we handle it under a signed agreement, never through a web form.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">02</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">What we collect, form by form</h2>
+                        </div>
+                        <div class="article-body">
+                            <h3>Contact form</h3>
+                            <p>Your name, organization, email address, phone number if you enter one, and the project details you type. Nothing else. The form carries one hidden anti-spam field that is invisible to you and always empty unless an automated bot fills it in, in which case the submission is discarded.</p>
+                            <p>Submitting it sends those fields to our contact endpoint, which composes an email and hands it to Resend for delivery to sales@selvaggibuilt.com. Your email address is set as the reply-to so we can answer you directly.</p>
+
+                            <h3>Project Brief Builder and the RFP modal</h3>
+                            <p>Two steps, two different destinations.</p>
+                            <ul>
+                                <li>When you press <strong>Draft My RFP</strong>, the project notes you typed are sent to our AI endpoint, which forwards them to Anthropic's Claude API to produce the structured draft you see on screen. At this point nothing has been emailed to us and nothing has been stored.</li>
+                                <li>When you press <strong>Submit RFP</strong>, both your original notes and the generated draft are sent to our contact endpoint and emailed to sales@selvaggibuilt.com through Resend.</li>
+                            </ul>
+                            <p>The Brief Builder has no name or email field. We receive only the text you typed. If you want us to be able to reply, put your contact details in the notes, or use the contact form instead.</p>
+                            <p>The one-line project box on the home page and the Tools page does not send anything anywhere. It only carries your text into the modal above.</p>
+
+                            <h3>ICRA Level Assessor</h3>
+                            <p>Four dropdown selections: construction activity, patient risk group, project duration, and adjacent occupancy. There is no free-text field and no identity field. Those four values go to our AI endpoint and on to Anthropic's Claude API to generate the matrix. Nothing from this tool is emailed to us and nothing is stored.</p>
+
+                            <h3>Process and Compliance Roadmap</h3>
+                            <p>Four dropdown selections: facility type, project scope in square feet, adjacent operations, and HCAI or structural status. Same path as the ICRA Assessor. Nothing is emailed to us and nothing is stored.</p>
+
+                            <h3>Collected automatically by our host</h3>
+                            <p>Like any website, ours is served by a host that records standard request data: IP address, browser user agent, the URL requested, and a timestamp. We do not use that data to build a profile of you. We use it to keep the site available and to investigate abuse.</p>
+                            <p>Both API endpoints apply a short rate limit to stop one visitor from consuming the whole allowance. To do that, they hold your IP address in memory for sixty seconds. It is never written to disk and it is discarded when the function restarts.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">03</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">What we do not do</h2>
+                        </div>
+                        <div class="article-body">
+                            <ul>
+                                <li><strong>No analytics.</strong> There is no Google Analytics, no Google Tag Manager, no Meta pixel, no LinkedIn Insight Tag, and no session-recording or heatmap tool anywhere on this site.</li>
+                                <li><strong>No advertising.</strong> We run no retargeting, no ad pixels, and no cross-context behavioral advertising.</li>
+                                <li><strong>No cookies of our own.</strong> This site sets no first-party cookies. It stores nothing in your browser's local storage either. It reads one optional key, <strong>selvaggi.haptics</strong>, so you can switch off vibration feedback on a phone. It never writes that key, and the value never leaves your device.</li>
+                                <li><strong>No database.</strong> Form submissions are not written to a database or a file. They arrive as email in our sales inbox.</li>
+                                <li><strong>No sale and no sharing.</strong> We do not sell personal information and we do not share it for cross-context behavioral advertising, as those terms are defined in California law. We have not done either in the preceding twelve months.</li>
+                                <li><strong>No sensitive personal information.</strong> We do not ask for and do not want government identifiers, financial account details, precise geolocation, biometrics, or health information about you.</li>
+                                <li><strong>No profiling and no automated decisions</strong> that produce legal or similarly significant effects about you.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">04</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Who processes your information</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>We use a small number of service providers. Each one processes information only to deliver its service to us.</p>
+                            <ul>
+                                <li><strong>Vercel Inc.</strong> hosts this site and runs the two functions behind the forms. Vercel keeps standard access and runtime logs for a limited period.</li>
+                                <li><strong>Resend</strong> delivers form submissions to our sales inbox as transactional email. It processes the fields you submitted in order to send that message.</li>
+                                <li><strong>Anthropic PBC</strong> operates the Claude API that generates the output of the ICRA Assessor, the Roadmap generator, and the Brief Builder. The text or selections you submit to those tools are transmitted to Anthropic to produce the response. We use Anthropic's commercial API, whose terms state that customer inputs and outputs are not used to train Anthropic's models. Anthropic retains API data for a limited period for trust and safety purposes under its own policy.</li>
+                                <li><strong>Google LLC</strong> supplies the map frame on our Contact page. That frame is loaded lazily, so it is requested only if you open the Contact page and scroll down to it. When it loads, Google receives your IP address and browser information and may set cookies in Google's own context, under Google's privacy policy rather than ours. If you would rather not load it, do not scroll to the map; our address is printed in text above it and in the footer of every page.</li>
+                            </ul>
+                            <p>We also disclose information when the law requires it, when we need to enforce our terms, or in connection with a sale or reorganization of the business. None of that is a sale of personal information.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">05</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Why we collect it, and how long we keep it</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>We use what you send for four things: to answer your inquiry, to prepare an estimate or proposal, to generate the tool output you asked for, and to keep the site secure and available. We do not use it for marketing lists, and we do not add you to a newsletter.</p>
+                            <ul>
+                                <li><strong>Contact form and submitted briefs:</strong> retained as ordinary business correspondence in our sales inbox for as long as the inquiry is live and afterward for our project and bid records. Ask us to delete it and we will, subject to the records we are required to keep as a licensed contractor.</li>
+                                <li><strong>Tool inputs and outputs:</strong> not retained by us. We keep no copy on our servers. Anthropic's retention is governed by its own policy.</li>
+                                <li><strong>Host logs:</strong> retained by Vercel for a short period under its retention policy. If our email provider is ever misconfigured, our contact function records the submission in the runtime log so the inquiry is not silently lost; those log entries are short-lived and are not exported anywhere.</li>
+                                <li><strong>Rate-limit records:</strong> sixty seconds, in memory only.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">06</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Your California privacy rights</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>The California Consumer Privacy Act, as amended by the California Privacy Rights Act, gives California residents specific rights. Those rights now cover business contacts too, so they apply to you even though you are reaching us in a professional capacity.</p>
+
+                            <h3>Categories we have collected in the last twelve months</h3>
+                            <ul>
+                                <li><strong>Identifiers:</strong> name, email address, telephone number, IP address.</li>
+                                <li><strong>Personal information under Civil Code section 1798.80(e):</strong> name, telephone number, employer or organization.</li>
+                                <li><strong>Professional or employment-related information:</strong> your organization and whatever role context you choose to include.</li>
+                                <li><strong>Internet or other electronic network activity:</strong> pages requested, user agent, and timestamps, recorded by our host.</li>
+                                <li><strong>Inferences:</strong> none. We build no profiles.</li>
+                                <li><strong>Sensitive personal information:</strong> none.</li>
+                            </ul>
+                            <p>Sources: directly from you when you submit a form or a tool, and automatically from your browser through our host. Business purposes: responding to inquiries, preparing estimates, providing the tools you requested, and security and debugging. Recipients: the service providers named in section 04, each acting as a service provider or processor under contract.</p>
+                            <p>We have not sold personal information and we have not shared it for cross-context behavioral advertising in the preceding twelve months. We do not knowingly sell or share the personal information of consumers under 16.</p>
+
+                            <h3>The rights you have</h3>
+                            <ul>
+                                <li><strong>Know and access.</strong> Ask what we have collected about you, where it came from, why we collected it, and who received it, and get a copy in a portable format.</li>
+                                <li><strong>Delete.</strong> Ask us to delete what we hold, subject to the exceptions the statute allows, including records we must keep as a licensed contractor.</li>
+                                <li><strong>Correct.</strong> Ask us to fix information that is inaccurate.</li>
+                                <li><strong>Opt out of sale or sharing.</strong> There is nothing to opt out of. We do neither, which is why you will not find a "Do Not Sell or Share My Personal Information" link on this site.</li>
+                                <li><strong>Limit the use of sensitive personal information.</strong> Not applicable. We collect none.</li>
+                                <li><strong>No retaliation.</strong> We will not deny you service, charge you differently, or give you a lesser response because you exercised a privacy right.</li>
+                            </ul>
+
+                            <h3>How to make a request</h3>
+                            <p>Email <a href="mailto:sales@selvaggibuilt.com">sales@selvaggibuilt.com</a> with "California Privacy Request" in the subject line, call <a href="tel:6572013606">657-201-3606</a>, or write to us at 5100 E. La Palma Ave., Ste 110, Anaheim, CA 92807.</p>
+                            <p>We confirm receipt within ten business days and respond within forty-five days. If we need longer we will tell you why and take up to forty-five additional days. To verify a request we match it against information we already hold, which in practice means the email address you used to contact us; we may ask you to confirm from that address. An authorized agent may act for you with written permission and proof of authority, and we may still ask you to verify your own identity.</p>
+
+                            <h3>Global Privacy Control and Do Not Track</h3>
+                            <p>We honor opt-out preference signals, but there is nothing here for one to act on, because we do not sell or share personal information. We do not respond to Do Not Track headers for the same reason: there is no tracking on this site to turn off.</p>
+
+                            <h3>Shine the Light</h3>
+                            <p>Under Civil Code section 1798.83, California residents may ask about disclosures of personal information to third parties for those parties' own direct marketing. We make no such disclosures.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">07</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Security, location, and changes</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>The site is served over HTTPS. Our API keys are held server-side and are never sent to your browser. We set security headers that block MIME sniffing, restrict framing, limit referrer data, and deny geolocation, microphone, and camera access. No system is perfectly secure, and we make no guarantee that a transmission over the internet cannot be intercepted.</p>
+                            <p>We operate in California and our providers process data in the United States. This site is not directed to the European Economic Area or the United Kingdom, and we do not offer services there. If you contact us from outside the United States, your information will be processed in the United States.</p>
+                            <p>Articles on this site link to outside resources such as HCAI, ASHE, APIC, and the CSLB. Those sites have their own policies and we do not control them.</p>
+                            <p>If we change this policy we will change the date at the top. Material changes will be described here rather than made quietly.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="bg-ivory py-16 md:py-20 border-t border-ebony/10">
+                <div class="max-w-[720px] mx-auto px-6 text-center flex flex-col items-center reveal">
+                    <span class="text-copper text-[12px] font-semibold uppercase tracking-caption mb-5">Questions</span>
+                    <h2 class="text-[32px] md:text-[44px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-5">Ask us about your data.</h2>
+                    <p class="text-ebony/80 text-[16px] md:text-[18px] mb-8 max-w-[540px]">
+                        Email <a href="mailto:sales@selvaggibuilt.com" class="text-copper font-semibold hover:underline">sales@selvaggibuilt.com</a> and a person will answer. See also our <a href="/terms" data-route="/terms" class="text-copper font-semibold hover:underline">Terms of Use</a>.
+                    </p>
+                    <a href="/contact" data-route="/contact" class="btn-secondary border border-ebony text-ebony h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Contact us</a>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================
+             TERMS OF USE
+             ============================================ -->
+        <section id="view-terms" class="view" data-view="/terms" data-title="Terms of Use | Selvaggi Built" data-description="Terms for using this site, including the reference-only disclaimer covering the ICRA Level Assessor, Process and Compliance Roadmap, and Project Brief Builder, AI output limitations, intellectual property, warranty and liability limits, and California governing law.">
+
+            <section class="bg-white py-20 md:py-28 border-b border-ebony/10">
+                <div class="max-w-[1280px] mx-auto px-6 text-center reveal">
+                    <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-caption mb-6 block">Legal</span>
+                    <h1 class="text-[44px] md:text-[64px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Terms of use.</h1>
+                    <p class="text-ebony/80 text-[18px] md:text-[20px] max-w-[680px] mx-auto">
+                        The planning tools on this site are reference output. They are not a permit, not a schedule, not a bid, and not professional advice. Read section 03 before you act on anything they produce.
+                    </p>
+                    <p class="text-ebony/60 text-[13px] mt-6">Last updated: August 15, 2026</p>
+                </div>
+            </section>
+
+            <section class="bg-white py-16 md:py-24">
+                <div class="max-w-[860px] mx-auto px-6">
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">01</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Agreement to these terms</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>This website is operated by Selvaggi Built, Inc., a California corporation and licensed contractor, CSLB #1079406, at 5100 E. La Palma Ave., Ste 110, Anaheim, CA 92807. In these terms, "we" and "us" mean Selvaggi Built, Inc., and "you" means the person using the site.</p>
+                            <p>Using this site means you accept these terms. If you are using it on behalf of a hospital, health system, architect, or any other organization, you confirm you have authority to accept them for that organization. If you do not accept them, do not use the site or its tools.</p>
+                            <p>Your use of the site is also governed by our <a href="/privacy" data-route="/privacy">Privacy Policy</a>.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">02</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">What this site is, and what it is not</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>This site describes our healthcare interior construction work in California. It is marketing and reference material.</p>
+                            <p>Nothing on it is a bid, a quote, a proposal, an offer to perform work, or an acceptance of any scope. Prices are not published here and no page commits us to a price, a duration, or a means and method. A binding relationship with Selvaggi Built exists only when both parties sign a written agreement.</p>
+                            <p>We are licensed in California and we build in California only. Nothing here is an offer to perform construction in a jurisdiction where we are not licensed. Our license status is publicly verifiable at the Contractors State License Board.</p>
+                            <p>Case studies describe completed projects. Square footages, durations, and containment levels reflect the conditions of that project at that time. They are not a prediction of what your project will require or how long it will take.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">03</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">The planning tools are reference output</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>This section covers the ICRA Level Assessor, the Process and Compliance Roadmap generator, and the Project Brief Builder, together the "Tools". Read it before you rely on anything they produce.</p>
+
+                            <h3>They are not professional advice</h3>
+                            <p>The Tools do not provide infection prevention advice, medical advice, architectural or engineering services, code consulting, or legal advice. Using them creates no professional relationship of any kind. They are planning aids meant to help you frame a conversation with the qualified professionals who are accountable for your project.</p>
+
+                            <h3>They know almost nothing about your building</h3>
+                            <p>The ICRA Assessor and the Roadmap generator work from four dropdown selections each. The Brief Builder works from the notes you type. None of them has seen your drawings, your existing conditions, your air handling, your pressure relationships, your current census, your seismic or fire ratings, your interim life safety measures, or your facility's own policies. Output that ignores those things is not wrong because the tool failed. It is a limit of what the tool was ever able to know.</p>
+
+                            <h3>ICRA output is not an ICRA permit</h3>
+                            <p>The ICRA Assessor produces an indicative class and a checklist. It does not issue, replace, or approve an infection control risk assessment or an ICRA permit. Under ASHE and APIC guidance and your own facility's policy, the governing risk assessment must be performed and authorized by your facility's Infection Prevention personnel, working with the facility's Safety and Facilities functions. Do not mobilize work, erect barriers, or set containment on the strength of this output. Take it to your infection preventionist and let them decide.</p>
+
+                            <h3>Roadmap output is not a schedule</h3>
+                            <p>The Process and Compliance Roadmap produces a baseline illustration of phasing and sequence. It is not a contractual schedule, not a construction schedule, not a commitment of duration, and not a representation that any permit or approval will be granted in any timeframe. It deliberately contains no pricing and must not be used for budgeting, funding requests, or board approvals.</p>
+
+                            <h3>Brief Builder output is not an RFP</h3>
+                            <p>The Project Brief Builder produces a draft document for discussion. It is not a request for proposal, not a scope of work, not a specification, not a bid, and not an acceptance of any scope by us. Submitting a draft to our estimating team starts a conversation and nothing more.</p>
+
+                            <h3>Review by the authority having jurisdiction is still required</h3>
+                            <p>Any real project must be reviewed, permitted, and inspected by the authorities having jurisdiction. Depending on the facility that can include the California Department of Health Care Access and Information, formerly OSHPD, the local building department, the fire authority, the California Department of Public Health, and your facility's Inspector of Record. Nothing produced by these Tools substitutes for that review, anticipates its outcome, or binds any regulator. Codes, standards, and guidance change; the Tools are not a code database and are not maintained as one.</p>
+
+                            <h3>Verify before you rely</h3>
+                            <p>Confirm every output against current codes, current standards, your facility's policies, and the judgment of your own qualified professionals. If output conflicts with what your infection preventionist, your engineer of record, or your AHJ tells you, they are right and the tool is wrong.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">04</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">AI-generated output</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>The Tools are powered by a third-party large language model, Anthropic's Claude. You should understand what that means before you use them.</p>
+                            <ul>
+                                <li>Output is generated text, not a retrieved record. It is not looked up in a standards database and it is not checked against one.</li>
+                                <li>It can be incomplete, out of date, or simply wrong, including confidently and fluently wrong. It may assign a containment level, a duration, or a requirement that does not apply to your project.</li>
+                                <li>No person at Selvaggi Built reviews output before you see it. It is produced on demand and shown to you directly.</li>
+                                <li>The same or similar output may be generated for other users. Output is not unique to you and we grant no exclusivity in it.</li>
+                                <li>We make no representation that any output is accurate, current, complete, or fit for any purpose, and we do not endorse it as our professional opinion. Our professional opinion comes from a site walk and a signed proposal.</li>
+                            </ul>
+                            <p>What you type into a Tool is transmitted to our service providers to generate a response, as described in the <a href="/privacy" data-route="/privacy">Privacy Policy</a>. Do not submit protected health information, patient-identifiable data, confidential drawings, information covered by a nondisclosure agreement, or anything else you are not free to send to a United States cloud service.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">05</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Acceptable use</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>Use the site for legitimate evaluation of our services and for your own project planning. Do not:</p>
+                            <ul>
+                                <li>Scrape, crawl for bulk extraction, or harvest content, contact details, or Tool output at scale.</li>
+                                <li>Call our endpoints directly, automate submissions, or work around the rate limits.</li>
+                                <li>Probe, scan, or test the security of the site or attempt to gain access to any system or data you are not authorized to reach.</li>
+                                <li>Use the Tools to build, train, benchmark, or market a competing product or service, or attempt to extract the underlying prompts or models.</li>
+                                <li>Submit malware, malicious code, or content that is unlawful, defamatory, or infringing.</li>
+                                <li>Misrepresent who you are or what organization you represent.</li>
+                                <li>Use the contact form to send unsolicited commercial messages.</li>
+                            </ul>
+                            <p>We may limit, suspend, or block access to the site or the Tools at any time, for any reason, without notice. The Tools are offered free of charge and we may change or withdraw them at any time.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">06</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Intellectual property</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>The site and its contents, including text, articles, photography, project case studies, layout, design, and code, are owned by Selvaggi Built, Inc. or its licensors and are protected by United States and international copyright law. The Selvaggi Built name, our logo, and the tagline "Precision Under Pressure" are our marks.</p>
+                            <p>You may view, print, and circulate pages of this site within your own organization for internal, non-commercial evaluation, and you may link to any page. You may not republish, resell, distribute commercially, or create derivative works from our content, and you may not use our name, logo, or marks to promote another business or to imply an association that does not exist.</p>
+                            <p>Third-party names that appear on this site, including HCAI, OSHPD, ASHE, APIC, the CSLB, and the names of health systems and facilities in our case studies, belong to their respective owners. They appear descriptively, to identify real projects and real standards, and their appearance does not imply that those organizations sponsor or endorse this website.</p>
+                            <p>We claim no ownership of the project notes you type into a Tool, and we do not assert ownership of the text a Tool generates for you.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">07</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Submissions and confidentiality</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>Nothing you send through this website is confidential. Submitting a form or a brief creates no duty of confidence on our part. If you need confidentiality, execute a nondisclosure agreement first and send the material under it, not through a web form.</p>
+                            <p>Any feedback, suggestion, or idea you send us about the site or the Tools, other than personal information and your project's own details, may be used by us without restriction, attribution, or compensation.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">08</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">No warranty</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>The site and the Tools are provided "as is" and "as available", without warranty of any kind. To the fullest extent permitted by law we disclaim all warranties, express, implied, and statutory, including implied warranties of merchantability, fitness for a particular purpose, title, non-infringement, and any warranty of accuracy, completeness, currency, or uninterrupted or error-free operation.</p>
+                            <p>Outbound links and the map frame on our Contact page are provided for convenience. We do not control them, we do not endorse them, and we are not responsible for their content or their privacy practices.</p>
+                            <p>Some jurisdictions do not allow certain disclaimers. Where that is the case, the disclaimers apply to the fullest extent the law permits.</p>
+                            <p><strong>This section applies to the website only.</strong> It does not limit, waive, or alter any warranty, obligation, or standard of care owed under a signed construction contract with Selvaggi Built. Those obligations are governed by that contract and by California contractor licensing law, not by this page.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">09</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Limitation of liability</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>To the maximum extent permitted by California law, Selvaggi Built, Inc. and its officers, directors, employees, and agents will not be liable for any indirect, incidental, consequential, special, exemplary, or punitive damages, or for lost profits, lost revenue, lost data, project delay, schedule impact, cost overrun, regulatory citation or penalty, or business interruption, arising out of or related to your use of this website or the Tools, whether the claim sounds in contract, tort, or any other theory, and even if we have been advised that such damages were possible.</p>
+                            <p>Our total aggregate liability for all claims arising out of or related to this website and the Tools will not exceed one hundred United States dollars.</p>
+                            <p>These limits do not apply to any liability that cannot be limited or excluded under California law. They also do not apply to a signed construction contract, which carries its own terms.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">10</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Indemnity</h2>
+                        </div>
+                        <div class="article-body">
+                            <p>You agree to defend, indemnify, and hold harmless Selvaggi Built, Inc. and its officers, directors, employees, and agents from any claim, loss, liability, or expense, including reasonable attorneys' fees, arising out of your misuse of this website, your breach of these terms, or your reliance on Tool output in a real project without the independent professional verification and regulatory review described in section 03.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16 reveal">
+                        <div class="flex items-baseline gap-4 border-b border-ebony pb-4 mb-12">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">11</span>
+                            <h2 class="text-[24px] md:text-[32px] font-semibold text-ebony tracking-tighter">Governing law, and the rest</h2>
+                        </div>
+                        <div class="article-body">
+                            <p><strong>Governing law.</strong> These terms and any dispute arising out of them or out of your use of this website are governed by the laws of the State of California, without regard to its conflict-of-laws rules.</p>
+                            <p><strong>Venue.</strong> The state and federal courts located in Orange County, California have exclusive jurisdiction, and you consent to personal jurisdiction there.</p>
+                            <p><strong>Changes.</strong> We may update these terms. The date at the top of this page shows when they last changed. Continuing to use the site after a change means you accept the updated terms.</p>
+                            <p><strong>Severability.</strong> If any provision is held unenforceable, it is limited or severed to the minimum extent necessary and the rest stays in force.</p>
+                            <p><strong>No waiver.</strong> Failure to enforce a provision is not a waiver of it.</p>
+                            <p><strong>Assignment.</strong> You may not assign these terms. We may assign them in connection with a merger, acquisition, or sale of assets.</p>
+                            <p><strong>Entire agreement.</strong> These terms and the <a href="/privacy" data-route="/privacy">Privacy Policy</a> are the entire agreement between us regarding this website. They do not replace or modify any signed contract between us.</p>
+                            <p><strong>Contact.</strong> Questions about these terms go to <a href="mailto:sales@selvaggibuilt.com">sales@selvaggibuilt.com</a> or 657-201-3606.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="bg-ivory py-16 md:py-20 border-t border-ebony/10">
+                <div class="max-w-[720px] mx-auto px-6 text-center flex flex-col items-center reveal">
+                    <span class="text-copper text-[12px] font-semibold uppercase tracking-caption mb-5">Next step</span>
+                    <h2 class="text-[32px] md:text-[44px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-5">Take the output to a site walk.</h2>
+                    <p class="text-ebony/80 text-[16px] md:text-[18px] mb-8 max-w-[540px]">
+                        A tool can frame the question. Only a walk of your facility answers it. See also our <a href="/privacy" data-route="/privacy" class="text-copper font-semibold hover:underline">Privacy Policy</a>.
+                    </p>
+                    <a href="/contact" data-route="/contact" class="btn-secondary border border-ebony text-ebony h-14 px-8 inline-flex items-center justify-center font-medium text-[15px] glass-btn">Contact us</a>
+                </div>
+            </section>
+        </section>
+
     </main>
 
     <!-- ============================================
@@ -2065,12 +2541,12 @@
 
                 <div class="md:col-span-3 flex flex-col gap-3">
                     <h4 class="text-ivory text-[12px] font-semibold uppercase tracking-caption mb-2">Sectors</h4>
-                    <a href="/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Hospitals</a>
-                    <a href="/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Medical Offices</a>
-                    <a href="/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Behavioral Health</a>
-                    <a href="/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Imaging and Diagnostic</a>
-                    <a href="/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Surgery Centers</a>
-                    <a href="/expertise" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Laboratory</a>
+                    <a href="/expertise#hospitals" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Hospitals</a>
+                    <a href="/expertise#medical-offices" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Medical Offices</a>
+                    <a href="/expertise#behavioral-health" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Behavioral Health</a>
+                    <a href="/expertise#imaging" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Imaging and Diagnostic</a>
+                    <a href="/expertise#surgery-centers" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Surgery Centers</a>
+                    <a href="/expertise#laboratory" data-route="/expertise" class="text-ivory/90 text-[15px] hover:text-copper transition-colors">Laboratory</a>
                 </div>
 
                 <div class="md:col-span-3 flex flex-col gap-3">
@@ -2078,13 +2554,18 @@
                     <span class="text-ivory/90 text-[15px]">CSLB License #1079406</span>
                     <span class="text-ivory/90 text-[15px]">Healthcare Interior Construction</span>
                     <span class="text-ivory/90 text-[15px]">California Only</span>
+                    <span class="text-ivory/90 text-[15px]">Est. 2018 &middot; Anaheim, CA</span>
                 </div>
             </div>
 
             <div class="border-t border-ivory/15 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <span class="text-ivory/80 text-[12px] font-semibold uppercase tracking-caption text-center md:text-left">
-                    &copy; 2026 Selvaggi Built, Inc. All rights reserved.
+                    &copy; <span id="copyrightYear">2026</span> Selvaggi Built, Inc. All rights reserved.
                 </span>
+                <div class="flex items-center gap-6">
+                    <a href="/privacy" data-route="/privacy" class="text-ivory/80 text-[12px] font-semibold uppercase tracking-caption hover:text-copper transition-colors">Privacy</a>
+                    <a href="/terms" data-route="/terms" class="text-ivory/80 text-[12px] font-semibold uppercase tracking-caption hover:text-copper transition-colors">Terms</a>
+                </div>
                 <span class="text-copper text-[12px] font-semibold uppercase tracking-caption">Precision Under Pressure</span>
             </div>
         </div>
@@ -2095,21 +2576,21 @@
          ============================================ -->
     <div id="rfpModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="rfpModalTitle">
         <div class="modal-content glass p-8 md:p-12">
-            <button onclick="closeRfpModal()" class="absolute top-6 right-6 text-ebony hover:text-copper transition-colors" aria-label="Close project brief form">
+            <button onclick="closeRfpModal()" class="absolute top-6 right-6 text-ebony hover:text-copper transition-colors" aria-label="Close the RFP form">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
 
             <span class="text-copper text-[12px] font-semibold tracking-caption block mb-4 mt-2">Intelligent scoping</span>
-            <h2 id="rfpModalTitle" class="text-[26px] md:text-[34px] font-semibold text-ebony mb-2 tracking-tighter">Draft your project brief.</h2>
+            <h2 id="rfpModalTitle" class="text-[26px] md:text-[34px] font-semibold text-ebony mb-2 tracking-tighter">Start an RFP.</h2>
             <p class="text-ebony/80 text-[15px] mb-8">
-                Paste your rough notes, meeting takeaways, or fragmented project details below. Our scoping assistant will structure them into a formal brief ready for our estimators.
+                Paste your rough notes, meeting takeaways, or fragmented project details below. Our scoping assistant structures them into a formal brief, you review it, then you submit it to our estimating team. We respond within one business day.
             </p>
 
             <textarea id="rfpInput" rows="6" class="w-full border border-ebony p-4 text-ebony text-[15px] focus:outline-none focus:border-copper resize-none mb-6 glass-input" placeholder="Example: 3rd floor sterile core renovation, 8 weeks, adjacent OR must stay live, ICRA Level 4 expected."></textarea>
 
             <div class="flex items-center gap-4">
                 <button id="generateBtn" onclick="generateRfpDraft()" class="btn-primary bg-copper text-white h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">
-                    Structure RFP Draft
+                    Draft My RFP
                 </button>
                 <div id="loadingSpinner" class="loader"></div>
             </div>
@@ -2118,7 +2599,7 @@
                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-3">Structured brief preview</span>
                 <div id="llmOutputContent" class="text-ebony text-[15px]"></div>
                 <button id="rfpSubmitBtn" onclick="submitRfpDraft()" class="btn-secondary border border-ebony text-ebony h-12 px-6 mt-8 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">
-                    Submit to Estimating Team
+                    Submit RFP
                 </button>
                 <p id="rfpSubmitStatus" class="mt-4 text-[14px]" aria-live="polite"></p>
             </div>
@@ -2136,6 +2617,11 @@
                 sector: 'hospital',
                 sectorLabel: 'Hospital',
                 title: "Torrance Memorial Medical Center: 4th Tower Nurses Station",
+                metaTitle: "Torrance Memorial 4th Tower Nurses Station | Selvaggi Built",
+                metaDescription: "A 600 SF nurses station rebuilt under full ICRA Level 4 containment at Torrance Memorial, with adjacent patient care running uninterrupted throughout.",
+                ogImage: '/assets/projects/torrance-nurses-station/hero.jpg',
+                ogImageWidth: 1600,
+                ogImageHeight: 1200,
                 sqft: "600 SF",
                 schedule: null,
                 compliance: "ICRA Level 4 / HCAI",
@@ -2156,6 +2642,11 @@
                 sector: 'behavioral',
                 sectorLabel: 'Behavioral Health',
                 title: "Canyon Ridge Behavioral Health: Patient Room Renovations",
+                metaTitle: "Canyon Ridge Behavioral Health Patient Rooms | Selvaggi Built",
+                metaDescription: "27 ligature-resistant patient rooms renovated across 17,766 SF over 15 months at Canyon Ridge, phased around an active behavioral health hospital.",
+                ogImage: '/assets/projects/canyon-ridge-patient-room/hero.jpg',
+                ogImageWidth: 1600,
+                ogImageHeight: 921,
                 sqft: "17,766 SF",
                 schedule: "15 months",
                 compliance: "ICRA Level 3",
@@ -2176,6 +2667,13 @@
                 sector: 'behavioral',
                 sectorLabel: 'Behavioral Health',
                 title: "Del Amo Behavioral Health: Dining Room Refurbishment",
+                metaTitle: "Del Amo Behavioral Health Dining Rooms | Selvaggi Built",
+                metaDescription: "Two occupied behavioral health dining rooms refurbished at Del Amo under ICRA containment: floating solid-surface counters and 1,700 SF of new flooring.",
+                // The Del Amo hero is portrait, which social cards crop badly.
+                // g2 is the landscape frame of the same finished counter.
+                ogImage: '/assets/projects/del-amo-dining/g2.jpg',
+                ogImageWidth: 1100,
+                ogImageHeight: 825,
                 sqft: "1,700 SF",
                 schedule: null,
                 compliance: "ICRA Level 3",
@@ -2246,6 +2744,8 @@
             if (!p) {
                 setRobots(true);
                 root.innerHTML = `<section class="py-32 text-center"><h1 class="text-[32px] font-semibold text-ebony">Project not found.</h1><p class="mt-4"><a href="/projects" data-route="/projects" class="text-copper">Back to all projects</a></p></section>`;
+                setMeta('view-project-detail', '/projects');
+                setProjectJsonLd(null);
                 return;
             }
             root.innerHTML = `
@@ -2323,7 +2823,60 @@
                     </div>
                 </section>
             `;
+            // Each case study owns its own title, description, and social card.
+            // Without this all three inherit the generic "Project | Selvaggi Built"
+            // from the view's data-title and read as duplicates to search engines.
+            const fullTitle = p.metaTitle || (p.title + ' | Selvaggi Built');
+            document.title = fullTitle;
+            document.getElementById('pageTitle').textContent = fullTitle;
+            document.getElementById('pageDescription').setAttribute('content', p.metaDescription || p.outcomeLine);
+            document.getElementById('routeAnnouncer').textContent = 'Navigated to ' + fullTitle;
+            setSocialMeta({
+                path: '/projects/' + p.slug,
+                title: fullTitle,
+                description: p.metaDescription || p.outcomeLine,
+                image: SITE_URL + (p.ogImage || p.heroImage),
+                width: p.ogImageWidth,
+                height: p.ogImageHeight,
+                imageAlt: p.heroAlt,
+                type: 'article'
+            });
+            setProjectJsonLd(p);
             applyReveals();
+        }
+
+        // Article + BreadcrumbList structured data for the active case study.
+        function setProjectJsonLd(p) {
+            let el = document.getElementById('projectJsonLd');
+            if (!p) { if (el) el.remove(); return; }
+            if (!el) {
+                el = document.createElement('script');
+                el.type = 'application/ld+json';
+                el.id = 'projectJsonLd';
+                document.head.appendChild(el);
+            }
+            const url = SITE_URL + '/projects/' + p.slug;
+            el.textContent = JSON.stringify([
+                {
+                    '@context': 'https://schema.org',
+                    '@type': 'Article',
+                    'headline': p.title,
+                    'description': p.metaDescription || p.outcomeLine,
+                    'image': SITE_URL + p.heroImage,
+                    'author': { '@type': 'Organization', 'name': 'Selvaggi Built, Inc.', 'url': SITE_URL },
+                    'publisher': { '@type': 'Organization', 'name': 'Selvaggi Built, Inc.', 'url': SITE_URL },
+                    'mainEntityOfPage': url
+                },
+                {
+                    '@context': 'https://schema.org',
+                    '@type': 'BreadcrumbList',
+                    'itemListElement': [
+                        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': SITE_URL + '/' },
+                        { '@type': 'ListItem', 'position': 2, 'name': 'Projects', 'item': SITE_URL + '/projects' },
+                        { '@type': 'ListItem', 'position': 3, 'name': p.title, 'item': url }
+                    ]
+                }
+            ]);
         }
 
         /* ============================================================
@@ -2596,17 +3149,29 @@
                 el.id = 'articleJsonLd';
                 document.head.appendChild(el);
             }
-            el.textContent = JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'BlogPosting',
-                'headline': a.title,
-                'description': a.metaDescription,
-                'datePublished': a.date,
-                'dateModified': a.date,
-                'author': { '@type': 'Organization', 'name': 'Selvaggi Built, Inc.', 'url': SITE_URL },
-                'publisher': { '@type': 'Organization', 'name': 'Selvaggi Built, Inc.', 'url': SITE_URL },
-                'mainEntityOfPage': SITE_URL + '/insights/' + a.slug
-            });
+            const url = SITE_URL + '/insights/' + a.slug;
+            el.textContent = JSON.stringify([
+                {
+                    '@context': 'https://schema.org',
+                    '@type': 'BlogPosting',
+                    'headline': a.title,
+                    'description': a.metaDescription,
+                    'datePublished': a.date,
+                    'dateModified': a.date,
+                    'author': { '@type': 'Organization', 'name': 'Selvaggi Built, Inc.', 'url': SITE_URL },
+                    'publisher': { '@type': 'Organization', 'name': 'Selvaggi Built, Inc.', 'url': SITE_URL },
+                    'mainEntityOfPage': url
+                },
+                {
+                    '@context': 'https://schema.org',
+                    '@type': 'BreadcrumbList',
+                    'itemListElement': [
+                        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': SITE_URL + '/' },
+                        { '@type': 'ListItem', 'position': 2, 'name': 'Insights', 'item': SITE_URL + '/insights' },
+                        { '@type': 'ListItem', 'position': 3, 'name': a.title, 'item': url }
+                    ]
+                }
+            ]);
         }
 
         function renderInsightDetail(slug) {
@@ -2615,7 +3180,7 @@
             if (!a) {
                 setRobots(true);
                 root.innerHTML = `<section class="py-32 text-center"><h1 class="text-[32px] font-semibold text-ebony">Article not found.</h1><p class="mt-4"><a href="/insights" data-route="/insights" class="text-copper">Back to all insights</a></p></section>`;
-                setMeta('view-insight-detail');
+                setMeta('view-insight-detail', '/insights');
                 setArticleJsonLd(null);
                 return;
             }
@@ -2661,6 +3226,12 @@
             document.getElementById('pageTitle').textContent = fullTitle;
             document.getElementById('pageDescription').setAttribute('content', a.metaDescription);
             document.getElementById('routeAnnouncer').textContent = 'Navigated to ' + fullTitle;
+            setSocialMeta({
+                path: '/insights/' + a.slug,
+                title: fullTitle,
+                description: a.metaDescription,
+                type: 'article'
+            });
             setArticleJsonLd(a);
             applyReveals();
         }
@@ -2677,7 +3248,9 @@
             '/insights':     'view-insights',
             '/company':      'view-company',
             '/contact':      'view-contact',
-            '/faq':          'view-faq'
+            '/faq':          'view-faq',
+            '/privacy':      'view-privacy',
+            '/terms':        'view-terms'
         };
 
         function parseHash() {
@@ -2703,7 +3276,7 @@
             if (el) el.classList.add('active');
         }
 
-        function setMeta(view) {
+        function setMeta(view, path) {
             const el = document.getElementById(view);
             if (!el) return;
             const t = el.getAttribute('data-title') || 'Selvaggi Built';
@@ -2712,6 +3285,7 @@
             document.getElementById('pageTitle').textContent = t;
             document.getElementById('pageDescription').setAttribute('content', d);
             document.getElementById('routeAnnouncer').textContent = 'Navigated to ' + t;
+            setSocialMeta({ path: path || el.getAttribute('data-view') || '/home', title: t, description: d });
         }
 
         function highlightNav(path) {
@@ -2731,6 +3305,41 @@
                 document.head.appendChild(link);
             }
             link.href = SITE_URL + (path === '/home' ? '/' : path);
+        }
+
+        // Rewrite the Open Graph / Twitter card for the active route. Without this
+        // every shared link unfurls as the homepage, which is the single most
+        // common way a case study loses its click on LinkedIn.
+        const OG_DEFAULT = {
+            image: SITE_URL + '/assets/og/og-default.jpg',
+            width: 1200,
+            height: 630,
+            alt: 'Completed patient room renovation by Selvaggi Built.'
+        };
+        function setSocialMeta({ path, title, description, image, width, height, imageAlt, type }) {
+            const set = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value) el.setAttribute('content', value);
+            };
+            const img = image || OG_DEFAULT.image;
+            // Width and height must describe the image actually being served.
+            // Del Amo's hero is portrait; declaring it 1200x630 makes LinkedIn and
+            // Facebook crop the card to garbage.
+            const w = image ? width : OG_DEFAULT.width;
+            const h = image ? height : OG_DEFAULT.height;
+            const alt = imageAlt || OG_DEFAULT.alt;
+            set('ogType', type || 'website');
+            set('ogTitle', title);
+            set('ogDescription', description);
+            set('ogUrl', SITE_URL + (path === '/home' ? '/' : path));
+            set('ogImage', img);
+            set('ogImageWidth', w ? String(w) : String(OG_DEFAULT.width));
+            set('ogImageHeight', h ? String(h) : String(OG_DEFAULT.height));
+            set('ogImageAlt', alt);
+            set('twTitle', title);
+            set('twDescription', description);
+            set('twImage', img);
+            set('twImageAlt', alt);
         }
 
         // Unknown /projects/<slug> and /insights/<slug> URLs still resolve to a 200
@@ -2754,6 +3363,13 @@
 
         function router() {
             const path = parseHash();
+            // Cold load / pasted deep link such as /expertise#imaging. The native
+            // fragment jump loses to the scrollTo(top) below, so route it through
+            // the same pendingScrollId path a clicked link uses. Hashes beginning
+            // with '/' are legacy hash routes and are handled on DOMContentLoaded.
+            if (!pendingScrollId && location.hash.length > 1 && location.hash.charAt(1) !== '/') {
+                pendingScrollId = location.hash.slice(1);
+            }
             highlightNav(path);
             setCanonical(path);
             setRobots(false);
@@ -2761,18 +3377,19 @@
             if (path.startsWith('/projects/') && path.length > '/projects/'.length) {
                 const slug = path.replace('/projects/', '');
                 activateView('view-project-detail');
-                renderProjectDetail(slug);
-                setMeta('view-project-detail');
                 setArticleJsonLd(null);
+                renderProjectDetail(slug); // sets its own meta + Article/Breadcrumb JSON-LD
             } else if (path.startsWith('/insights/') && path.length > '/insights/'.length) {
                 const slug = path.replace('/insights/', '');
                 activateView('view-insight-detail');
+                setProjectJsonLd(null);
                 renderInsightDetail(slug); // sets its own meta + BlogPosting JSON-LD
             } else {
                 const id = routes[path] || 'view-home';
                 activateView(id);
-                setMeta(id);
+                setMeta(id, path);
                 setArticleJsonLd(null);
+                setProjectJsonLd(null);
             }
 
             window.scrollTo({ top: 0, behavior: 'auto' });
@@ -2891,8 +3508,10 @@
             lockBtn(btn, spinner); outArea.classList.remove('visible');
             try {
                 outContent.innerHTML = await callAIProxy('icra', body);
+                setIcraCta(outContent.innerHTML);
             } catch (err) {
                 outContent.innerHTML = backendOfflineHTML();
+                setIcraCta('');
             } finally {
                 outArea.classList.add('visible');
                 unlockBtn(btn, spinner);
@@ -2923,6 +3542,112 @@
         }
 
         /* ============================================================
+           TOOL RESULT: printable sheet + post-result CTA
+           Facility planners have to circulate containment output to infection
+           control, the architect, and the Inspector of Record, so each tool
+           result can be printed as a standalone, branded sheet.
+           ============================================================ */
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => (
+                { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+            ));
+        }
+
+        const TOOL_PRINT_CONFIG = {
+            icra: {
+                heading: 'ICRA Containment Assessment',
+                contentId: 'icraContent',
+                fields: [
+                    ['Construction activity', 'icra-activity'],
+                    ['Patient risk group', 'icra-risk'],
+                    ['Project duration', 'icra-duration'],
+                    ['Adjacent occupancy', 'icra-occupancy']
+                ],
+                note: 'Reference output only, based on current ICRA guidance. Final ICRA permits require authorization from facility Infection Prevention personnel prior to mobilization.'
+            },
+            estimator: {
+                heading: 'Process and Compliance Roadmap',
+                contentId: 'estimatorContent',
+                fields: [
+                    ['Facility type', 'est-facility'],
+                    ['Project scope', 'est-sqft'],
+                    ['Adjacent operations', 'est-ops'],
+                    ['HCAI / structural', 'est-hcai']
+                ],
+                note: 'Baseline estimation only. Not a contractual schedule. Subject to site conditions, facility sign-off, and Inspector of Record review.'
+            }
+        };
+
+        function printToolResult(kind) {
+            const cfg = TOOL_PRINT_CONFIG[kind];
+            if (!cfg) return;
+            const src = document.getElementById(cfg.contentId);
+            if (!src || !src.innerHTML.trim()) return;
+
+            document.querySelectorAll('.print-sheet').forEach(el => el.remove());
+
+            const rows = cfg.fields.map(([label, id]) => {
+                const el = document.getElementById(id);
+                const val = el && el.value ? el.value : '—';
+                return `<tr><td>${escapeHtml(label)}</td><td>${escapeHtml(val)}</td></tr>`;
+            }).join('');
+
+            let stamp;
+            try {
+                stamp = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            } catch (err) {
+                stamp = new Date().toDateString();
+            }
+
+            const sheet = document.createElement('div');
+            sheet.className = 'print-sheet';
+            sheet.innerHTML = `
+                <img class="print-logo" src="/assets/logo/logo-horizontal-color.svg" alt="Selvaggi Built">
+                <h1>${escapeHtml(cfg.heading)}</h1>
+                <p class="print-sub">Generated ${escapeHtml(stamp)} &middot; selvaggibuilt.com</p>
+                <h2>Project parameters</h2>
+                <table><tbody>${rows}</tbody></table>
+                <h2>Assessment</h2>
+                <div>${src.innerHTML}</div>
+                <div class="print-foot">
+                    <strong>Disclaimer:</strong> ${escapeHtml(cfg.note)}<br>
+                    Selvaggi Built, Inc. &middot; CSLB License #1079406 &middot; 5100 E. La Palma Ave., Ste 110, Anaheim, CA 92807 &middot; 657-201-3606 &middot; sales@selvaggibuilt.com
+                </div>`;
+            document.body.appendChild(sheet);
+
+            let done = false;
+            const cleanup = () => {
+                if (done) return;
+                done = true;
+                window.removeEventListener('afterprint', cleanup);
+                sheet.remove();
+            };
+            window.addEventListener('afterprint', cleanup);
+
+            // Let the logo resolve first, or the sheet prints with a blank header.
+            const logo = sheet.querySelector('.print-logo');
+            const go = () => { window.print(); setTimeout(cleanup, 1000); };
+            if (logo && !logo.complete) {
+                logo.addEventListener('load', go, { once: true });
+                logo.addEventListener('error', go, { once: true });
+                setTimeout(() => { if (!done) go(); }, 1200);
+            } else {
+                setTimeout(go, 50);
+            }
+        }
+
+        // Tailor the post-result CTA to the containment class the assessment
+        // actually returned, so the copy never contradicts the output above it.
+        function setIcraCta(resultHtml) {
+            const el = document.getElementById('icraCtaCopy');
+            if (!el) return;
+            const m = /\bClass\s+(IV|III|II|I)\b/i.exec(resultHtml || '');
+            el.textContent = m
+                ? `Your project indicates Class ${m[1].toUpperCase()} containment. We build to this standard inside occupied hospitals. Send us the project and we will confirm the plan on site.`
+                : 'We build to these standards inside occupied hospitals. Send us the project and we will confirm the containment plan on site.';
+        }
+
+        /* ============================================================
            CONTACT FORM
            ============================================================ */
         async function submitContactForm(e) {
@@ -2937,7 +3662,8 @@
                 organization: form.organization.value.trim(),
                 email: form.email.value.trim(),
                 phone: form.phone.value.trim(),
-                message: form.message.value.trim()
+                message: form.message.value.trim(),
+                website: form.website ? form.website.value : ''
             };
             if (!payload.name || !payload.organization || !payload.email || !payload.message) {
                 status.innerHTML = '<span class="text-copper">Please complete the required fields.</span>';
@@ -3023,15 +3749,27 @@
         /* ============================================================
            MODAL
            ============================================================ */
+        let rfpLastFocus = null;
+        const FOCUSABLE = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+
         function openRfpModal(e) {
             if (e) e.preventDefault();
+            rfpLastFocus = document.activeElement;
             document.getElementById('rfpModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             setTimeout(() => document.getElementById('rfpInput').focus(), 200);
         }
         function closeRfpModal() {
-            document.getElementById('rfpModal').classList.remove('active');
+            const modal = document.getElementById('rfpModal');
+            if (!modal.classList.contains('active')) return;
+            modal.classList.remove('active');
             document.body.style.overflow = '';
+            // Return the caret to whatever opened the modal, or keyboard users are
+            // dumped back at the top of the document.
+            if (rfpLastFocus && document.contains(rfpLastFocus)) {
+                rfpLastFocus.focus({ preventScroll: true });
+            }
+            rfpLastFocus = null;
             setTimeout(() => {
                 document.getElementById('llmOutputArea').classList.remove('visible');
                 document.getElementById('rfpInput').value = '';
@@ -3041,7 +3779,20 @@
             }, 400);
         }
         document.getElementById('rfpModal').addEventListener('click', function(e) { if (e.target === this) closeRfpModal(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRfpModal(); });
+        document.addEventListener('keydown', e => {
+            const modal = document.getElementById('rfpModal');
+            if (!modal.classList.contains('active')) return;
+            if (e.key === 'Escape') { closeRfpModal(); return; }
+            if (e.key !== 'Tab') return;
+            // Keep Tab inside the dialog while it is open.
+            const items = Array.from(modal.querySelectorAll(FOCUSABLE))
+                .filter(el => el.offsetParent !== null || el === document.activeElement);
+            if (!items.length) return;
+            const first = items[0];
+            const last = items[items.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        });
 
         /* ============================================================
            ASK-RFP PILL: one-line project intake that feeds the RFP modal.
@@ -3384,6 +4135,9 @@
                 const t = location.hash.slice(1);
                 if (t.charAt(0) === '/') history.replaceState({}, '', t);
             }
+            // Hardcoded 2026 in the markup is the no-JS fallback; this keeps it current.
+            const yr = document.getElementById('copyrightYear');
+            if (yr) yr.textContent = new Date().getFullYear();
             renderProjects();
             renderInsights();
             attachProjectFilter();
@@ -3401,8 +4155,14 @@
             // '/home' is the internal view key; the canonical URL for it is '/'.
             // Pushing '/home' would put a duplicate of the homepage in the URL bar.
             const target = route === '/home' ? '/' : route;
+            // Deep links like /expertise#hospitals: the fragment is carried into the
+            // pushed URL and handed to the router's pendingScrollId, because router()
+            // scrolls to top and would otherwise cancel the browser's native jump.
+            const frag = (a.getAttribute('href') || '').split('#')[1] || '';
             e.preventDefault();
-            if (location.pathname !== target) history.pushState({}, '', target);
+            const dest = target + (frag ? '#' + frag : '');
+            if (location.pathname + location.hash !== dest) history.pushState({}, '', dest);
+            if (frag) pendingScrollId = frag;
             router();
         });
         window.addEventListener('popstate', router);

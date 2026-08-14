@@ -52,7 +52,9 @@
     { "source": "/tag/:path*", "destination": "/insights", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/(expertise|how-we-work|projects|tools|insights|company|contact|faq)", "destination": "/index" },
+    { "source": "/(expertise|how-we-work|projects|tools|insights|company|contact|faq|privacy|terms)", "destination": "/index" },
+    { "source": "/projects/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(facebookexternalhit|LinkedInBot|Twitterbot|Slackbot|Slack-ImgProxy|Discordbot|WhatsApp|TelegramBot|Pinterest|redditbot|SkypeUriPreview|vkShare|Embedly|Iframely|Mastodon|Bluesky).*" }], "destination": "/api/og?type=projects&slug=:slug" },
+    { "source": "/insights/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(facebookexternalhit|LinkedInBot|Twitterbot|Slackbot|Slack-ImgProxy|Discordbot|WhatsApp|TelegramBot|Pinterest|redditbot|SkypeUriPreview|vkShare|Embedly|Iframely|Mastodon|Bluesky).*" }], "destination": "/api/og?type=insights&slug=:slug" },
     { "source": "/projects/:slug", "destination": "/index" },
     { "source": "/insights/:slug", "destination": "/index" }
   ],
@@ -69,6 +71,7 @@
   ],
   "functions": {
     "api/ai.js": { "maxDuration": 30 },
-    "api/contact.js": { "maxDuration": 10 }
+    "api/contact.js": { "maxDuration": 10 },
+    "api/og.js": { "maxDuration": 10 }
   }
 }

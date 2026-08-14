@@ -58,12 +58,25 @@ module.exports = async function handler(req, res) {
     const body = req.body || {};
     if (!body.kind) return res.status(400).json({ error: 'missing_kind' });
 
+    // Honeypot. Only a bot fills a field that is positioned off-screen and taken
+    // out of the tab order. Answer 200 so the sender sees nothing worth retrying.
+    if (typeof body.website === 'string' && body.website.trim() !== '') {
+        console.warn('[contact] honeypot tripped, dropping submission');
+        return res.status(200).json({ ok: true });
+    }
+
     const KEY = process.env.RESEND_API_KEY;
     const FROM = process.env.RESEND_FROM;
     const TO = process.env.SALES_INBOX || 'sales@selvaggibuilt.com';
     if (!KEY || !FROM) {
-        console.warn('[contact] RESEND_API_KEY/RESEND_FROM not configured. Payload logged only.');
-        console.log('[contact:unsent]', JSON.stringify(body));
+        // Deliberately does NOT log the payload. This branch is live whenever the
+        // Resend keys are unset, and dumping name/email/phone/message into the
+        // platform logs would put visitor PII somewhere the privacy policy does
+        // not account for. The 503 tells the browser to show the fallback address.
+        console.warn(
+            '[contact] RESEND_API_KEY/RESEND_FROM not configured; submission rejected.',
+            'kind=' + String(body.kind).slice(0, 24)
+        );
         return res.status(503).json({ error: 'email_not_configured' });
     }
 
