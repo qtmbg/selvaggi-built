@@ -107,6 +107,8 @@
            the focus outline box. Browsers apply :focus-visible to programmatic
            focus inconsistently, which made a copper box flicker around the hero
            heading on some loads. Suppress it in every state. */
+        .view [id][tabindex="-1"]:focus,
+        .view [id][tabindex="-1"]:focus-visible { outline: none !important; }
         .view h1[tabindex]:focus,
         .view h1[tabindex]:focus-visible {
             outline: none !important;
@@ -352,6 +354,17 @@
             opacity: 1;
         }
 
+        /* Plain-language gloss inside the uppercase trust strip. The parent grid
+           sets uppercase + caption tracking + bold; a full sentence needs none of
+           them. Visible text rather than a title attribute, because title tooltips
+           are unreachable on touch and announced inconsistently by screen readers. */
+        .metric-note {
+            display: block; margin-top: 0.5rem;
+            text-transform: none; letter-spacing: 0;
+            font-size: 11px; font-weight: 400; line-height: 1.4;
+            color: rgba(16, 24, 32, 0.68);
+        }
+
         /* Link arrow */
         .link-arrow svg { transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .link-arrow:hover svg { transform: translateX(6px); }
@@ -369,9 +382,21 @@
         /* Mobile menu */
         #mobileMenu {
             transform: translateY(-110%); opacity: 0;
-            transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+            /* visibility + pointer-events: without them the closed panel still sits
+               in the tab order and the accessibility tree, and its invisible box
+               still hit-tests over the top bar's tel: link on phones. */
+            visibility: hidden; pointer-events: none;
+            transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        opacity 0.3s ease,
+                        visibility 0s linear 0.45s;
         }
-        #mobileMenu.open { transform: translateY(0); opacity: 1; }
+        #mobileMenu.open {
+            transform: translateY(0); opacity: 1;
+            visibility: visible; pointer-events: auto;
+            transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        opacity 0.3s ease,
+                        visibility 0s linear 0s;
+        }
 
         /* Modal */
         .modal-overlay {
@@ -446,7 +471,11 @@
            child of <body>; the print rule hides every sibling. */
         .print-sheet { display: none; }
         @media print {
-            body > *:not(.print-sheet) { display: none !important; }
+            /* Scoped to body.is-printing-sheet, which printToolResult() sets only
+               while a sheet exists. An unscoped rule would blank the page for
+               anyone hitting Cmd+P on an article or a case study. A class rather
+               than :has() so this holds on older Safari and Firefox too. */
+            body.is-printing-sheet > *:not(.print-sheet) { display: none !important; }
             .print-sheet {
                 display: block !important;
                 font-family: 'Inter', system-ui, sans-serif;
@@ -781,6 +810,19 @@
             .reveal { opacity: 1; transform: none; }
         }
     </style>
+
+    <noscript>
+        <style>
+            /* Without JS the router never adds .active, so every .view stays
+               display:none and every .reveal stays opacity:0 and the page renders
+               completely blank. Unhide everything. One long document carrying all
+               the content beats nothing at all for locked-down hospital browsers,
+               text-mode readers, and the crawlers that do not execute JS. */
+            .view { display: block !important; opacity: 1 !important; }
+            .reveal { opacity: 1 !important; transform: none !important; }
+            #rfpModal, #mobileMenu { display: none !important; }
+        </style>
+    </noscript>
 </head>
 <body>
 
@@ -929,7 +971,7 @@
                         <div class="glass glass-hover p-4"><span class="text-copper block mb-1 font-bold">License</span>CSLB #1079406</div>
                         <div class="glass glass-hover p-4"><span class="text-copper block mb-1 font-bold">Compliance</span>HCAI / OSHPD</div>
                         <div class="glass glass-hover p-4"><span class="text-copper block mb-1 font-bold">Infection Control</span>ICRA Level 4</div>
-                        <div class="glass glass-hover p-4"><span class="text-copper block mb-1 font-bold">EMR / X-Mod</span>0.86</div>
+                        <div class="glass glass-hover p-4"><span class="text-copper block mb-1 font-bold">Safety Rating</span>EMR 0.86<span class="metric-note">Workers&rsquo; compensation experience modification rate. The industry baseline is 1.00. Lower is better.</span></div>
                         <div class="glass glass-hover p-4"><span class="text-copper block mb-1 font-bold">Service Area</span>California</div>
                     </div>
                 </div>
@@ -1209,7 +1251,7 @@
 
                         <article id="medical-offices" class="glass border border-copper/40 block reveal scroll-mt-32">
                             <div class="photo aspect-[4/3]">
-                                <img src="/assets/sectors/sectors-medical-offices-nurse-station.webp" alt="Completed medical office nurse station with green glass counter and wood flooring renovated by Selvaggi Built" loading="lazy">
+                                <img src="/assets/sectors/sectors-medical-offices-nurse-station.webp" alt="Completed medical office nurse station with a green glass counter and wood-look flooring" loading="lazy">
                                 <span class="photo-tag glass-dark">02. Medical Offices</span>
                             </div>
                             <div class="p-7">
@@ -1253,7 +1295,7 @@
 
                         <article id="laboratory" class="glass border border-copper/40 block reveal scroll-mt-32">
                             <div class="photo aspect-[4/3]">
-                                <img src="/assets/sectors/sectors-laboratory-pathology-clinical-lab.webp" alt="Active clinical laboratory renovation with new casework, equipment, and biosafety infrastructure by Selvaggi Built" loading="lazy">
+                                <img src="/assets/sectors/sectors-laboratory-pathology-clinical-lab.webp" alt="Clinical laboratory interior with casework, benchtop equipment, and biosafety infrastructure" loading="lazy">
                                 <span class="photo-tag glass-dark">06. Laboratory</span>
                             </div>
                             <div class="p-7">
@@ -1598,10 +1640,10 @@
             <!-- Filter -->
             <section class="bg-white pt-12 pb-4">
                 <div class="max-w-[1280px] mx-auto px-6">
-                    <div class="flex flex-wrap gap-3" id="projectFilter">
-                        <button data-filter="all" class="filter-btn bg-ebony text-white px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead glass-btn">All</button>
-                        <button data-filter="hospital" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Hospitals</button>
-                        <button data-filter="behavioral" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Behavioral Health</button>
+                    <div class="flex flex-wrap gap-3" id="projectFilter" role="group" aria-label="Filter case studies by sector">
+                        <button type="button" data-filter="all" aria-pressed="true" class="filter-btn bg-ebony text-white px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead glass-btn">All</button>
+                        <button type="button" data-filter="hospital" aria-pressed="false" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Hospitals</button>
+                        <button type="button" data-filter="behavioral" aria-pressed="false" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Behavioral Health</button>
                     </div>
                 </div>
             </section>
@@ -1814,7 +1856,8 @@
                         <div class="glass glass-hover border-l-2 border-l-copper p-5">
                             <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">License</span>
                             <h3 class="text-ebony text-[16px] font-semibold mb-1">CSLB License</h3>
-                            <p class="text-ebony/80 text-[15px]">#1079406</p>
+                            <p class="text-ebony text-[15px] mb-3">#1079406</p>
+                            <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=1079406" target="_blank" rel="noopener" class="text-copper text-[13px] font-medium hover:underline">Verify with the CSLB &rarr;</a>
                         </div>
                         <div class="glass glass-hover border-l-2 border-l-copper p-5">
                             <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Service Area</span>
@@ -2554,7 +2597,7 @@
                     <span class="text-ivory/90 text-[15px]">CSLB License #1079406</span>
                     <span class="text-ivory/90 text-[15px]">Healthcare Interior Construction</span>
                     <span class="text-ivory/90 text-[15px]">California Only</span>
-                    <span class="text-ivory/90 text-[15px]">Est. 2018 &middot; Anaheim, CA</span>
+                    <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=1079406" target="_blank" rel="noopener" class="text-copper text-[15px] hover:underline">Verify our license &rarr;</a>
                 </div>
             </div>
 
@@ -2586,6 +2629,7 @@
                 Paste your rough notes, meeting takeaways, or fragmented project details below. Our scoping assistant structures them into a formal brief, you review it, then you submit it to our estimating team. We respond within one business day.
             </p>
 
+            <label for="rfpInput" class="sr-only">Project notes to structure into a brief</label>
             <textarea id="rfpInput" rows="6" class="w-full border border-ebony p-4 text-ebony text-[15px] focus:outline-none focus:border-copper resize-none mb-6 glass-input" placeholder="Example: 3rd floor sterile core renovation, 8 weeks, adjacent OR must stay live, ICRA Level 4 expected."></textarea>
 
             <div class="flex items-center gap-4">
@@ -2678,7 +2722,7 @@
                 schedule: null,
                 compliance: "ICRA Level 3",
                 outcomeLine: "Two behavioral health dining rooms refreshed with floating solid-surface counters, integrated equipment enclosures, and new flooring, completed in an occupied facility.",
-                challenge: "The existing dining room counters at Del Amo ITU and Del Sol Dining Rooms were outdated and did not provide the desired functionality or appearance for the facility. The project required the removal of existing counters, cabinets, and wall protection while working within an occupied healthcare environment where dust control, safety, and minimal disruption to operations were critical considerations.",
+                challenge: "Del Amo ITU and Del Sol are patient dining rooms in an occupied behavioral health facility, and both stayed in service. That set the constraints before any design question was asked. Construction ran under ICRA Level 3, with negative air pressure equipment and dust containment procedures in place throughout, and dust control, safety, and minimal disruption to daily operations governed the sequence. The scope was invasive for rooms that could not close. Existing counters, cabinets, and wall protection came out. New framing and cabinetry went in for the water filtration systems, and roughly 1,700 square feet of flooring was replaced. The detailing carried its own requirements: counter supports were concealed and anchored directly into the wall studs rather than carried on exposed legs or brackets, and the free-standing water filters and coffee dispensers were built into enclosures. The counters themselves were outdated and no longer gave the facility the function or the appearance it needed. Replacing them was the smallest part of the problem.",
                 approach: "The refurbishment included selective demolition of existing finishes and millwork, installation of concealed floating counter support brackets anchored directly to wall studs, construction of new support framing and cabinetry for water filtration systems, and installation of new solid surface floating counters. Additional improvements included new water filter and coffee dispenser enclosures, drywall repairs, complete interior painting of both dining rooms, and installation of approximately 1,700 square feet of Mannington glue-down LVT flooring. Infection control measures, including negative air pressure equipment and dust containment procedures, were implemented throughout construction to maintain a safe environment for patients and staff.",
                 outcome: "The project transformed both dining rooms with a modern floating counter design that improved functionality, accessibility, and aesthetics. The new solid surface counters, integrated equipment enclosures, refreshed finishes, and upgraded flooring created a cleaner, more durable, and visually appealing environment while supporting daily facility operations. The completed renovations enhanced the overall dining experience and delivered a long-lasting solution aligned with the facility's operational needs and design objectives.",
                 heroImage: '/assets/projects/del-amo-dining/hero.jpg',
@@ -2788,9 +2832,12 @@
                                     <h2 class="text-[24px] md:text-[28px] font-semibold text-ebony tracking-tighter mb-4">The Outcome</h2>
                                     <p class="text-ebony/85 text-[16px] leading-[1.7]">${p.outcome}</p>
                                 </div>
-                                <div class="flex flex-col sm:flex-row gap-4 border-t border-ebony pt-8">
-                                    <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Start an RFP</a>
-                                    <a href="/contact" data-route="/contact" class="btn-secondary border border-ebony text-ebony h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Contact us</a>
+                                <div class="border-t border-ebony pt-8">
+                                    ${p.compliance ? `<p class="text-ebony/80 text-[15px] mb-6">This project was delivered under ${p.compliance} containment. The <a href="/tools" data-route="/tools" class="text-copper font-semibold underline">ICRA Level Assessor</a> will tell you what your own project requires, in about a minute.</p>` : ''}
+                                    <div class="flex flex-col sm:flex-row gap-4">
+                                        <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Start an RFP</a>
+                                        <a href="/contact" data-route="/contact" class="btn-secondary border border-ebony text-ebony h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Contact us</a>
+                                    </div>
                                 </div>
                             </div>
                             <aside class="lg:col-span-4">
@@ -2930,7 +2977,7 @@
                     </ul>
 
                     <h2>Who approves and enforces it</h2>
-                    <p>The facility's infection preventionist owns the assessment and issues the ICRA permit. The contractor builds and maintains the containment to that permit, documents it daily, and the infection prevention team retains the authority to stop work if containment fails. On our projects the superintendent walks the barriers every shift and logs pressure readings, because the containment that passes inspection on day one has to hold on week ten. That discipline is the core of our <a href="/expertise" data-route="/expertise">Zero-Disruption Protocol</a>.</p>
+                    <p>The facility's infection preventionist owns the assessment and issues the ICRA permit. The contractor builds and maintains the containment to that permit, documents it daily, and the infection prevention team retains the authority to stop work if containment fails. On our projects the superintendent walks the barriers every shift and logs pressure readings, because the containment that passes inspection on day one has to hold on week ten. That discipline is the core of our <a href="/expertise#zero-disruption-protocol" data-route="/expertise">Zero-Disruption Protocol</a>.</p>
 
                     <h2>Where containment usually fails</h2>
                     <ul>
@@ -3124,7 +3171,8 @@
                     <h3 class="text-ebony text-[20px] font-semibold mb-3 leading-snug">
                         <a href="/insights/${a.slug}" data-route="/insights/${a.slug}" class="hover:text-copper transition-colors">${a.title}</a>
                     </h3>
-                    <p class="text-ebony/80 text-[15px] mb-6">${a.excerpt}</p>
+                    <p class="text-ebony/80 text-[15px] mb-5">${a.excerpt}</p>
+                    <span class="text-ebony text-[12px] font-semibold uppercase tracking-caption block mb-6">By Selvaggi Built, Inc.</span>
                     <a href="/insights/${a.slug}" data-route="/insights/${a.slug}" class="link-arrow inline-flex items-center text-copper font-medium text-[13px] uppercase tracking-subhead mt-auto w-max">
                         Read article&nbsp;&middot;&nbsp;${a.readTime}
                         <svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
@@ -3194,6 +3242,7 @@
                         </a>
                         <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6 text-[12px] font-semibold uppercase tracking-caption">
                             <span class="text-copper">${a.category}</span>
+                            <span class="text-ebony/60">By Selvaggi Built, Inc.</span>
                             <span class="text-ebony/60">${a.dateDisplay}</span>
                             <span class="text-ebony/60">${a.readTime}</span>
                         </div>
@@ -3259,16 +3308,10 @@
             return p === '' ? '/home' : p;
         }
 
-        // Navigate to a route, then scroll to a section within it. Lets CTAs like
-        // "Read the full protocol" land on the matching content rather than the
-        // top of the destination page.
+        // Set by the link handler (or by a cold load carrying a #fragment) so the
+        // router can scroll to a section after its own scroll-to-top has run.
+        // Lets a link like /expertise#imaging land on the matching content.
         let pendingScrollId = null;
-        function goToSection(e, route, id) {
-            if (e) e.preventDefault();
-            pendingScrollId = id;
-            if (location.pathname === route) router();
-            else { history.pushState({}, '', route); router(); }
-        }
 
         function activateView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -3407,7 +3450,15 @@
                 pendingScrollId = null;
                 setTimeout(() => {
                     const target = document.getElementById(id);
-                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (!target) return;
+                    // A JS smooth-scroll ignores the reduced-motion CSS reset, so
+                    // it has to be gated here too.
+                    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+                    // Move focus with the viewport, or a keyboard user hears the
+                    // view's h1 and resumes tabbing from the link they just left.
+                    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+                    target.focus({ preventScroll: true });
                 }, 140);
             }
         }
@@ -3614,12 +3665,14 @@
                     Selvaggi Built, Inc. &middot; CSLB License #1079406 &middot; 5100 E. La Palma Ave., Ste 110, Anaheim, CA 92807 &middot; 657-201-3606 &middot; sales@selvaggibuilt.com
                 </div>`;
             document.body.appendChild(sheet);
+            document.body.classList.add('is-printing-sheet');
 
             let done = false;
             const cleanup = () => {
                 if (done) return;
                 done = true;
                 window.removeEventListener('afterprint', cleanup);
+                document.body.classList.remove('is-printing-sheet');
                 sheet.remove();
             };
             window.addEventListener('afterprint', cleanup);
@@ -3731,7 +3784,10 @@
                 filterEl.querySelectorAll('button').forEach(x => {
                     x.classList.remove('bg-ebony', 'text-white');
                     x.classList.add('border', 'border-ebony', 'text-ebony');
+                    // Which tab is active was conveyed by colour alone.
+                    x.setAttribute('aria-pressed', 'false');
                 });
+                b.setAttribute('aria-pressed', 'true');
                 b.classList.add('bg-ebony', 'text-white');
                 b.classList.remove('border', 'border-ebony', 'text-ebony');
                 let visible = 0;
@@ -3743,6 +3799,11 @@
                 });
                 const note = emptyNote();
                 if (note) note.style.display = visible === 0 ? '' : 'none';
+                // The grid changes silently otherwise; reuse the polite announcer.
+                const ann = document.getElementById('routeAnnouncer');
+                if (ann) ann.textContent = visible === 0
+                    ? 'No case studies in this sector yet.'
+                    : visible + (visible === 1 ? ' case study' : ' case studies') + ' shown.';
             });
         }
 

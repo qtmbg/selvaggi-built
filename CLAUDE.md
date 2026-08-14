@@ -14,7 +14,8 @@ single-page app plus two Vercel serverless functions. No build step, no framewor
   routing** (History API) and a glass-morphism visual design. This file is ~95% of the project;
   most edits happen here.
 - **Routes (clean paths):** `/` (home), `/expertise`, `/projects` (+ `/projects/<slug>`),
-  `/tools`, `/insights` (+ `/insights/<slug>`), `/company`, `/how-we-work`, `/contact`, `/faq`.
+  `/tools`, `/insights` (+ `/insights/<slug>`), `/company`, `/how-we-work`, `/contact`, `/faq`,
+  `/privacy`, `/terms`.
   `vercel.json` rewrites an **explicit allowlist** of these paths to `/index` (extensionless
   because `cleanUrls` is on — a `.html` destination 404s at the Edge).
   **⚠️ Adding a new top-level route means adding it to the `rewrites` allowlist in `vercel.json`,
@@ -39,8 +40,24 @@ single-page app plus two Vercel serverless functions. No build step, no framewor
   array in `index.html` (slug, category, dates, excerpt, metaDescription, HTML `body`).
   Article pages set their own title/meta description and inject BlogPosting JSON-LD.
   To add an article, append an entry to the array — no other wiring needed.
+- **Per-route metadata:** every view carries `data-title` / `data-description`, and `setMeta()`
+  applies them. **Detail routes are the exception and own their metadata entirely:**
+  `renderProjectDetail()` and `renderInsightDetail()` set title, description, social card, and
+  JSON-LD themselves, and `router()` must **not** call `setMeta()` for them — doing so is what
+  made all three case studies share the title "Project | Selvaggi Built".
+- **Social cards:** `setSocialMeta()` rewrites the `og:*` / `twitter:*` tags per route. That only
+  reaches Googlebot, which renders JS. LinkedIn, Facebook, Slack, and X read raw HTML, so
+  `vercel.json` routes **those user-agents only** to `api/og.js`, which server-renders the same
+  tags. Humans and Googlebot keep the plain static file, so a fault in `api/og.js` cannot take
+  the real pages down. It parses the `projects` / `insights` arrays out of `index.html` at
+  runtime, so **adding an article still needs no other wiring**. If you rename those arrays or
+  change their field names, update `api/og.js`.
+  `og:image:width` / `og:image:height` must describe the image actually served — declaring
+  Del Amo's portrait hero as 1200x630 made social cards crop it badly, which is why each project
+  carries explicit `ogImage` / `ogImageWidth` / `ogImageHeight`.
 - **`api/ai.js`** — Vercel serverless function. Server-side proxy to Anthropic Claude for
   the RFP / ICRA / Estimator features. Holds the API key server-side; never expose it to the client.
+- **`api/og.js`** — serves social crawlers an OG-populated copy of `index.html` (see above).
 - **`api/contact.js`** — Vercel serverless function. Sends contact-form submissions to `SALES_INBOX`
   via Resend. Returns 503 until `RESEND_API_KEY` / `RESEND_FROM` are configured.
 - **`server/`** — local Express version of the same proxy (`server.js`) for running off-Vercel.
@@ -87,6 +104,23 @@ Never commit `.env`. Never ship keys to the client.
   letter-spacings `tighter/subhead/caption/logo`.) Dynamic class names built with `${...}`
   must keep every possible class as a complete literal string in the file or the extractor
   won't see it.
+- **⚠️ KNOWN ISSUE — slash-opacity utilities on the brand colors do nothing.**
+  `tailwind.config.js` maps the brand colors to CSS variables (`ebony: 'var(--ebony)'`).
+  Tailwind cannot compute an alpha channel from a `var()`, so **every `text-ebony/80`,
+  `border-copper/40`, `text-ivory/90`, etc. generates no rule at all** — `assets/css/tailwind.css`
+  contains only `.text-ebony`, with no opacity variants. There are ~130 such usages in
+  `index.html`. What they render as today: `text-ebony/80` inherits its parent's color, and
+  `border-copper/40` falls back to Tailwind preflight's `border: 0 solid #e5e7eb`, so those
+  card borders are **light gray, not copper**.
+  This predates the CDN→static migration (the Play CDN had the same `var()` limitation), so the
+  site the client approved is the gray-bordered one. **Fixing it is a site-wide visual change,
+  not a bug fix — get sign-off first.** The fix is to give the config real color values so
+  Tailwind can compute alpha (`ebony: '#101820'`, …; the `--ebony` CSS variables stay for the
+  hand-written rules in the `<style>` block), then rebuild. Verify the border and body-copy
+  changes against a screenshot pass before shipping.
+  Until then: **new markup should use classes that actually exist** — plain `text-ebony`,
+  `text-copper`, or a hand-written rule in the `<style>` block (as `.metric-note` and
+  `.tool-btn-ghost` do).
 - The site contains placeholder content awaiting client-provided assets — see `ASSET-MANIFEST.md`.
 - Client (Drew / CEO) reviews via the live Vercel URL, so deploy + verify before handing off.
 
