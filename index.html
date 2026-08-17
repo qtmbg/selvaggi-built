@@ -476,6 +476,12 @@
                anyone hitting Cmd+P on an article or a case study. A class rather
                than :has() so this holds on older Safari and Firefox too. */
             body.is-printing-sheet > *:not(.print-sheet) { display: none !important; }
+            /* The fixed atmosphere layers are pseudo-elements, so body > * misses
+               them. Left alone they print a copper wash and film grain behind the
+               sheet whenever the reader has background graphics turned on. */
+            body.is-printing-sheet::before,
+            body.is-printing-sheet::after { display: none !important; content: none !important; }
+            body.is-printing-sheet { background: #fff !important; }
             .print-sheet {
                 display: block !important;
                 font-family: 'Inter', system-ui, sans-serif;
@@ -1256,7 +1262,7 @@
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Medical Offices</h3>
-                                <p class="text-ebony/80 text-[15px]">Tenant improvements for physician groups and specialty clinics, scheduled around patient appointments and clinical workflows.</p>
+                                <p class="text-ebony/80 text-[15px]">Tenant improvements for physician groups and specialty clinics, scheduled around patient appointments and clinical workflows. Most medical office buildings permit through the local city or county building department rather than HCAI, even when the tenant is a health system. We confirm which jurisdiction owns your project before we price it.</p>
                             </div>
                         </article>
 
@@ -1278,7 +1284,7 @@
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Imaging and Diagnostic</h3>
-                                <p class="text-ebony/80 text-[15px]">Lead-lined suites, structural supports, and clean power for advanced imaging modalities, installed without disrupting adjacent clinical areas.</p>
+                                <p class="text-ebony/80 text-[15px]">Lead-lined suites, structural supports, and clean power for advanced imaging modalities, installed without disrupting adjacent clinical areas. Shielding, structural support, and equipment coordination are sequenced around the vendor's install date, because the room cannot be closed out until the shielding survey passes.</p>
                             </div>
                         </article>
 
@@ -1289,7 +1295,7 @@
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Surgery Centers</h3>
-                                <p class="text-ebony/80 text-[15px]">Outpatient operating rooms and sterile processing spaces built to inpatient standards. ASC and HOPD ready.</p>
+                                <p class="text-ebony/80 text-[15px]">Outpatient operating rooms and sterile processing spaces built to inpatient standards. ASC and HOPD ready. OR downtime is the whole cost, so the sequence is built backward from the room release date and the shutdown windows the surgical schedule will actually give up.</p>
                             </div>
                         </article>
 
@@ -1300,7 +1306,7 @@
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Laboratory and Pathology</h3>
-                                <p class="text-ebony/80 text-[15px]">Casework, utilities, and ventilation systems renovated in active lab environments, coordinated around specimen processing schedules and biosafety requirements.</p>
+                                <p class="text-ebony/80 text-[15px]">Casework, utilities, and ventilation systems renovated in active lab environments, coordinated around specimen processing schedules and biosafety requirements. Specimen integrity sets the constraint, not the finish schedule. Ventilation cutovers and casework demolition are staged so biosafety containment is never the thing that gives.</p>
                             </div>
                         </article>
                     </div>
@@ -1497,9 +1503,9 @@
                         </form>
 
                         <div id="icraOutputArea" class="ai-output ai-output-dark">
-                            <div id="icraContent" class="text-ivory text-[15px]"></div>
+                            <div id="icraContent" class="text-ivory text-[15px]" aria-live="polite"></div>
                             <p class="text-[12px] text-ivory/60 mt-6 italic">Disclaimer: Reference output only, based on current ICRA guidance. Final ICRA permits require authorization from facility Infection Prevention personnel prior to mobilization.</p>
-                            <div class="mt-6 pt-6 border-t border-ivory/20 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <div id="icraCtaRow" class="mt-6 pt-6 border-t border-ivory/20 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <p id="icraCtaCopy" class="text-ivory text-[15px] max-w-[420px]">We build to this standard inside occupied hospitals. Send us the project and we will confirm the containment plan on site.</p>
                                 <div class="flex flex-wrap gap-3">
                                     <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Start an RFP</a>
@@ -1583,7 +1589,7 @@
                         </form>
 
                         <div id="estimatorOutputArea" class="ai-output ai-output-dark">
-                            <div id="estimatorContent" class="text-ivory text-[15px]"></div>
+                            <div id="estimatorContent" class="text-ivory text-[15px]" aria-live="polite"></div>
                             <p class="text-[12px] text-ivory/60 italic mt-6 max-w-[480px]">Disclaimer: Baseline estimation only. Not a contractual schedule. Subject to site conditions, facility sign-off, and Inspector of Record review.</p>
                             <div class="mt-6 pt-6 border-t border-ivory/20 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <p class="text-ivory text-[15px] max-w-[420px]">Ready to price this against your real constraints? We walk the facility before we quote.</p>
@@ -1633,6 +1639,9 @@
                     <h1 class="text-[44px] md:text-[64px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Built for continuity.</h1>
                     <p class="text-ebony/80 text-[18px] md:text-[20px] max-w-[640px] mx-auto">
                         Active-facility healthcare interior renovations delivered across California.
+                    </p>
+                    <p class="text-ebony text-[15px] max-w-[640px] mx-auto mt-4">
+                        Three case studies published so far, with more in preparation. If you want to see work in a sector that is not represented here yet, ask on the site walk and we will bring the file.
                     </p>
                 </div>
             </section>
@@ -1873,6 +1882,38 @@
                 </div>
             </section>
 
+            <!-- Trade partners + field hiring. Routed to the one published inbox
+                 (sales@) with subject conventions; no careers@ alias exists.
+                 /careers already 308s to /company, so this is where it lands. -->
+            <section id="work-with-us" class="bg-white py-20 md:py-28">
+                <div class="max-w-[1280px] mx-auto px-6">
+                    <div class="flex flex-col md:flex-row md:items-baseline justify-between border-b border-ebony pb-4 mb-12 gap-4 reveal">
+                        <div class="flex items-baseline gap-4">
+                            <span class="text-copper text-[14px] font-semibold tracking-caption">04</span>
+                            <h2 class="text-[28px] md:text-[40px] font-semibold text-ebony tracking-tighter">Work with us</h2>
+                        </div>
+                        <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-subhead">Trades and field staff</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 reveal">
+                        <div>
+                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-3">Trade partners</span>
+                            <h3 class="text-ebony text-[20px] font-semibold mb-4">Subcontractors who can work inside a live hospital.</h3>
+                            <p class="text-ebony text-[15px] mb-4">Healthcare interiors are not a normal jobsite. Work happens behind sealed barriers, on after-hours windows, under negative pressure, with an Inspector of Record who can stop the job. Trades that hold that standard get called back.</p>
+                            <p class="text-ebony text-[15px] mb-6">Send your license number, trade, service area, insurance certificate, and any healthcare or ICRA experience your crews hold. We keep a prequalified list by trade and pull from it when scope matches.</p>
+                            <a href="mailto:sales@selvaggibuilt.com?subject=Trade%20partner%20prequalification" class="btn-secondary border border-ebony text-ebony h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Submit prequalification</a>
+                        </div>
+                        <div>
+                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-3">Field and office</span>
+                            <h3 class="text-ebony text-[20px] font-semibold mb-4">We hire for the standard, not the headcount.</h3>
+                            <p class="text-ebony text-[15px] mb-4">The work is superintendents, foremen, carpenters, and preconstruction staff who understand that a corridor has to be clean and clear before the 6 a.m. shift change. If that is how you already work, we want to know you.</p>
+                            <p class="text-ebony text-[15px] mb-6">We do not always have a posting open. We do always read what comes in. Send a resume, the trades you hold, and the healthcare projects you have worked.</p>
+                            <a href="mailto:sales@selvaggibuilt.com?subject=Employment%20inquiry" class="btn-secondary border border-ebony text-ebony h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Send a resume</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Testimonials section hidden until the client supplies attributed client quotes with a signed release. Restore when available. -->
 
             <!-- CTA -->
@@ -1921,6 +1962,10 @@
                         <div>
                             <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">License</span>
                             <span class="text-ebony text-[16px]">CSLB #1079406</span>
+                        </div>
+                        <div>
+                            <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Trade partners</span>
+                            <p class="text-ebony text-[15px]">Subcontractors and field staff: see <a href="/company#work-with-us" data-route="/company" class="text-copper font-semibold hover:underline">Work with us</a>.</p>
                         </div>
                     </div>
 
@@ -2641,7 +2686,7 @@
 
             <div id="llmOutputArea" class="ai-output">
                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-3">Structured brief preview</span>
-                <div id="llmOutputContent" class="text-ebony text-[15px]"></div>
+                <div id="llmOutputContent" class="text-ebony text-[15px]" aria-live="polite"></div>
                 <button id="rfpSubmitBtn" onclick="submitRfpDraft()" class="btn-secondary border border-ebony text-ebony h-12 px-6 mt-8 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">
                     Submit RFP
                 </button>
@@ -3562,7 +3607,7 @@
                 setIcraCta(outContent.innerHTML);
             } catch (err) {
                 outContent.innerHTML = backendOfflineHTML();
-                setIcraCta('');
+                setIcraCta('', true);
             } finally {
                 outArea.classList.add('visible');
                 unlockBtn(btn, spinner);
@@ -3614,6 +3659,7 @@
                     ['Project duration', 'icra-duration'],
                     ['Adjacent occupancy', 'icra-occupancy']
                 ],
+                file: 'Selvaggi-Built-ICRA-Assessment',
                 note: 'Reference output only, based on current ICRA guidance. Final ICRA permits require authorization from facility Infection Prevention personnel prior to mobilization.'
             },
             estimator: {
@@ -3625,6 +3671,7 @@
                     ['Adjacent operations', 'est-ops'],
                     ['HCAI / structural', 'est-hcai']
                 ],
+                file: 'Selvaggi-Built-Compliance-Roadmap',
                 note: 'Baseline estimation only. Not a contractual schedule. Subject to site conditions, facility sign-off, and Inspector of Record review.'
             }
         };
@@ -3639,7 +3686,11 @@
 
             const rows = cfg.fields.map(([label, id]) => {
                 const el = document.getElementById(id);
-                const val = el && el.value ? el.value : '—';
+                // The option label, not the value: for Project Scope they differ
+                // ("Targeted (under 2,500 SF)" vs "Under 2,500 SF"), and this sheet
+                // goes to Infection Control and the Inspector of Record, so it has
+                // to mirror what the user actually saw on screen.
+                const val = (el && el.selectedIndex > -1 && el.value) ? el.options[el.selectedIndex].text : '—';
                 return `<tr><td>${escapeHtml(label)}</td><td>${escapeHtml(val)}</td></tr>`;
             }).join('');
 
@@ -3667,11 +3718,15 @@
             document.body.appendChild(sheet);
             document.body.classList.add('is-printing-sheet');
 
+            // Chrome's "Save as PDF" seeds the filename from document.title.
+            const prevTitle = document.title;
+            document.title = cfg.file + '-' + new Date().toISOString().slice(0, 10);
             let done = false;
             const cleanup = () => {
                 if (done) return;
                 done = true;
                 window.removeEventListener('afterprint', cleanup);
+                document.title = prevTitle;
                 document.body.classList.remove('is-printing-sheet');
                 sheet.remove();
             };
@@ -3689,15 +3744,59 @@
             }
         }
 
+        // ICRA Matrix of Precautions (ASHE / APIC): Construction Activity Type
+        // crossed with Patient Risk Group yields the Class of Precautions. Used as
+        // a deterministic fallback so the CTA still names a class when the model
+        // writes "Level IV" or "ICRA Level 4" rather than "Class IV".
+        const ICRA_MATRIX = {
+            'Inspection / Non-invasive':           { low: 'I',      medium: 'I',   high: 'I',      highest: 'II' },
+            'Small-scale / Short duration':        { low: 'II',     medium: 'II',  high: 'II',     highest: 'III/IV' },
+            'Demolition / Major wall removal':     { low: 'II',     medium: 'III', high: 'III/IV', highest: 'III/IV' },
+            'Major renovation / New construction': { low: 'III/IV', medium: 'IV',  high: 'IV',     highest: 'IV' }
+        };
+
+        const ICRA_CTA_COPY = {
+            'I':      'Class I is minimal precautions. The schedule risk sits in the access route and the tie-ins, not the work itself. Send us the project and we will confirm it on site.',
+            'II':     'Class II means dust control and HVAC isolation, not a sealed room. We build to this inside occupied buildings. Send us the project and we will confirm the plan on site.',
+            'III':    'Class III means sealed barriers, negative pressure, and Infection Control sign-off before mobilization. We build to this standard inside occupied hospitals. Send us the project and we will confirm the plan on site.',
+            'III/IV': 'This scope sits on the Class III / Class IV line, so your Infection Preventionist makes the call. Either way it needs sealed barriers, negative pressure, and written IC approval. Send us the project and we will confirm the plan on site.',
+            'IV':     'Class IV means a rigid anteroom, HEPA-filtered negative pressure, and after-hours tie-ins. We build to this standard inside occupied hospitals every week. Send us the project and we will confirm the plan on site.'
+        };
+
+        function deriveIcraClass() {
+            const activity = (document.getElementById('icra-activity') || {}).value || '';
+            const risk     = (document.getElementById('icra-risk') || {}).value || '';
+            const riskKey  = risk.trim().split(/\s+/)[0].toLowerCase(); // low | medium | high | highest
+            const row = ICRA_MATRIX[activity];
+            return (row && row[riskKey]) || '';
+        }
+
+        function parseIcraClass(html) {
+            const text = String(html || '').replace(/<[^>]*>/g, ' ');
+            // Longest alternative first so "Class III/IV" does not truncate to "III".
+            const roman = /\b(?:Class|Level)\s+(III\s*\/\s*IV|IV|III|II|I)\b/i.exec(text);
+            if (roman) return roman[1].toUpperCase().replace(/\s+/g, '');
+            const arabic = /\b(?:Class|Level)\s+([1-4])\b/i.exec(text);
+            if (arabic) return ['I', 'II', 'III', 'IV'][Number(arabic[1]) - 1];
+            return '';
+        }
+
         // Tailor the post-result CTA to the containment class the assessment
         // actually returned, so the copy never contradicts the output above it.
-        function setIcraCta(resultHtml) {
-            const el = document.getElementById('icraCtaCopy');
+        function setIcraCta(resultHtml, failed) {
+            const el  = document.getElementById('icraCtaCopy');
+            const row = document.getElementById('icraCtaRow');
             if (!el) return;
-            const m = /\bClass\s+(IV|III|II|I)\b/i.exec(resultHtml || '');
-            el.textContent = m
-                ? `Your project indicates Class ${m[1].toUpperCase()} containment. We build to this standard inside occupied hospitals. Send us the project and we will confirm the plan on site.`
-                : 'We build to these standards inside occupied hospitals. Send us the project and we will confirm the containment plan on site.';
+            if (failed) {
+                // The outage notice carries its own phone/email CTA. A second,
+                // class-specific one would claim an assessment that never ran.
+                if (row) row.style.display = 'none';
+                return;
+            }
+            if (row) row.style.display = '';
+            const cls = parseIcraClass(resultHtml) || deriveIcraClass();
+            el.textContent = ICRA_CTA_COPY[cls] ||
+                'We build to these standards inside occupied hospitals. Send us the project and we will confirm the containment plan on site.';
         }
 
         /* ============================================================
@@ -3815,7 +3914,9 @@
 
         function openRfpModal(e) {
             if (e) e.preventDefault();
-            rfpLastFocus = document.activeElement;
+            // currentTarget over activeElement: clicking a link does not reliably
+            // focus it in Safari, so activeElement can still be <body>.
+            rfpLastFocus = (e && e.currentTarget) || document.activeElement;
             document.getElementById('rfpModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             setTimeout(() => document.getElementById('rfpInput').focus(), 200);
