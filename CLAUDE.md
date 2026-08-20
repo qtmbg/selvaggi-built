@@ -118,14 +118,27 @@ Never commit `.env`. Never ship keys to the client.
   Note the borders were never the problem: every `border-copper/40` sits on a `.glass`
   element, and `.glass` sets `border: 1px solid rgba(255,255,255,0.55)` in the inline
   `<style>` block, which loads after `tailwind.css` and therefore always wins.
-- **⚠️ KNOWN ISSUE — copper fails WCAG AA on light backgrounds.**
-  `--copper` (#B77C4A) on white measures **3.5:1**, below the 4.5:1 AA threshold for
-  normal-size text. It is used for eyebrow labels (11-12px), inline links, and as
-  `bg-copper` behind white button text. A contrast sweep of all 13 routes found 24 such
-  elements, and copper accounts for every one of them. This is a **brand-colour decision,
-  not a bug fix** - darkening copper to about #8F5F38 would clear AA but changes the
-  palette site-wide, so it needs client sign-off. Large text (24px+, or 18.66px+ bold)
-  already passes at 3:1 and is unaffected.
+- **Copper is two tokens, on purpose.** `--copper` (#B77C4A) is the brand accent:
+  borders, fills, the logo, large display type, and copper text on dark panels (which
+  already measures 5.11:1). `--copper-ink` (#96602F) is used **only where copper is text on
+  a light surface**, because the brand value measures 3.50:1 on white and 3.08:1 on ivory,
+  under the 4.5:1 AA floor for normal text. The switch is done by context in the `<style>`
+  block (`.bg-white .text-copper`, `.bg-ivory .text-copper`), with `.bg-ebony`,
+  `.glass-dark`, `.glass-footer` and `.top-bar` restoring the brand value **after** those
+  rules — a `.glass-dark` card nested in a `.bg-ivory` section must not get the ink.
+  `.btn-primary.glass-btn` is solid `--copper-ink`, not translucent: white-on-copper needs
+  4.5:1 and the old `rgba(183,124,74,.78)` measured 2.56:1. The whole site measures **0 AA
+  failures**; re-run the contrast sweep after any color change.
+- **Analytics is Vercel Web Analytics, and that choice is load-bearing.** The script is
+  served first-party from `/_vercel/insights/script.js`, so it needs **no CSP exception**
+  and preserves the zero-external-render-dependency rule. It is cookieless, so the privacy
+  policy's no-cookies statement stays true and **no consent banner is required**. Swapping
+  in GA4 would break all three of those at once and would mean a banner plus a privacy
+  rewrite. Custom events go through `track(name, data)`, which is wrapped in try/catch and
+  no-ops when Web Analytics is disabled — analytics must never throw into a conversion path.
+  Currently tracked: `icra_completed`, `roadmap_completed`, `rfp_opened`, `rfp_submitted`,
+  `tool_result_printed`. **Web Analytics must be enabled in the Vercel dashboard** (Project
+  → Analytics) or the script 404s and every event is silently dropped.
 - The site contains placeholder content awaiting client-provided assets — see `ASSET-MANIFEST.md`.
 - Client (Drew / CEO) reviews via the live Vercel URL, so deploy + verify before handing off.
 

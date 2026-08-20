@@ -90,6 +90,13 @@
             --slate-rgb: 63 74 79;
             --stone-rgb: 212 206 194;
             --copper-rgb: 183 124 74;
+            /* Accessible copper for TEXT on light grounds. Brand copper measures
+               3.50:1 on white and 3.08:1 on ivory, under the 4.5:1 AA floor for
+               normal-size text. This deepened value measures 5.24 and 4.61. It is
+               used only where copper is text on a light surface; borders, fills,
+               the logo, and copper on dark panels (already 5.11:1) keep the brand
+               value untouched. */
+            --copper-ink-rgb: 150 96 47;
             --ivory-rgb: 245 240 230;
             --white-rgb: 255 255 255;
 
@@ -97,6 +104,7 @@
             --slate: rgb(var(--slate-rgb));
             --stone: rgb(var(--stone-rgb));
             --copper: rgb(var(--copper-rgb));
+            --copper-ink: rgb(var(--copper-ink-rgb));
             --ivory: rgb(var(--ivory-rgb));
             --white: rgb(var(--white-rgb));
         }
@@ -173,7 +181,7 @@
                which would knock a transform-centered label off-center. */
             position: absolute; left: 0; top: 0; height: 100%; line-height: 24px;
             max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-            font-size: 15px; color: rgba(16, 24, 32, 0.42);
+            font-size: 15px; color: rgba(16, 24, 32, 0.62);
             opacity: 1;
             transition: opacity 0.32s ease, transform 0.32s ease, filter 0.32s ease;
         }
@@ -392,6 +400,35 @@
         }
         .nav-link:hover::after, .nav-link.current::after { right: 0; }
         .nav-link.current { color: var(--copper); }
+
+        /* ============================================================
+           ACCESSIBLE COPPER TEXT
+           Copper is the single brand accent, and on light grounds it fails WCAG
+           AA for normal-size text (3.50:1 on white, 3.08:1 on ivory). Rather
+           than darken the whole palette, only copper used as TEXT on a light
+           surface shifts to --copper-ink. Borders, fills, the logo, large
+           display type, and copper on dark panels are unchanged, which is most
+           of what reads as "the copper" on the page.
+           The dark-surface rules come second on purpose: a .glass-dark card
+           sitting inside a .bg-ivory section must keep the brand value, because
+           the ink would be too dark against it.
+           ============================================================ */
+        .bg-white .text-copper,
+        .bg-ivory .text-copper { color: var(--copper-ink); }
+
+        .bg-ebony .text-copper,
+        .glass-dark .text-copper,
+        .glass-footer .text-copper,
+        .top-bar .text-copper { color: var(--copper); }
+
+        /* White-on-copper buttons measure 3.50:1. Deepening the fill keeps the
+           light-label-on-copper form while clearing AA at 5.24:1; flipping to a
+           dark label would pass too but changes the button's character. */
+        .btn-primary.bg-copper { background-color: var(--copper-ink); }
+
+        /* Hand-written rules that hard-code the accent as text on light ground. */
+        .faq-answer a,
+        .article-body a { color: var(--copper-ink); }
 
         /* ============================================================
            HEADER RESPONSIVE
@@ -738,7 +775,12 @@
 
         /* Glass buttons: layered with the existing btn styles */
         .btn-primary.glass-btn {
-            background-color: rgba(183, 124, 74, 0.78);
+            /* Solid, not translucent. White-on-copper needs 4.5:1 and the old
+               0.78 alpha measured 2.56:1 over white. Even the accessible ink
+               needs alpha >= 0.94 to clear AA, and a primary CTA has no reason
+               to be see-through. The backdrop blur, inset highlight and shadow
+               below still tie it to the glass system. Now 5.24:1. */
+            background-color: var(--copper-ink);
             -webkit-backdrop-filter: saturate(180%) blur(14px);
             backdrop-filter: saturate(180%) blur(14px);
             color: var(--white);
@@ -749,7 +791,7 @@
                 0 12px 28px -10px rgba(183, 124, 74, 0.55);
         }
         .btn-primary.glass-btn:hover {
-            background-color: rgba(183, 124, 74, 0.92);
+            background-color: rgb(133 85 41);
             transform: translateY(-2px);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.55),
@@ -860,6 +902,16 @@
             .reveal { opacity: 1; transform: none; }
         }
     </style>
+
+    <!-- Vercel Web Analytics. Chosen over GA4 deliberately: the script is served
+         first-party from this domain, so it needs no CSP exception and keeps the
+         zero-external-render-dependency rule; it is cookieless and stores no
+         personal data, so it needs no consent banner and the privacy policy's
+         no-cookies statement stays true. The shim queues events fired before the
+         script loads, and makes every call a safe no-op if Web Analytics is
+         switched off in the Vercel dashboard. -->
+    <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+    <script defer src="/_vercel/insights/script.js"></script>
 
     <noscript>
         <style>
@@ -2294,14 +2346,14 @@
         <!-- ============================================
              PRIVACY POLICY
              ============================================ -->
-        <section id="view-privacy" class="view" data-view="/privacy" data-title="Privacy Policy | Selvaggi Built" data-description="How Selvaggi Built handles information submitted through this site: what the contact form and planning tools collect, who processes it, how long it is kept, and your California CCPA/CPRA rights. No analytics, no tracking, no sale of personal information.">
+        <section id="view-privacy" class="view" data-view="/privacy" data-title="Privacy Policy | Selvaggi Built" data-description="How Selvaggi Built handles information submitted through this site: what the contact form and planning tools collect, who processes it, how long it is kept, and your California CCPA/CPRA rights. Cookieless analytics only, no advertising trackers, no sale of personal information.">
 
             <section class="bg-white py-20 md:py-28 border-b border-ebony/10">
                 <div class="max-w-[1280px] mx-auto px-6 text-center reveal">
                     <span class="text-copper text-[12px] md:text-[14px] font-semibold uppercase tracking-caption mb-6 block">Legal</span>
                     <h1 class="text-[44px] md:text-[64px] font-semibold text-ebony tracking-tighter leading-[1.05] mb-6">Privacy policy.</h1>
                     <p class="text-ebony/80 text-[18px] md:text-[20px] max-w-[680px] mx-auto">
-                        We collect what we need to answer you and nothing else. This site runs no analytics, sets no cookies of its own, and holds no database of visitors.
+                        We collect what we need to answer you and nothing else. This site sets no cookies of its own, holds no database of visitors, and uses only aggregate, cookieless traffic measurement.
                     </p>
                     <p class="text-ebony/60 text-[13px] mt-6">Last updated: August 15, 2026</p>
                 </div>
@@ -2361,7 +2413,7 @@
                         </div>
                         <div class="article-body">
                             <ul>
-                                <li><strong>No analytics.</strong> There is no Google Analytics, no Google Tag Manager, no Meta pixel, no LinkedIn Insight Tag, and no session-recording or heatmap tool anywhere on this site.</li>
+                                <li><strong>Cookieless analytics only.</strong> We use Vercel Web Analytics to count page views and a few actions, such as whether someone finished an ICRA assessment or submitted an RFP. It sets no cookies, assigns you no identifier, and does not follow you between sites. We see totals, never individuals. There is no Google Analytics, no Google Tag Manager, no Meta pixel, no LinkedIn Insight Tag, and no session-recording or heatmap tool anywhere on this site.</li>
                                 <li><strong>No advertising.</strong> We run no retargeting, no ad pixels, and no cross-context behavioral advertising.</li>
                                 <li><strong>No cookies of our own.</strong> This site sets no first-party cookies. It stores nothing in your browser's local storage either. It reads one optional key, <strong>selvaggi.haptics</strong>, so you can switch off vibration feedback on a phone. It never writes that key, and the value never leaves your device.</li>
                                 <li><strong>No database.</strong> Form submissions are not written to a database or a file. They arrive as email in our sales inbox.</li>
@@ -3064,6 +3116,12 @@
            SEO article library. Each entry renders at #/insights/<slug>
            with its own title, meta description, and BlogPosting JSON-LD.
            ============================================================ */
+        // Analytics. Never let a metric break a user flow: every call is wrapped.
+        function track(name, data) {
+            try { if (typeof window.va === 'function') window.va('event', { name: name, data: data || {} }); }
+            catch (err) { /* analytics must never throw into a conversion path */ }
+        }
+
         const SITE_URL = 'https://selvaggibuilt.com';
 
         const insights = [
@@ -3678,6 +3736,7 @@
             }
             // 2xx only
             status.innerHTML = '<span class="text-ebony">Brief sent. We respond within one business day.</span>';
+            track('rfp_submitted');
         }
 
         async function runICRAAssessor(e) {
@@ -3696,6 +3755,7 @@
             try {
                 outContent.innerHTML = await callAIProxy('icra', body);
                 setIcraCta(outContent.innerHTML);
+                track('icra_completed', { level: parseIcraClass(outContent.innerHTML) || deriveIcraClass(), activity: body.activity, risk: body.risk });
             } catch (err) {
                 outContent.innerHTML = backendOfflineHTML();
                 setIcraCta('', true);
@@ -3720,6 +3780,7 @@
             lockBtn(btn, spinner); outArea.classList.remove('visible');
             try {
                 outContent.innerHTML = await callAIProxy('estimator', body);
+                track('roadmap_completed', { facility: body.facility, scope: body.sqft, hcai: body.hcai });
             } catch (err) {
                 outContent.innerHTML = backendOfflineHTML();
             } finally {
@@ -3808,6 +3869,7 @@
                 </div>`;
             document.body.appendChild(sheet);
             document.body.classList.add('is-printing-sheet');
+            track('tool_result_printed', { tool: kind });
 
             // Chrome's "Save as PDF" seeds the filename from document.title.
             const prevTitle = document.title;
@@ -4008,6 +4070,7 @@
             // currentTarget over activeElement: clicking a link does not reliably
             // focus it in Safari, so activeElement can still be <body>.
             rfpLastFocus = (e && e.currentTarget) || document.activeElement;
+            track('rfp_opened');
             document.getElementById('rfpModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             setTimeout(() => document.getElementById('rfpInput').focus(), 200);
