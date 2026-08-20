@@ -379,6 +379,36 @@
         .nav-link:hover::after, .nav-link.current::after { right: 0; }
         .nav-link.current { color: var(--copper); }
 
+        /* ============================================================
+           HEADER RESPONSIVE
+           The seven primary nav links need about 930px once the type is
+           tightened, but they were only revealed at Tailwind's lg (1024px).
+           That left the whole 768-1023px band rendering as logo + roughly
+           600px of dead space + the RFP button, even though the links
+           clearly fit. Reveal them at 960px instead, tighten the type just
+           enough to fit there, and shorten the bar on phones so the chrome
+           is not 120px tall before any content appears.
+
+           Hand-written rather than Tailwind utilities: h-16, md:h-20 and a
+           960px screen are all absent from the prebuilt stylesheet, and
+           plain CSS here cannot be broken by a forgotten rebuild.
+           ============================================================ */
+        @media (min-width: 960px) {
+            #primaryNav { display: flex !important; }
+            /* The panel too, not just the button: otherwise an open mobile menu
+               survives a resize past this breakpoint with no visible way to
+               close it, because the toggle is gone. */
+            #menuToggle, #mobileMenu { display: none !important; }
+        }
+        /* Tight band: 11px type on a 12px gap fits 960px with room to spare. */
+        @media (min-width: 960px) and (max-width: 1099px) {
+            #primaryNav { gap: 0.75rem; font-size: 11px; }
+        }
+        /* Phones: a 64px bar reads correctly against a 32px logo. */
+        @media (max-width: 767px) {
+            #siteNav { height: 4rem; }
+        }
+
         /* Mobile menu */
         #mobileMenu {
             transform: translateY(-110%); opacity: 0;
@@ -848,14 +878,14 @@
 
     <!-- Primary nav -->
     <header class="glass sticky top-0 z-40">
-        <nav class="max-w-[1280px] mx-auto h-20 px-6 flex justify-between items-center" aria-label="Main">
+        <nav id="siteNav" class="max-w-[1280px] mx-auto h-20 px-6 flex justify-between items-center" aria-label="Main">
             <a href="/" data-route="/home" class="flex items-center" aria-label="Selvaggi Built home">
                 <img src="/assets/logo/logo-horizontal-color.svg" alt="Selvaggi Built" class="h-8 md:h-9 w-auto">
             </a>
 
             <!-- The logo is the Home link; keeping Home out of the desktop nav
                  gives the 7 remaining items room to breathe at laptop widths. -->
-            <div class="hidden lg:flex items-center gap-4 xl:gap-8 text-ebony text-[12px] xl:text-[13px] font-medium tracking-subhead uppercase whitespace-nowrap">
+            <div id="primaryNav" class="hidden lg:flex items-center gap-4 xl:gap-8 text-ebony text-[12px] xl:text-[13px] font-medium tracking-subhead uppercase whitespace-nowrap">
                 <a href="/expertise" data-route="/expertise" class="nav-link">Expertise</a>
                 <a href="/how-we-work" data-route="/how-we-work" class="nav-link">How We Work</a>
                 <a href="/projects" data-route="/projects" class="nav-link">Projects</a>
@@ -3343,7 +3373,10 @@
                 <section class="bg-ivory py-16 md:py-24">
                     <div class="max-w-[1280px] mx-auto px-6">
                         <span class="text-copper text-[12px] font-semibold uppercase tracking-caption block mb-8">Keep reading</span>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Two columns at md, three at lg, matching #insightsGrid. Jumping
+                             straight to three left ~162px of content per card at 768px, which
+                             the "Read article - N min" link overflowed by 14px. -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             ${related.map(insightCardHTML).join('')}
                         </div>
                     </div>
@@ -4210,6 +4243,12 @@
             const link = e.target.closest('.mobile-link');
             if (link) closeMobileMenu();
         });
+        // Crossing into the desktop nav breakpoint hides the panel in CSS; reset
+        // the button state too so aria-expanded and the icons do not disagree.
+        const navBreakpoint = window.matchMedia('(min-width: 960px)');
+        const syncMenuToBreakpoint = e => { if (e.matches) closeMobileMenu(); };
+        if (navBreakpoint.addEventListener) navBreakpoint.addEventListener('change', syncMenuToBreakpoint);
+        else if (navBreakpoint.addListener) navBreakpoint.addListener(syncMenuToBreakpoint);
 
         /* ============================================================
            REVEALS
