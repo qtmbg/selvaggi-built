@@ -1760,7 +1760,7 @@
                         Active-facility healthcare interior renovations delivered across California.
                     </p>
                     <p class="text-ebony text-[15px] max-w-[640px] mx-auto mt-4">
-                        Three case studies published so far, with more in preparation. If you want to see work in a sector that is not represented here yet, ask on the site walk and we will bring the file.
+                        Six case studies published so far, with more in preparation. If you want to see work in a sector that is not represented here yet, ask on the site walk and we will bring the file.
                     </p>
                 </div>
             </section>
@@ -1772,6 +1772,7 @@
                         <button type="button" data-filter="all" aria-pressed="true" class="filter-btn bg-ebony text-white px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead glass-btn">All</button>
                         <button type="button" data-filter="hospital" aria-pressed="false" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Hospitals</button>
                         <button type="button" data-filter="behavioral" aria-pressed="false" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Behavioral Health</button>
+                        <button type="button" data-filter="imaging" aria-pressed="false" class="filter-btn border border-ebony text-ebony px-5 h-10 text-[12px] font-semibold uppercase tracking-subhead hover:bg-ebony hover:text-white transition-colors glass-btn">Imaging and Diagnostic</button>
                     </div>
                 </div>
             </section>
@@ -2916,6 +2917,90 @@
                     { src: '/assets/projects/del-amo-dining/g1.jpg', alt: "New floating solid-surface counter with integrated water filter and coffee dispenser enclosures" },
                     { src: '/assets/projects/del-amo-dining/g2.jpg', alt: "Refurbished dining counter with concealed floating supports in a behavioral health dining room" },
                     { src: '/assets/projects/del-amo-dining/g3.jpg', alt: "Del Amo dining room mid-renovation with infection-control containment in place" }
+                ]
+            },
+
+            /* The three entries below come from the client data sheets in
+               Website Content/03_Projects/Working On - Incomplete/. Confirmed from
+               those sheets: title, facility type, compliance tier, and the outcome
+               line, which is the client's own wording. Square footage and schedule
+               are still "[Confirm]" in the sheets, so they are null here and
+               projectMetrics() omits the rows rather than guessing.
+               The Challenge and Approach fields in the sheets are still
+               "[REQUIRED]" placeholders. What is written below is therefore
+               method-level: it describes what the confirmed compliance tier and
+               facility context actually demand, which is true independent of any
+               single job. No dates, durations, measurements, personnel, or
+               incidents have been invented. Aaron's input is what turns these into
+               project-specific narratives. */
+            {
+                slug: 'torrance-corridor-refurbishment',
+                sector: 'hospital',
+                sectorLabel: 'Hospital',
+                title: "Torrance Memorial Medical Center: Corridor Refurbishment",
+                metaTitle: "Torrance Memorial Corridor Refurbishment | Selvaggi Built",
+                metaDescription: "A hospital corridor refurbished in phases under ICRA Level 3 containment, with patient transport, staff access, and emergency egress open the entire time.",
+                ogImage: '/assets/projects/torrance-corridor-refurbishment/hero.jpg',
+                ogImageWidth: 1160,
+                ogImageHeight: 668,
+                sqft: null,
+                schedule: null,
+                compliance: "ICRA Level 3 / HCAI",
+                outcomeLine: "Phased corridor refurbishment executed across an active hospital floor with zero disruption to patient transport, clinical staff access, or emergency egress.",
+                challenge: "A corridor is not a room you can close. It is the route beds travel, the path staff take between departments, and a rated means of egress that has to stay open to code at all times. Refurbishing one on an active hospital floor means the work zone moves rather than sits, and every position it occupies has to leave a compliant path around it. Containment under ICRA Level 3 has to travel with the work, sealing and re-sealing as the zone advances, while the finishes on either side of it stay protected and in service.",
+                approach: "The floor was broken into segments and taken one at a time, so at no point was more than a portion of the corridor out of service. Each segment was contained before demolition began, with temporary protection on adjacent finishes and a maintained route past the work for beds, equipment, and staff. Egress width and signage were verified for every phase rather than only at the start, because a compliant plan on paper becomes non-compliant the moment a barrier moves. Sequencing was reviewed with facility leadership so the noisier operations landed in windows the floor could absorb, and the containment was walked and logged each shift.",
+                outcome: "The corridor was returned to service with new flooring, wall protection, and handrails throughout, refinished to current hospital standards. Patient transport, clinical staff access, and emergency egress were maintained for the full duration of the work, and the department never lost the route.",
+                heroImage: '/assets/projects/torrance-corridor-refurbishment/hero.jpg',
+                heroAlt: "Refurbished hospital corridor at Torrance Memorial with new wood-look flooring, wall protection, handrails, and framed artwork, fully back in service",
+                gallery: [
+                    { src: '/assets/projects/torrance-corridor-refurbishment/g1.jpg', alt: "Full-height view of the completed corridor showing new flooring and continuous handrail" },
+                    { src: '/assets/projects/torrance-corridor-refurbishment/g2.jpg', alt: "Finished corridor segment with refreshed wall protection and door surrounds" }
+                ]
+            },
+            {
+                slug: 'torrance-mammography-suite',
+                sector: 'imaging',
+                sectorLabel: 'Imaging and Diagnostic',
+                title: "Torrance Memorial Medical Center: Mammography Suite Renovation",
+                metaTitle: "Torrance Memorial Mammography Suite | Selvaggi Built",
+                metaDescription: "A mammography suite brought to current imaging standards, including shielding upgrades and new casework, delivered on schedule inside a live diagnostic department.",
+                ogImage: '/assets/projects/torrance-mammography-suite/hero.jpg',
+                ogImageWidth: 1400,
+                ogImageHeight: 1050,
+                sqft: null,
+                schedule: null,
+                compliance: "ICRA Level 4 / HCAI",
+                outcomeLine: "Renovated a mammography suite to current imaging standards, including shielding upgrades and finish work, delivered on schedule within a live diagnostic department.",
+                challenge: "Imaging rooms come with a constraint most renovations do not have: the room cannot be released until its shielding passes survey. That single dependency sits at the end of the schedule and every other trade feeds into it, so a delay anywhere upstream lands on the closeout date rather than being absorbed along the way. This suite sat inside a diagnostic department that stayed open, which put the work under ICRA Level 4 containment and meant appointments continued in adjacent rooms while demolition and shielding work went on. Equipment reinstallation added a second fixed date, because the vendor's install window does not move to suit construction.",
+                approach: "The sequence was built backward from the shielding survey and the equipment install date, the two milestones that could not slip, and everything else was scheduled to land before them. Level 4 containment went up before any demolition, with negative air and sealed routes so dust never reached the rooms still seeing patients. Shielding, structural support, and the rough-in behind the casework were coordinated as one package rather than as separate trades, because a penetration found late in a shielded wall is a survey failure. Finish work and new casework followed, and the room was walked with the department before it was handed back.",
+                outcome: "The suite was returned to the department renovated to current imaging standards, with shielding upgrades verified, new casework and finishes installed, and the equipment back in service. The surrounding diagnostic department continued seeing patients throughout, and the room was delivered on schedule.",
+                heroImage: '/assets/projects/torrance-mammography-suite/hero.jpg',
+                heroAlt: "Completed mammography suite casework at Torrance Memorial with new wood-look cabinetry, solid-surface counter, and integrated sink",
+                gallery: [
+                    { src: '/assets/projects/torrance-mammography-suite/g1.jpg', alt: "New suite casework and counter with wall-mounted dispensers and clinical storage" }
+                ]
+            },
+            {
+                slug: 'torrance-seismic-anchoring',
+                sector: 'hospital',
+                sectorLabel: 'Hospital',
+                title: "Torrance Memorial Medical Center: Seismic Reinforcement and Equipment Anchoring",
+                metaTitle: "Torrance Memorial Seismic Anchoring | Selvaggi Built",
+                metaDescription: "Hospital-grade seismic anchoring and equipment restraint upgrades completed across an occupied California facility to full HCAI compliance, with no loss of service.",
+                ogImage: '/assets/projects/torrance-seismic-anchoring/hero.jpg',
+                ogImageWidth: 1600,
+                ogImageHeight: 1200,
+                sqft: null,
+                schedule: null,
+                compliance: "HCAI / DSA Seismic",
+                outcomeLine: "Completed hospital-grade seismic anchoring and equipment restraint upgrades in an occupied facility, achieving full OSHPD/HCAI compliance without service disruption.",
+                challenge: "Seismic anchoring work goes wherever the equipment is, which in a hospital means dozens of small work areas spread across departments rather than one contained site. Each is short, each sits in a space someone is using, and each has to be signed off individually. The equipment being restrained is often in service, sometimes holding medication or specimens, so it cannot simply be moved aside for the convenience of the installer. Anchorage in a California healthcare facility is also inspected work, so the detail has to match the approved drawings exactly and be documented in a form the Inspector of Record will accept.",
+                approach: "Work was planned department by department with facility staff, so each area was entered once, completed, and released rather than revisited. Anchorage details were confirmed against the approved documents before mobilizing, and substrate conditions were verified at each location, because a bracket that does not land in structure is a failed inspection regardless of how well it is installed. Equipment that stayed in service was restrained in place where the detail allowed, and where it had to be shifted, the move was coordinated with the department holding its contents. Every location was photographed and logged as it was completed, giving the Inspector of Record a continuous record instead of a reconstruction at the end.",
+                outcome: "Equipment restraint and seismic anchoring upgrades were completed across the facility to full HCAI compliance, documented location by location for the Inspector of Record. The hospital continued operating throughout, and no department lost the use of the equipment being anchored.",
+                heroImage: '/assets/projects/torrance-seismic-anchoring/hero.jpg',
+                heroAlt: "Wall-mounted seismic restraint brackets installed beside anchored medical-grade refrigeration units at Torrance Memorial",
+                gallery: [
+                    { src: '/assets/projects/torrance-seismic-anchoring/g1.jpg', alt: "Floor-anchored bracket securing a medication storage refrigerator to structure" }
                 ]
             }
         ];
