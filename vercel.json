@@ -6,6 +6,9 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
+    { "source": "/",
+      "has": [{ "type": "host", "value": "www.selvaggibuilt.com" }],
+      "destination": "https://selvaggibuilt.com/", "permanent": true },
     { "source": "/:path*",
       "has": [{ "type": "host", "value": "www.selvaggibuilt.com" }],
       "destination": "https://selvaggibuilt.com/:path*", "permanent": true },
