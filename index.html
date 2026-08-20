@@ -79,12 +79,25 @@
 
     <style>
         :root {
-            --ebony: #101820;
-            --slate: #3F4A4F;
-            --stone: #D4CEC2;
-            --copper: #B77C4A;
-            --ivory: #F5F0E6;
-            --white: #FFFFFF;
+            /* Channel-only triplets so Tailwind can compute an alpha channel.
+               Mapping the utilities straight at a hex var() silently produced NO
+               rule for every slash-opacity class (text-ebony/80, border-copper/40,
+               and ~130 others), because Tailwind cannot derive alpha from a var().
+               The composed --x vars below stay the source of truth for the
+               hand-written rules in this stylesheet. */
+            --ebony-rgb: 16 24 32;
+            --slate-rgb: 63 74 79;
+            --stone-rgb: 212 206 194;
+            --copper-rgb: 183 124 74;
+            --ivory-rgb: 245 240 230;
+            --white-rgb: 255 255 255;
+
+            --ebony: rgb(var(--ebony-rgb));
+            --slate: rgb(var(--slate-rgb));
+            --stone: rgb(var(--stone-rgb));
+            --copper: rgb(var(--copper-rgb));
+            --ivory: rgb(var(--ivory-rgb));
+            --white: rgb(var(--white-rgb));
         }
         html, body { background-color: var(--white); }
         /* Reserve the scrollbar gutter so toggling body overflow (e.g. opening

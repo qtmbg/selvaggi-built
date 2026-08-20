@@ -99,28 +99,33 @@ Never commit `.env`. Never ship keys to the client.
   npx -y tailwindcss@3.4.17 -c tailwind.config.js -i tailwind-input.css \
     -o assets/css/tailwind.css --minify
   ```
-  (`tailwind.config.js` and `tailwind-input.css` are checked in at the repo root; the config
-  mirrors the old inline `tailwind.config` — custom colors map to the CSS variables, custom
-  letter-spacings `tighter/subhead/caption/logo`.) Dynamic class names built with `${...}`
+  (`tailwind.config.js` and `tailwind-input.css` are checked in at the repo root. The config
+  maps brand colors through the `--*-rgb` channel variables so alpha works — see the next
+  bullet, and do not revert it to `var(--ebony)` — plus custom letter-spacings
+  `tighter/subhead/caption/logo`.) Dynamic class names built with `${...}`
   must keep every possible class as a complete literal string in the file or the extractor
   won't see it.
-- **⚠️ KNOWN ISSUE — slash-opacity utilities on the brand colors do nothing.**
-  `tailwind.config.js` maps the brand colors to CSS variables (`ebony: 'var(--ebony)'`).
-  Tailwind cannot compute an alpha channel from a `var()`, so **every `text-ebony/80`,
-  `border-copper/40`, `text-ivory/90`, etc. generates no rule at all** — `assets/css/tailwind.css`
-  contains only `.text-ebony`, with no opacity variants. There are ~130 such usages in
-  `index.html`. What they render as today: `text-ebony/80` inherits its parent's color, and
-  `border-copper/40` falls back to Tailwind preflight's `border: 0 solid #e5e7eb`, so those
-  card borders are **light gray, not copper**.
-  This predates the CDN→static migration (the Play CDN had the same `var()` limitation), so the
-  site the client approved is the gray-bordered one. **Fixing it is a site-wide visual change,
-  not a bug fix — get sign-off first.** The fix is to give the config real color values so
-  Tailwind can compute alpha (`ebony: '#101820'`, …; the `--ebony` CSS variables stay for the
-  hand-written rules in the `<style>` block), then rebuild. Verify the border and body-copy
-  changes against a screenshot pass before shipping.
-  Until then: **new markup should use classes that actually exist** — plain `text-ebony`,
-  `text-copper`, or a hand-written rule in the `<style>` block (as `.metric-note` and
-  `.tool-btn-ghost` do).
+- **Brand colors are mapped through channel variables so alpha works.**
+  `:root` defines `--ebony-rgb: 16 24 32` (etc.) and composes `--ebony: rgb(var(--ebony-rgb))`
+  from it. `tailwind.config.js` maps utilities to `rgb(var(--ebony-rgb) / <alpha-value>)`.
+  **Do not point the config at `var(--ebony)` directly.** Tailwind cannot derive an alpha
+  channel from a `var()` holding a hex, so it silently emits *no rule at all* for every
+  slash-opacity class. That was the state until Aug 2026: ~130 usages of `text-ebony/80`,
+  `text-ivory/90`, `border-copper/40` and friends generated nothing, and the affected text
+  inherited full-strength colour instead of its intended opacity. Fixed by the channel-var
+  indirection above, which keeps one source of truth and, unlike `color-mix()`, works in
+  every browser. When adding a colour, add both the `-rgb` triplet and the composed var.
+  Note the borders were never the problem: every `border-copper/40` sits on a `.glass`
+  element, and `.glass` sets `border: 1px solid rgba(255,255,255,0.55)` in the inline
+  `<style>` block, which loads after `tailwind.css` and therefore always wins.
+- **⚠️ KNOWN ISSUE — copper fails WCAG AA on light backgrounds.**
+  `--copper` (#B77C4A) on white measures **3.5:1**, below the 4.5:1 AA threshold for
+  normal-size text. It is used for eyebrow labels (11-12px), inline links, and as
+  `bg-copper` behind white button text. A contrast sweep of all 13 routes found 24 such
+  elements, and copper accounts for every one of them. This is a **brand-colour decision,
+  not a bug fix** - darkening copper to about #8F5F38 would clear AA but changes the
+  palette site-wide, so it needs client sign-off. Large text (24px+, or 18.66px+ bold)
+  already passes at 3:1 and is unaffected.
 - The site contains placeholder content awaiting client-provided assets — see `ASSET-MANIFEST.md`.
 - Client (Drew / CEO) reviews via the live Vercel URL, so deploy + verify before handing off.
 
