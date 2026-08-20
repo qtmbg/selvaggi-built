@@ -1398,12 +1398,12 @@
 
                         <article id="imaging" class="glass border border-copper/40 block reveal scroll-mt-32">
                             <div class="photo aspect-[4/3]">
-                                <img src="/assets/sectors/sectors-imaging-diagnostic-mammography-suite.webp" alt="Mammography suite renovation with new cabinetry and 3D imaging equipment installed in an active hospital facility" loading="lazy">
+                                <img src="/assets/sectors/sectors-imaging-diagnostic-suite-casework.jpg" alt="Completed imaging suite casework with wood-look cabinetry, solid-surface counter, and integrated sink, renovated by Selvaggi Built at Torrance Memorial" loading="lazy">
                                 <span class="photo-tag glass-dark">04. Imaging</span>
                             </div>
                             <div class="p-7">
                                 <h3 class="text-ebony text-[20px] font-semibold mb-2">Imaging and Diagnostic</h3>
-                                <p class="text-ebony/80 text-[15px]">Lead-lined suites, structural supports, and clean power for advanced imaging modalities, installed without disrupting adjacent clinical areas. Shielding, structural support, and equipment coordination are sequenced around the vendor's install date, because the room cannot be closed out until the shielding survey passes.</p>
+                                <p class="text-ebony/80 text-[15px]">Lead-lined suites, structural supports, and clean power for advanced imaging modalities, installed without disrupting adjacent clinical areas. Shielding, structural support, and equipment coordination are sequenced around the vendor's install date, because the room cannot be closed out until the shielding survey passes. <a href="/projects/torrance-mammography-suite" data-route="/projects/torrance-mammography-suite" class="text-copper font-semibold underline">See the mammography suite at Torrance Memorial</a>.</p>
                             </div>
                         </article>
 
@@ -1985,8 +1985,9 @@
                         <div class="glass glass-hover border-l-2 border-l-copper p-5">
                             <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">License</span>
                             <h3 class="text-ebony text-[16px] font-semibold mb-1">CSLB License</h3>
-                            <p class="text-ebony text-[15px] mb-3">#1079406</p>
-                            <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=1079406" target="_blank" rel="noopener" class="text-copper text-[13px] font-medium hover:underline">Verify with the CSLB &rarr;</a>
+                            <p class="text-ebony text-[15px] mb-1">#1079406</p>
+                            <p class="text-ebony/80 text-[15px] mb-3">Enter that number on the state register to confirm status, bond, and workers' compensation. CSLB does not support direct links to a licence record.</p>
+                            <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/CheckLicense.aspx" target="_blank" rel="noopener" class="text-copper text-[13px] font-medium hover:underline">CSLB licence check &rarr;</a>
                         </div>
                         <div class="glass glass-hover border-l-2 border-l-copper p-5">
                             <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-2">Follow</span>
@@ -2783,7 +2784,7 @@
                     <span class="text-ivory/90 text-[15px]">CSLB License #1079406</span>
                     <span class="text-ivory/90 text-[15px]">Healthcare Interior Construction</span>
                     <span class="text-ivory/90 text-[15px]">California Only</span>
-                    <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=1079406" target="_blank" rel="noopener" class="text-copper text-[15px] hover:underline">Verify our license &rarr;</a>
+                    <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/CheckLicense.aspx" target="_blank" rel="noopener" class="text-copper text-[15px] hover:underline">Look up #1079406 at CSLB &rarr;</a>
                 </div>
             </div>
 
@@ -3047,8 +3048,11 @@
         function renderProjects() {
             const grid = document.getElementById('projectsGrid');
             if (grid) grid.innerHTML = projects.map(projectCardHTML).join('');
+            // Homepage is a preview, not the archive: it keeps three cards and
+            // links out to /projects. Publishing more case studies should not
+            // quietly double the length of the home page.
             const home = document.getElementById('homeProjectsGrid');
-            if (home) home.innerHTML = projects.map(projectCardHTML).join('');
+            if (home) home.innerHTML = projects.slice(0, 3).map(projectCardHTML).join('');
             applyReveals();
         }
 
