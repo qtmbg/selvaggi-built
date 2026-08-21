@@ -32,9 +32,25 @@ function extractArraySource(src, name) {
     let quote = null;
     for (; i < src.length; i++) {
         const c = src[i];
+        const next = src[i + 1];
         if (quote) {
             if (c === '\\') { i++; continue; }
             if (c === quote) quote = null;
+            continue;
+        }
+        // Comments must be skipped, not scanned. These arrays carry explanatory
+        // comments between entries, and an apostrophe in one of them ("Aaron's")
+        // would otherwise open a string that swallows the closing bracket.
+        if (c === '/' && next === '/') {
+            const nl = src.indexOf('\n', i);
+            if (nl === -1) return null;
+            i = nl;
+            continue;
+        }
+        if (c === '/' && next === '*') {
+            const close = src.indexOf('*/', i + 2);
+            if (close === -1) return null;
+            i = close + 1;
             continue;
         }
         if (c === '"' || c === "'" || c === '`') { quote = c; continue; }
@@ -95,7 +111,14 @@ module.exports = function handler(req, res) {
         const url = new URL(req.url, SITE);
         const slug = url.searchParams.get('slug');
         const roster = loadTeam();
-        const m = roster.find(x => x.slug === slug);
+        // Same matching rules as the front end: case-insensitive and
+        // alias-aware, so /api/vcard?slug=michelle-murrey works even though the
+        // printed card says Michelle-Murray.
+        const key = String(slug || '').toLowerCase();
+        const m = roster.find(x =>
+            x.slug.toLowerCase() === key ||
+            (x.aliases || []).some(a => String(a).toLowerCase() === key)
+        );
 
         if (!m) {
             res.setHeader('Content-Type', 'text/plain; charset=utf-8');

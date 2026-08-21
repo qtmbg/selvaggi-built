@@ -58,6 +58,28 @@ single-page app plus two Vercel serverless functions. No build step, no framewor
 - **`api/ai.js`** — Vercel serverless function. Server-side proxy to Anthropic Claude for
   the RFP / ICRA / Estimator features. Holds the API key server-side; never expose it to the client.
 - **`api/og.js`** — serves social crawlers an OG-populated copy of `index.html` (see above).
+- **Employee contact cards (business-card QR codes):** the `team` array in `index.html` drives
+  three things per person with no other wiring: the page at **`/First-Last`** (root level,
+  TitleCase), the vCard at `/api/vcard?slug=First-Last`, and the URL printed on the card.
+  **⚠️ `slug` is the exact string encoded in a printed QR code. Changing one means a reprint.**
+  `aliases` lets a record answer to extra paths, which is how the spellings that differ between
+  the cards and the team page both resolve (`/Michelle-Murray` and `/Michelle-Murrey`,
+  `/Leslie-Lentz` and `/Leslie-Lentz-Eldridge`, `/Alex-Guzman` and `/Axel-Guzman`). Lookup via
+  `findTeamMember()` is case-insensitive so a hand-typed lowercase URL still works.
+  **Adding a person takes two edits:** the array entry, and the name in the employee-path
+  rewrite group in `vercel.json`. That second step is deliberate — a catch-all pattern for
+  root-level paths would turn every typo into a soft 404, which is the exact problem the
+  rewrites allowlist exists to prevent. The router checks `routes{}` first, so a real page can
+  never be shadowed by a person with a colliding name.
+  These pages are **noindex** and stay out of `sitemap.xml`: they carry direct staff contact
+  details, and a code on a business card does not need to rank.
+  `mobile` / `email` / `title` / `photo` are all optional; a null value is omitted from the page
+  and the vCard rather than rendering an empty row.
+- **⚠️ `api/og.js` and `api/vcard.js` parse array literals out of `index.html` at runtime** with
+  a small bracket scanner that skips both `//` and `/* */` comments. It has to: those arrays
+  carry explanatory comments between entries, and a single apostrophe in one (`Aaron's`) would
+  otherwise open a string that swallows the closing bracket and silently break every social card
+  or vCard. If you touch that scanner, test both functions against the real file.
 - **`api/contact.js`** — Vercel serverless function. Sends contact-form submissions to `SALES_INBOX`
   via Resend. Returns 503 until `RESEND_API_KEY` / `RESEND_FROM` are configured.
 - **`server/`** — local Express version of the same proxy (`server.js`) for running off-Vercel.

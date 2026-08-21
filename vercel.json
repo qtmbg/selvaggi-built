@@ -62,6 +62,7 @@
     { "source": "/(expertise|how-we-work|projects|tools|insights|company|contact|faq|privacy|terms)", "destination": "/index" },
     { "source": "/projects/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(facebookexternalhit|LinkedInBot|Twitterbot|Slackbot|Slack-ImgProxy|Discordbot|WhatsApp|TelegramBot|Pinterest|redditbot|SkypeUriPreview|vkShare|Embedly|Iframely|Mastodon|Bluesky).*" }], "destination": "/api/og?type=projects&slug=:slug" },
     { "source": "/insights/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(facebookexternalhit|LinkedInBot|Twitterbot|Slackbot|Slack-ImgProxy|Discordbot|WhatsApp|TelegramBot|Pinterest|redditbot|SkypeUriPreview|vkShare|Embedly|Iframely|Mastodon|Bluesky).*" }], "destination": "/api/og?type=insights&slug=:slug" },
+    { "source": "/(Aaron-Selvaggi|Joel-Hernandez|Adam-Hill|Leslie-Lentz|Luis-Hernandez|Michelle-Murray|Axel-Guzman|David-Dembowski|Martin-Peralta|Leslie-Lentz-Eldridge|Michelle-Murrey|Alex-Guzman|aaron-selvaggi|joel-hernandez|adam-hill|leslie-lentz|luis-hernandez|michelle-murray|axel-guzman|david-dembowski|martin-peralta|leslie-lentz-eldridge|michelle-murrey|alex-guzman)", "destination": "/index" },
     { "source": "/team/:slug", "destination": "/index" },
     { "source": "/projects/:slug", "destination": "/index" },
     { "source": "/insights/:slug", "destination": "/index" }
