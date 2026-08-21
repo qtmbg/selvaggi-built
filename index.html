@@ -402,6 +402,48 @@
         .nav-link.current { color: var(--copper); }
 
         /* ============================================================
+           EMPLOYEE CONTACT CARD (/team/<slug>)
+           Phone-first: this is where a business-card QR code lands, so every
+           action is a full-width tap target at least 56px tall. Plain CSS rather
+           than utilities so a forgotten Tailwind rebuild cannot flatten it.
+           ============================================================ */
+        .vcard-photo {
+            width: 132px; height: 132px; margin: 0 auto;
+            border-radius: 50%; overflow: hidden;
+            border: 1px solid rgba(183, 124, 74, 0.45);
+            box-shadow: 0 14px 34px -16px rgba(16, 24, 32, 0.4);
+        }
+        .vcard-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .vcard-save {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; min-height: 58px; padding: 0 24px;
+            background: var(--copper-ink); color: var(--white);
+            font-size: 15px; font-weight: 600; letter-spacing: 0.02em;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+        }
+        .vcard-save:hover { background: rgb(133 85 41); transform: translateY(-1px); }
+        .vcard-save:focus-visible { outline: 2px solid var(--ebony); outline-offset: 3px; }
+
+        .vcard-rows { margin-top: 14px; border-top: 1px solid rgba(16, 24, 32, 0.12); }
+        .vcard-row {
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+            min-height: 58px; padding: 12px 4px;
+            border-bottom: 1px solid rgba(16, 24, 32, 0.12);
+            text-align: left; transition: color 0.2s ease;
+        }
+        .vcard-row-label {
+            font-size: 11px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--copper-ink); flex: 0 0 auto;
+        }
+        .vcard-row-value {
+            font-size: 16px; color: var(--ebony); text-align: right;
+            overflow-wrap: anywhere;
+        }
+        .vcard-row:hover .vcard-row-value { color: var(--copper-ink); }
+        .vcard-row:focus-visible { outline: 2px solid var(--copper); outline-offset: 2px; }
+
+        /* ============================================================
            ACCESSIBLE COPPER TEXT
            Copper is the single brand accent, and on light grounds it fails WCAG
            AA for normal-size text (3.50:1 on white, 3.08:1 on ivory). Rather
@@ -459,6 +501,17 @@
         @media (max-width: 767px) {
             #siteNav { height: 4rem; }
         }
+
+        /* .glass declares position:relative, and because this stylesheet loads
+           after assets/css/tailwind.css it silently beat the .sticky utility on
+           <header> and the .absolute utility on #mobileMenu (equal specificity,
+           later wins). Two consequences, both site-wide and both invisible in a
+           desktop screenshot: the header never actually stuck on scroll, and the
+           closed mobile menu sat in normal flow, padding roughly 460px of blank
+           space between the header and the content on every phone page.
+           Restored with selectors specific enough to outrank .glass. */
+        header.glass { position: sticky; top: 0; }
+        #mobileMenu.glass { position: absolute; }
 
         /* Mobile menu */
         #mobileMenu {
@@ -1860,6 +1913,7 @@
                             Aaron Selvaggi leads Selvaggi Built with a clear focus on healthcare renovation, occupied facility construction, and complex tenant improvement work across Southern California. His leadership emphasizes trust, responsiveness, safety, craftsmanship, and the disciplined coordination required to deliver successful projects in active hospital and medical environments.
                         </p>
                         <span class="text-ebony text-[11px] font-semibold uppercase tracking-caption">Aaron Selvaggi. Founder &amp; President.</span>
+                        <a href="/team/aaron-selvaggi" data-route="/team/aaron-selvaggi" class="link-arrow inline-flex items-center text-copper font-medium text-[12px] uppercase tracking-subhead mt-4 w-max">Contact card<svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></a>
                     </div>
                 </div>
             </section>
@@ -1886,6 +1940,7 @@
                                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Director of Operations</span>
                                 <p class="text-ebony/80 text-[14px] mb-3">Oversees project delivery, field coordination, operational systems, and team execution across Selvaggi Built's healthcare renovation work.</p>
                                 <p class="text-ebony/80 text-[14px]">With a practical, solutions-focused leadership style, he supports clients, project teams, and trade partners by helping ensure complex renovations are planned clearly, coordinated effectively, and executed with the reliability active healthcare environments require.</p>
+                                <a href="/team/joel-hernandez" data-route="/team/joel-hernandez" class="link-arrow inline-flex items-center text-copper font-medium text-[12px] uppercase tracking-subhead mt-4 w-max">Contact card<svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></a>
                             </div>
                         </article>
 
@@ -1899,6 +1954,7 @@
                                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Office Manager</span>
                                 <p class="text-ebony/80 text-[14px] mb-3">Supports daily operations, team coordination, and administrative systems that help keep projects, communication, and internal workflows running smoothly.</p>
                                 <p class="text-ebony/80 text-[14px]">With a steady, organized approach, he helps maintain the structure behind Selvaggi Built's work, supporting the office, project teams, and client-facing operations with reliability and attention to detail.</p>
+                                <a href="/team/adam-hill" data-route="/team/adam-hill" class="link-arrow inline-flex items-center text-copper font-medium text-[12px] uppercase tracking-subhead mt-4 w-max">Contact card<svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></a>
                             </div>
                         </article>
 
@@ -1912,6 +1968,7 @@
                                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Marketing Director</span>
                                 <p class="text-ebony/80 text-[14px] mb-3">Leads brand strategy, marketing, and communication for Selvaggi Built, helping shape how the company presents its expertise, values, and healthcare renovation experience across every client touchpoint.</p>
                                 <p class="text-ebony/80 text-[14px]">With a strategic eye for messaging, growth, and client experience, she develops the proposals, website content, marketing systems, and brand initiatives that support Selvaggi Built's continued visibility and trusted reputation.</p>
+                                <a href="/team/leslie-lentz-eldridge" data-route="/team/leslie-lentz-eldridge" class="link-arrow inline-flex items-center text-copper font-medium text-[12px] uppercase tracking-subhead mt-4 w-max">Contact card<svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></a>
                             </div>
                         </article>
 
@@ -1925,6 +1982,7 @@
                                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Superintendent</span>
                                 <p class="text-ebony/80 text-[14px] mb-3">Leads field execution with a focus on safety, coordination, quality, and minimizing disruption in active healthcare environments.</p>
                                 <p class="text-ebony/80 text-[14px]">With a steady, hands-on approach, he works closely with project teams, trade partners, and facility staff to keep work moving efficiently, maintain clean and organized job sites, and support the level of communication and reliability complex renovations require.</p>
+                                <a href="/team/luis-hernandez" data-route="/team/luis-hernandez" class="link-arrow inline-flex items-center text-copper font-medium text-[12px] uppercase tracking-subhead mt-4 w-max">Contact card<svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></a>
                             </div>
                         </article>
 
@@ -1938,6 +1996,7 @@
                                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Estimating Administrator</span>
                                 <p class="text-ebony/80 text-[14px] mb-3">Supports the estimating process through organized documentation, bid coordination, and clear communication with project teams, trade partners, and vendors.</p>
                                 <p class="text-ebony/80 text-[14px]">With a detail-focused and dependable approach, she helps keep preconstruction workflows moving efficiently, supporting accurate proposals, timely responses, and the coordination needed to help projects start with clarity and confidence.</p>
+                                <a href="/team/michelle-murrey" data-route="/team/michelle-murrey" class="link-arrow inline-flex items-center text-copper font-medium text-[12px] uppercase tracking-subhead mt-4 w-max">Contact card<svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></a>
                             </div>
                         </article>
 
@@ -1951,6 +2010,7 @@
                                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Project Foreman</span>
                                 <p class="text-ebony/80 text-[14px] mb-3">Keeps daily field work moving through hands-on coordination, jobsite organization, and consistent communication with project teams, trade partners, and facility staff.</p>
                                 <p class="text-ebony/80 text-[14px]">With a practical, detail-focused approach, he helps maintain safe, clean, and efficient jobsites while keeping work aligned with project goals, schedule requirements, and the standards active healthcare environments demand.</p>
+                                <a href="/team/martin-peralta" data-route="/team/martin-peralta" class="link-arrow inline-flex items-center text-copper font-medium text-[12px] uppercase tracking-subhead mt-4 w-max">Contact card<svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></a>
                             </div>
                         </article>
 
@@ -1964,6 +2024,7 @@
                                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Junior Estimator</span>
                                 <p class="text-ebony/80 text-[14px] mb-3">Contributes to the estimating process through quantity takeoffs, bid support, document review, and coordination with internal teams and trade partners.</p>
                                 <p class="text-ebony/80 text-[14px]">With a detail-oriented and eager approach, he helps organize preconstruction information, support proposal accuracy, and keep estimating workflows moving with clarity and responsiveness.</p>
+                                <a href="/team/axel-guzman" data-route="/team/axel-guzman" class="link-arrow inline-flex items-center text-copper font-medium text-[12px] uppercase tracking-subhead mt-4 w-max">Contact card<svg class="w-4 h-4 ml-2" viewBox="0 0 16 16" fill="none"><path d="M3.33 8h9.33M8 3.33L12.67 8 8 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></a>
                             </div>
                         </article>
                     </div>
@@ -2345,6 +2406,13 @@
             }
             </script>
         </section>
+        <!-- ============================================
+             EMPLOYEE CONTACT (business-card QR destination)
+             ============================================ -->
+        <section id="view-team-member" class="view" data-view="/team/detail" data-title="Contact | Selvaggi Built" data-description="Employee contact details for Selvaggi Built, Inc.">
+            <div id="teamMemberRoot" class="bg-white"></div>
+        </section>
+
         <!-- ============================================
              PRIVACY POLICY
              ============================================ -->
@@ -3007,6 +3075,40 @@
         ];
 
         /* ============================================================
+           DATA. team
+           Employee contact records. Each entry generates three things with no
+           extra wiring: the contact page at /team/<slug>, the vCard download at
+           /api/vcard?slug=<slug>, and the permanent URL printed on the business
+           card QR code.
+
+           TO EDIT A PERSON: change the line below. Nothing else needs touching.
+           TO ADD A PERSON: copy a block, change the fields, done. No new route
+           and no vercel.json change is required.
+
+           Any field left null is simply omitted from both the page and the
+           vCard, so a missing mobile number leaves no empty row and no blank
+           line in the downloaded contact. Only `office` and `website` are
+           filled in below, because the office line and the domain are the only
+           contact details confirmed anywhere in this repo. Per-person mobile
+           numbers and email addresses have to be supplied before the cards are
+           printed; they are deliberately not guessed at here.
+
+           These pages are noindex by design (see renderTeamMember). Publishing
+           staff mobile numbers into search results invites scraping, and a QR
+           code on a business card does not need to rank for anything.
+           ============================================================ */
+        const team = [
+            { slug: 'aaron-selvaggi',        first: 'Aaron',    last: 'Selvaggi',        title: 'Founder & President',      photo: '/assets/team/aaron.webp',    mobile: null, office: '+1-657-201-3606', email: null, linkedin: 'https://www.linkedin.com/in/aaron-selvaggi-129295267/' },
+            { slug: 'joel-hernandez',        first: 'Joel',     last: 'Hernandez',       title: 'Director of Operations',   photo: '/assets/team/joel.webp',     mobile: null, office: '+1-657-201-3606', email: null, linkedin: 'https://www.linkedin.com/in/joelhernandezpm' },
+            { slug: 'adam-hill',             first: 'Adam',     last: 'Hill',            title: 'Office Manager',           photo: '/assets/team/adam.webp',     mobile: null, office: '+1-657-201-3606', email: null, linkedin: null },
+            { slug: 'leslie-lentz-eldridge', first: 'Leslie',   last: 'Lentz-Eldridge',  title: 'Marketing Director',       photo: '/assets/team/leslie.webp',   mobile: null, office: '+1-657-201-3606', email: null, linkedin: null },
+            { slug: 'luis-hernandez',        first: 'Luis',     last: 'Hernandez',       title: 'Superintendent',           photo: '/assets/team/luis.webp',     mobile: null, office: '+1-657-201-3606', email: null, linkedin: 'https://www.linkedin.com/in/luis-hernandez-99b112387' },
+            { slug: 'michelle-murrey',       first: 'Michelle', last: 'Murrey',          title: 'Estimating Administrator', photo: '/assets/team/michelle.webp', mobile: null, office: '+1-657-201-3606', email: null, linkedin: null },
+            { slug: 'martin-peralta',        first: 'Martin',   last: 'Peralta',         title: 'Project Foreman',          photo: '/assets/team/martin.webp',   mobile: null, office: '+1-657-201-3606', email: null, linkedin: null },
+            { slug: 'axel-guzman',           first: 'Axel',     last: 'Guzman',          title: 'Junior Estimator',         photo: '/assets/team/axel.webp',     mobile: null, office: '+1-657-201-3606', email: null, linkedin: null }
+        ];
+
+        /* ============================================================
            RENDER HELPERS
            ============================================================ */
         // Build the metric list for a project, skipping any value not yet confirmed.
@@ -3569,6 +3671,74 @@
         }
 
         /* ============================================================
+           EMPLOYEE CONTACT PAGE
+           The destination for the business-card QR codes. Built phone-first,
+           because that is what a QR scan is: one tap per action, targets large
+           enough to hit without zooming.
+           ============================================================ */
+        function renderTeamMember(slug) {
+            const m = team.find(x => x.slug === slug);
+            const root = document.getElementById('teamMemberRoot');
+            // Always noindex: these carry direct staff contact details and exist
+            // to be scanned off a card, not to rank.
+            setRobots(true);
+            if (!m) {
+                root.innerHTML = `<section class="py-32 text-center"><h1 class="text-[32px] font-semibold text-ebony">Contact not found.</h1><p class="mt-4"><a href="/company" data-route="/company" class="text-copper">See the team</a></p></section>`;
+                setMeta('view-team-member', '/company');
+                return;
+            }
+            const name = m.first + ' ' + m.last;
+            const rows = [];
+            if (m.mobile) rows.push(['Mobile', 'tel:' + m.mobile.replace(/[^+\d]/g, ''), m.mobile]);
+            if (m.office) rows.push(['Office', 'tel:' + m.office.replace(/[^+\d]/g, ''), m.office]);
+            if (m.email)  rows.push(['Email',  'mailto:' + m.email, m.email]);
+
+            root.innerHTML = `
+                <section class="bg-ivory py-16 md:py-24">
+                    <div class="max-w-[560px] mx-auto px-6 text-center">
+                        <img src="/assets/logo/logo-horizontal-color.svg" alt="Selvaggi Built" class="h-8 w-auto mx-auto mb-10">
+                        <div class="vcard-photo"><img src="${m.photo}" alt="${escapeHtml(name)}"></div>
+                        <h1 class="text-[32px] md:text-[40px] font-semibold text-ebony tracking-tighter mt-6 mb-1">${escapeHtml(name)}</h1>
+                        <p class="text-copper text-[12px] font-semibold uppercase tracking-caption mb-8">${escapeHtml(m.title)}</p>
+
+                        <a class="vcard-save" href="/api/vcard?slug=${encodeURIComponent(m.slug)}">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="square"/></svg>
+                            Save to contacts
+                        </a>
+
+                        <div class="vcard-rows">
+                            ${rows.map(([label, href, val]) => `
+                                <a class="vcard-row" href="${href}">
+                                    <span class="vcard-row-label">${label}</span>
+                                    <span class="vcard-row-value">${escapeHtml(val)}</span>
+                                </a>`).join('')}
+                            ${m.linkedin ? `<a class="vcard-row" href="${m.linkedin}" target="_blank" rel="noopener"><span class="vcard-row-label">LinkedIn</span><span class="vcard-row-value">View profile</span></a>` : ''}
+                            <a class="vcard-row" href="/" data-route="/home"><span class="vcard-row-label">Website</span><span class="vcard-row-value">selvaggibuilt.com</span></a>
+                        </div>
+
+                        <p class="text-ebony/80 text-[14px] mt-8">
+                            Selvaggi Built, Inc.<br>
+                            5100 E. La Palma Ave., Ste 110, Anaheim, CA 92807<br>
+                            CSLB License #1079406
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+                            <a href="#" onclick="openRfpModal(event)" class="btn-primary bg-copper text-white h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Start an RFP</a>
+                            <a href="/projects" data-route="/projects" class="btn-secondary border border-ebony text-ebony h-12 px-6 inline-flex items-center justify-center font-medium text-[14px] uppercase tracking-subhead glass-btn">Our work</a>
+                        </div>
+                    </div>
+                </section>`;
+
+            const fullTitle = name + ' | Selvaggi Built';
+            document.title = fullTitle;
+            document.getElementById('pageTitle').textContent = fullTitle;
+            document.getElementById('pageDescription').setAttribute('content',
+                name + ', ' + m.title + ' at Selvaggi Built, Inc. Healthcare interior construction in California.');
+            document.getElementById('routeAnnouncer').textContent = 'Navigated to ' + fullTitle;
+            setSocialMeta({ path: '/team/' + m.slug, title: fullTitle, description: m.title + ', Selvaggi Built, Inc.', type: 'profile' });
+            applyReveals();
+        }
+
+        /* ============================================================
            ROUTER
            ============================================================ */
         const routes = {
@@ -3700,7 +3870,12 @@
             setCanonical(path);
             setRobots(false);
 
-            if (path.startsWith('/projects/') && path.length > '/projects/'.length) {
+            if (path.startsWith('/team/') && path.length > '/team/'.length) {
+                activateView('view-team-member');
+                setArticleJsonLd(null);
+                setProjectJsonLd(null);
+                renderTeamMember(path.replace('/team/', '')); // sets its own meta + noindex
+            } else if (path.startsWith('/projects/') && path.length > '/projects/'.length) {
                 const slug = path.replace('/projects/', '');
                 activateView('view-project-detail');
                 setArticleJsonLd(null);
