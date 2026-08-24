@@ -427,7 +427,11 @@
             display: flex; align-items: center; justify-content: center; gap: 10px;
             width: 100%; min-height: 58px; padding: 0 24px;
             background: var(--copper-ink); color: var(--white);
-            font-size: 15px; font-weight: 600; letter-spacing: 0.02em;
+            font-size: 15px; font-weight: 600;
+            /* Uppercase to match START AN RFP / OUR WORK below it. Sentence case
+               made the eye reach it after the secondary buttons even though it is
+               the primary action on the page. */
+            text-transform: uppercase; letter-spacing: 0.08em;
             transition: background-color 0.25s ease, transform 0.25s ease;
         }
         .vcard-save:hover { background: rgb(133 85 41); transform: translateY(-1px); }
@@ -1997,10 +2001,10 @@
                         <!-- Michelle -->
                         <article class="card glass glass-hover border border-copper/40 reveal flex flex-col">
                             <div class="photo aspect-[4/5]">
-                                <img src="/assets/team/michelle.webp" alt="Portrait of Michelle Murrey" loading="lazy">
+                                <img src="/assets/team/michelle.webp" alt="Portrait of Michelle Murray" loading="lazy">
                             </div>
                             <div class="p-7">
-                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Michelle Murrey</h3>
+                                <h3 class="text-ebony text-[20px] font-semibold mb-1">Michelle Murray</h3>
                                 <span class="text-copper text-[11px] font-semibold uppercase tracking-caption block mb-4">Estimating Administrator</span>
                                 <p class="text-ebony/80 text-[14px] mb-3">Supports the estimating process through organized documentation, bid coordination, and clear communication with project teams, trade partners, and vendors.</p>
                                 <p class="text-ebony/80 text-[14px]">With a detail-focused and dependable approach, she helps keep preconstruction workflows moving efficiently, supporting accurate proposals, timely responses, and the coordination needed to help projects start with clarity and confidence.</p>
@@ -3127,11 +3131,11 @@
               photo: '/assets/team/adam.webp', mobile: null, office: '+1-657-201-3606', email: null,
               linkedin: null },
 
-            // Card prints "Leslie Lentz" and /Leslie-Lentz; the team page says
-            // "Leslie Lentz-Eldridge". Both paths resolve. NEEDS CONFIRMATION
-            // which name should display.
+            // Confirmed by Leslie: she is dropping "Eldridge", so the contact
+            // card follows the printed card. The Company page keeps
+            // Lentz-Eldridge until she finishes the change; both paths resolve.
             { slug: 'Leslie-Lentz', aliases: ['leslie-lentz', 'Leslie-Lentz-Eldridge', 'leslie-lentz-eldridge'],
-              first: 'Leslie', last: 'Lentz-Eldridge', title: 'Marketing Director',
+              first: 'Leslie', last: 'Lentz', title: 'Marketing Director',
               photo: '/assets/team/leslie.webp', mobile: null, office: '+1-657-201-3606', email: null,
               linkedin: null },
 
@@ -3140,31 +3144,30 @@
               photo: '/assets/team/luis.webp', mobile: null, office: '+1-657-201-3606', email: null,
               linkedin: 'https://www.linkedin.com/in/luis-hernandez-99b112387' },
 
-            // Card prints "Michelle Murray" and /Michelle-Murray; the team page
-            // says "Murrey". One of the two misspells an employee's name. Both
-            // paths resolve so the QR works either way. NEEDS CONFIRMATION
-            // BEFORE THE CARDS ARE PRINTED.
+            // Confirmed by Leslie: "Murray" is correct. The team page said
+            // "Murrey" and has been corrected. The /Michelle-Murrey alias stays
+            // so anything already pointing at the old spelling still resolves.
             { slug: 'Michelle-Murray', aliases: ['michelle-murray', 'Michelle-Murrey', 'michelle-murrey'],
-              first: 'Michelle', last: 'Murrey', title: 'Estimating Administrator',
+              first: 'Michelle', last: 'Murray', title: 'Estimating Administrator',
               photo: '/assets/team/michelle.webp', mobile: null, office: '+1-657-201-3606', email: null,
               linkedin: null },
 
-            // Card LABEL reads "Alex Guzman" but its own URL and the team page
-            // both say Axel. Treating Axel as correct. NEEDS CONFIRMATION.
+            // Confirmed by Leslie: "Axel" is correct, so the printed card's
+            // "Alex" label is a card typo. The /Alex-Guzman alias stays so the
+            // mislabelled card still resolves if that URL was ever used.
             { slug: 'Axel-Guzman', aliases: ['axel-guzman', 'Alex-Guzman', 'alex-guzman'],
               first: 'Axel', last: 'Guzman', title: 'Junior Estimator',
               photo: '/assets/team/axel.webp', mobile: null, office: '+1-657-201-3606', email: null,
               linkedin: null },
 
-            // Has a printed card but is not on the team page: no photo and no
-            // title supplied. The page renders without a portrait rather than
-            // showing a broken image. NEEDS TITLE + PHOTO.
+            // New employee, joining the team page soon. Photo not available yet,
+            // so the page falls back to an initials monogram. STILL NEEDS TITLE.
             { slug: 'David-Dembowski', aliases: ['david-dembowski'],
               first: 'David', last: 'Dembowski', title: null,
               photo: null, mobile: null, office: '+1-657-201-3606', email: null,
               linkedin: null },
 
-            // On the team page, no printed card. Reachable from /company.
+            // Card added by Leslie; confirm the QR encodes /Martin-Peralta.
             { slug: 'Martin-Peralta', aliases: ['martin-peralta'],
               first: 'Martin', last: 'Peralta', title: 'Project Foreman',
               photo: '/assets/team/martin.webp', mobile: null, office: '+1-657-201-3606', email: null,
