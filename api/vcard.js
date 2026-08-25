@@ -83,7 +83,7 @@ function esc(v) {
 }
 
 function buildVCard(m) {
-    const name = m.first + ' ' + m.last;
+    const name = m.displayName || (m.first + ' ' + m.last);
     const lines = [
         'BEGIN:VCARD',
         'VERSION:3.0',
